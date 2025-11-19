@@ -95,7 +95,7 @@ with col3:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/9bc8e27736eeeb46bd8af86f6956c3294355ea99b12f9b33751a6361.png" class="card-img">
-        <h3>Partie 3 : Trading algorithmique</h3>
+        <h3>Partie 3 : Vos trades, pondus et gérés par Birdo 🥚📈</h3>
         <p style="opacity: 0.6;">Birdo</p>
         <p style="opacity: 0.8;">Stratégies automatisées et backtesting.</p>
     </div>
