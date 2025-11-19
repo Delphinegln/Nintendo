@@ -6,6 +6,3 @@ matplotlib
 plotly
 seaborn
 scipy
-pytz
-scipy.stats
-math
