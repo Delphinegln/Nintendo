@@ -9,14 +9,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("Mon application avec un curseur étoile ⭐")
-st.write("Déplacez votre souris pour voir le curseur en forme d'étoile !")
-# Configuration de la page
-st.set_page_config(
-    page_title="Dashboard for Nintendo's Investors",
-    page_icon="images/Daisy.png",  # Icône PNG
-    layout="wide"
-)
 
 # CSS pour uniformiser les cartes
 st.markdown("""
