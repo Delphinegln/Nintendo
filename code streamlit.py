@@ -54,7 +54,7 @@ with col1:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
-        <h3>Partie 1 : Prévision financière</h3>
+        <h3>Partie 1 :  Daisy fait fleurir vos profits ! 🌼💰</h3>
         <p style="opacity: 0.6;">Daisy</p>
         <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
     </div>
