@@ -7,9 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1DFbzRpkYmt6vzG4kHRCkDku6DtUn4Z9J
 """
 
-# ==========================================
 # Portefeuille centré Nintendo - version interactive (débutant)
-# ==========================================
+
 # - Nintendo imposée
 # - Poids de Nintendo FIXE choisi par l'utilisateur
 # - Affichage avec noms d'entreprises (pas les tickers)
@@ -37,8 +36,8 @@ except Exception:
 
 warnings.filterwarnings("ignore")
 
-# -------------------------------------
-# Config de base
+
+# CONFIG DE BASE
 # -------------------------------------
 NINTENDO = "NTDOY"  # Nintendo imposée (ADR US)
 DEFAULT_PEERS = ["EA", "TTWO", "SONY", "MSFT", "7832.T", "9697.T", "9684.T", "9766.T", "UBI.PA", "TCEHY"]
@@ -62,8 +61,8 @@ TICKER_NAME = {
 ORDER = "asc"  # tri des allocations
 
 
-# -------------------------------------
-# Fonctions d'entrée utilisateur
+
+# FONCTION D'ENTREE UTILISATEUR
 # -------------------------------------
 def ask_float_pct(msg: str, default: float, lo: float = 0.0, hi: float = 1.0) -> float:
     """Demande un pourcentage lisible (6, 6%, 0.06). Renvoie un float dans [0..1]."""
@@ -100,8 +99,7 @@ def ask_int(msg: str, default: int, lo: int = 1, hi: int = 20) -> int:
         print(f"→ Entrer un entier entre {lo} et {hi}.")
 
 
-# -------------------------------------
-# Données Yahoo & métriques
+# DONNEES YAHOO ET METRIQUES
 # -------------------------------------
 def download_prices(tickers: List[str], start: str, end: str) -> pd.DataFrame:
     data = yf.download(tickers, start=start, end=end, progress=False, auto_adjust=True)
@@ -122,8 +120,7 @@ def ann_perf(r: pd.Series):
     return ann_ret, ann_vol, sharpe
 
 
-# -------------------------------------
-# Contraintes & optimisation
+# CONTRAINTES ET OPTIMIZATION
 # -------------------------------------
 @dataclass
 class Constraints:
@@ -179,7 +176,7 @@ def optimize_mv(mu: pd.Series, cov: pd.DataFrame, tickers: List[str],
             weights[others] = rest / len(others)
         return weights
 
-# --------------------------------------------------------
+
 # BOUCLE RÉPÉTÉE : exécuter plein de simulations d'affilée
 # --------------------------------------------------------
 
