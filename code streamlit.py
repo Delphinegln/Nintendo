@@ -2,7 +2,7 @@ import streamlit as st
 
 # Configuration de la page
 st.set_page_config(
-    page_title="Dashboard Data Science - Mario Project",
+    page_title="Dashboard for Nintendo's Investors",
     page_icon="images/Daisy.png",  # Icône PNG
     layout="wide"
 )
