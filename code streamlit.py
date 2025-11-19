@@ -113,7 +113,7 @@ with col4:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
-        <h3>Partie 4 : Pricing d'options</h3>
+        <h3>Partie 4 : Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</h3>
         <p style="opacity: 0.6;">Bowser</p>
         <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
     </div>
@@ -134,7 +134,7 @@ with col6:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/63f4fbcbf84bd8532d9e041b3f6671c611706eb9ecc792f6fb74499a.png" class="card-img">
-        <h3>Partie 5 : Gestion des risques</h3>
+        <h3>Partie 5 : Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</h3>
         <p style="opacity: 0.6;">Luigi</p>
         <p style="opacity: 0.8;">Analyse des risques financiers.</p>
     </div>
