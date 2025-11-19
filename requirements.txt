@@ -3,11 +3,9 @@ pandas
 numpy
 yfinance
 matplotlib
-scipy
 plotly
 seaborn
-scipy.stats
-math
+scipy
 pytz
 datetime
 warnings
