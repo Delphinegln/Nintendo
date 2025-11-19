@@ -72,7 +72,7 @@ with col1:
 with col2:
     st.markdown("""
     <div class="custom-card">
-        <img src="images/Peach.png" class="card-img">
+        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
         <h3>Partie 2 : Optimisation de portefeuille</h3>
         <p style="opacity: 0.6;">Peach</p>
         <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
@@ -94,7 +94,7 @@ col3, col4 = st.columns(2)
 with col3:
     st.markdown("""
     <div class="custom-card">
-        <img src="images/Birdo.png" class="card-img">
+        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/9bc8e27736eeeb46bd8af86f6956c3294355ea99b12f9b33751a6361.png" class="card-img">
         <h3>Partie 3 : Trading algorithmique</h3>
         <p style="opacity: 0.6;">Birdo</p>
         <p style="opacity: 0.8;">Stratégies automatisées et backtesting.</p>
@@ -112,7 +112,7 @@ with col3:
 with col4:
     st.markdown("""
     <div class="custom-card">
-        <img src="images/Bowser.png" class="card-img">
+        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
         <h3>Partie 4 : Pricing d'options</h3>
         <p style="opacity: 0.6;">Bowser</p>
         <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
@@ -133,7 +133,7 @@ col5, col6, col7 = st.columns([1, 2, 1])
 with col6:
     st.markdown("""
     <div class="custom-card">
-        <img src="images/Luigi.png" class="card-img">
+        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/63f4fbcbf84bd8532d9e041b3f6671c611706eb9ecc792f6fb74499a.png" class="card-img">
         <h3>Partie 5 : Gestion des risques</h3>
         <p style="opacity: 0.6;">Luigi</p>
         <p style="opacity: 0.8;">Analyse des risques financiers.</p>
