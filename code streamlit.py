@@ -1,4 +1,17 @@
 import streamlit as st
+# CSS pour mettre l'image en fond d'écran
+st.markdown("""
+    <style>
+    .stApp {
+        background-image: url('https://wallpaper.forfun.com/fetch/16/16b882fa988ab528cbe12f8ae188c25c.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 
 # CSS pour changer le curseur en étoile
 st.markdown("""
