@@ -73,7 +73,7 @@ with col2:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
-        <h3>Partie 2 : Peach prend soin de vos actifs comme Mario protège le royaume 🍑🛡️</h3>
+        <h3>Partie 2 : Peach your assets! 🍑💼</h3>
         <p style="opacity: 0.6;">Peach</p>
         <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
     </div>
