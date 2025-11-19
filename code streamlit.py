@@ -89,7 +89,7 @@ with col2:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
-        <h3>PortfolioOoptimization</h3>
+        <h3>Portfolio Optimization</h3>
         <p style="opacity: 0.6;">Peach your assets! 🍑💼</p>
         <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
     </div>
