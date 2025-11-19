@@ -5,3 +5,6 @@ yfinance
 matplotlib
 scipy
 plotly
+seaborn
+prophet
+math
