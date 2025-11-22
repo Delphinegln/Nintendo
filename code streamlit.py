@@ -97,21 +97,25 @@ st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors<
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
 # ========== GRID LAYOUT : CARTES ==========
+# On affiche les cartes SEULEMENT si la page Daisy n'est PAS ouverte
+if not st.session_state["show_daisy_page"]:
+    
 col1, col2 = st.columns(2)
 
 # ---------- PARTIE 1 : DAISY ----------
-with col1:
-    st.markdown("""
-    <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
-        <h3>Financial Forecasting</h3>
-        <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
-        <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    with col1:
+        st.markdown("""
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
+            <h3>Financial Forecasting</h3>
+            <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
+            <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
-        st.session_state["show_daisy_page"] = True
+        if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
+            st.session_state["show_daisy_page"] = True
+            st.rerun()
 
 # ---------- PARTIE 2 : PEACH ----------
 with col2:
