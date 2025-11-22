@@ -9,28 +9,20 @@ import plotly.colors
 from datetime import datetime
 import numpy.random as npr
 
-st.set_page_config(
-    page_title="Nintendo Dashboard",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)    
-sns.set_theme(style="whitegrid")
-
-# ====== SESSION STATE GLOBAL ======
-if "show_daisy_page" not in st.session_state:
-    st.session_state["show_daisy_page"] = False
-    
+# ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
 st.set_page_config(
     page_title="Nintendo Dashboard",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Initialiser l'état une seule fois
+sns.set_theme(style="whitegrid")
+
+# ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
 if "show_daisy_page" not in st.session_state:
     st.session_state["show_daisy_page"] = False
-    
-# CSS pour mettre l'image en fond d'écran
+
+# ========== CSS : FOND D'ÉCRAN ==========
 st.markdown("""
     <style>
     .stApp {
@@ -43,8 +35,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
-# CSS pour changer le curseur en étoile
+# ========== CSS : CURSEUR ÉTOILE ==========
 st.markdown("""
     <style>
     * {
@@ -53,8 +44,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
-# CSS pour uniformiser les cartes
+# ========== CSS : CARTES UNIFORMES ==========
 st.markdown("""
 <style>
     .main { background-color: transparent; }
@@ -86,6 +76,7 @@ st.markdown("""
         font-size: 0.9em; 
         margin: 5px 0;
     }
+
     .placeholder-box {
         background-color: rgba(94, 82, 64, 0.05);
         border: 2px dashed rgba(94, 82, 64, 0.3);
@@ -101,52 +92,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-
-st.markdown("""
-<style>
-/* Élargir le dialog Daisy en format horizontal */
-.stDialog > div {
-    width: 90vw !important;      /* très large */
-    max-width: 1100px !important; /* limite sur grands écrans */
-}
-
-/* Optionnel : un fond légèrement flouté derrière le dialog */
-.stDialog::backdrop {
-    backdrop-filter: blur(3px);
-}
-</style>
-""", unsafe_allow_html=True)
-
-
-# HEADER
+# ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
-
-# --- GRID LAYOUT ---
+# ========== GRID LAYOUT : CARTES ==========
 col1, col2 = st.columns(2)
 
-
-
-# ------------------------------------------------------------------
-# PARTIE 1 : DAISY
+# ---------- PARTIE 1 : DAISY ----------
 with col1:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
         <h3>Financial Forecasting</h3>
-        <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
+        <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
         <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    # bouton propre sous la carte
     if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
         st.session_state["show_daisy_page"] = True
 
-
-# ------------------------------------------------------------------
-# PARTIE 2 : PEACH
+# ---------- PARTIE 2 : PEACH ----------
 with col2:
     st.markdown("""
     <div class="custom-card">
@@ -164,11 +131,10 @@ with col2:
         </div>
         """, unsafe_allow_html=True)
 
-# ------------------------------------------------------------------
-# LIGNE 2
+# ---------- LIGNE 2 ----------
 col3, col4 = st.columns(2)
 
-# PARTIE 3 : BIRDO
+# ---------- PARTIE 3 : BIRDO ----------
 with col3:
     st.markdown("""
     <div class="custom-card">
@@ -186,12 +152,12 @@ with col3:
         </div>
         """, unsafe_allow_html=True)
 
-# PARTIE 4 : BOWSER
+# ---------- PARTIE 4 : BOWSER ----------
 with col4:
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
-        <h3>Option Pricing </h3>
+        <h3>Option Pricing</h3>
         <p style="opacity: 0.6;">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</p>
         <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
     </div>
@@ -204,8 +170,7 @@ with col4:
         </div>
         """, unsafe_allow_html=True)
 
-# ------------------------------------------------------------------
-# LIGNE 3 – LUIGI (centré)
+# ---------- LIGNE 3 : LUIGI (CENTRÉ) ----------
 col5, col6, col7 = st.columns([1, 2, 1])
 
 with col6:
@@ -224,9 +189,6 @@ with col6:
             <div class="placeholder-text">Section à compléter par Luigi</div>
         </div>
         """, unsafe_allow_html=True)
-
-# ------------------------------------------------------------------
-
 
 # ====================== PAGE DAISY FULL WIDTH ======================
 if st.session_state["show_daisy_page"]:
@@ -265,6 +227,8 @@ if st.session_state["show_daisy_page"]:
         language="python"
     )
 
+    st.markdown("<br>", unsafe_allow_html=True)
+
     # ---------- LIGNE 1 : ÉTATS FINANCIERS & PRIX ----------
     col_left, col_right = st.columns([2, 3])
 
@@ -297,13 +261,13 @@ if st.session_state["show_daisy_page"]:
         px_norm.columns = [companies[c] for c in px_norm.columns]
 
         fig_prices = go.Figure()
-        for col in px_norm.columns:
+        for col_name in px_norm.columns:
             fig_prices.add_trace(
                 go.Scatter(
                     x=px_norm.index,
-                    y=px_norm[col],
+                    y=px_norm[col_name],
                     mode="lines",
-                    name=col
+                    name=col_name
                 )
             )
 
@@ -434,15 +398,17 @@ if st.session_state["show_daisy_page"]:
             marker_color=["#E15759", "#4E79A7", "#59A14F"]
         )
         fig_scen.update_layout(
-            title="Scénarios sur l’Operating Income",
+            title="Scénarios sur l'Operating Income",
             yaxis_title="JPY (simulé)",
             height=360,
             margin=dict(l=40, r=20, t=50, b=40)
         )
         st.plotly_chart(fig_scen, use_container_width=True)
 
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.caption("Module Daisy : outil de support à la décision pour les investisseurs Nintendo.")
 
-# SIDEBAR
+# ========== SIDEBAR ==========
 with st.sidebar:
     st.markdown("### Navigation")
 
