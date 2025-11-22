@@ -1,534 +1,672 @@
-# Financial **Forecasting**
-
-## Data preparation and **Setup**
-"""
-
-# --- Imports ---
+import streamlit as st
 import yfinance as yf
-from prophet import Prophet
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from scipy import stats
-import math
+import plotly.graph_objects as go
+import plotly.colors
+from datetime import datetime
 import numpy.random as npr
 
-# --- Plot style ---
-sns.set_theme(context="notebook", style="whitegrid")
-plt.rcParams.update({
-    "figure.figsize": (12, 6),
-    "axes.titlesize": 14,
-    "axes.labelsize": 12,
-    "xtick.labelsize": 10,
-    "ytick.labelsize": 10,
-    "legend.frameon": False,
-    "figure.autolayout": True,
-})
-
-# --- Date range for data extraction ---
-start = "2015-09-30"
-end   = "2025-09-30"
-
-# --- Ticker -> Company name mapping ---
-companies = {
-    "NTDOY": "Nintendo Co., Ltd.",
-    "SONY": "Sony Group Corporation",
-    "MSFT":   "Microsoft Corporation",
-    "EA":     "Electronic Arts Inc.",
-    "TCEHY": "Tencent Holdings Corporation"
-}
-
-"""Ce bloc de code prépare l'environnement pour l'analyse et la visualisation de données financières. Il importe les bibliothèques nécessaires, configure les styles de traçage et définit des variables importantes pour l'extraction de données.
-
-Dans le même temps, nous définissons les entreprises à étudier à savoir Nintendo (NTDOY) et ses concurrents (Nintendo Co., Ltd., Sony Group Corporation, Microsoft Corporation, Electronic Arts Inc., Tencent Holdings Corporation).
-
-## Data Extraction and Historical Analysis
-
-### Retrieving Financial Data
-"""
-
-# ---------- 1) Détails financiers Nintendo ----------
-ntd_ticker = "NTDOY"
-ntd = yf.Ticker(ntd_ticker)
-
-# Annual Financial Statements
-balance_sheet = ntd.balance_sheet
-income_stmt   = ntd.income_stmt
-cashflow_stmt = ntd.cashflow
-
-# Dividends
-# Convertir les dates de début et de fin en objets datetime sensibles au fuseau horaire 'Asia/Tokyo'
-# pour correspondre au fuseau horaire de l'index des dividendes.
-start_ts = pd.to_datetime(start).tz_localize('Asia/Tokyo')
-end_ts = pd.to_datetime(end).tz_localize('Asia/Tokyo')
-div_all = ntd.dividends
-div_period = div_all.loc[(div_all.index >= start_ts) & (div_all.index <= end_ts)]
-
-
-# Affichages
-print("=== NINTENDO (NTDOY) — Balance Sheet ===")
-# Set display options to show all rows and columns
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-display(balance_sheet)
-# Reset display options to default
-pd.reset_option('display.max_columns')
-pd.reset_option('display.max_rows')
-
-print("\n=== NINTENDO (NTDOY) — Income Statement ===")
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-display(income_stmt)
-pd.reset_option('display.max_columns')
-pd.reset_option('display.max_rows')
-
-print("\n=== NINTENDO (NTDOY) — Cash Flow Statement ===")
-pd.set_option('display.max_columns', None)
-pd.set_option('display.max_rows', None)
-display(cashflow_stmt)
-pd.reset_option('display.max_columns')
-pd.reset_option('display.max_rows')
-
-print("\n=== NINTENDO (NTDOY) — Dividends ===")
-display(div_period.to_frame(name="Dividend per share"))
-
-"""### Historical Analysis"""
-
-# ---------- 2) Historical Prices ----------
-tickers = list(companies.keys())
-prices = yf.download(tickers, start=start, end=end, progress=False)["Close"] # Changed 'Adj Close' to 'Close'
-
-# Forcer DataFrame si un seul ticker
-if isinstance(prices, pd.Series):
-    prices = prices.to_frame()
-
-# ---------- 3) Normalisation (base 100 au premier point valide) ----------
-def base100(df: pd.DataFrame) -> pd.DataFrame:
-    def norm_col(s):
-        if s.dropna().empty:
-            return s
-        first_val = s.dropna().iloc[0]
-        return (s / first_val) * 100.0
-    return df.apply(norm_col, axis=0)
-
-px_norm = base100(prices.copy())
-
-# Renommer colonnes avec noms lisibles
-px_norm = px_norm.rename(columns={t: companies.get(t, t) for t in px_norm.columns})
-
-# ---------- 4) Visualisation performance relative ----------
-ax = px_norm.plot(figsize=(12, 6), lw=1.8)
-ax.set_title(f"Performance relative (base 100) — {start_ts.date()} → {end_ts.date()}")
-ax.set_xlabel("Date")
-ax.set_ylabel("Index (base 100)")
-ax.grid(True, alpha=0.3)
-plt.legend(title="Entreprise", ncol=2, frameon=False)
-plt.show()
-
-#Download stock data and calculating the returns
-
-stocks = ['NTDOY', 'TCEHY', 'SONY', 'MSFT',"EA"]
-prices = yf.download(stocks, start='2020-01-01', end='2024-12-31')['Close']
-returns = prices.pct_change().dropna()
-
-r = returns["NTDOY"].mean() #Calculate mean return
-sigma = returns["NTDOY"].std() # std of returns
-
-M = 100 #the number of time intervals for the discretization
-T = 5.0
-dt = T / M
-
-I = 10000
-
-S = np.zeros((M + 1, I))
-S0 = prices["NTDOY"].loc["2024-12-30"]
-S[0] = S0
-
-for t in range(1, M + 1):
-    S[t] = S[t-1] * np.exp((r - 0.5 * sigma ** 2) * dt + sigma * math.sqrt(dt) * npr.standard_normal(I))
-
-# Using Plotly for interactive plot
-import plotly.graph_objects as go
-
-fig = go.Figure()
-
-for i in range(I):
-    fig.add_trace(go.Scatter(y=S[:, i], mode='lines', name=f'Simulation {i+1}', showlegend=False,
-                             line=dict(width=1, color='lightblue')))
-
-# Adding the mean trajectory for better visualization
-fig.add_trace(go.Scatter(y=np.mean(S, axis=1), mode='lines', name='Mean Trajectory',
-                         line=dict(width=2, color='darkblue')))
-
-fig.update_layout(
-    title='Monte Carlo Simulation of NTDOY Stock Price',
-    xaxis_title='Time Step',
-    yaxis_title='Stock Price',
-    height=600,
-    width=1000
+# ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
+st.set_page_config(
+    page_title="Nintendo Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded",
 )
 
-fig.show()
+sns.set_theme(style="whitegrid")
 
-"""## Financial forecasting with Prophet
-Time series analysis
-"""
+# ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
+if "show_daisy_page" not in st.session_state:
+    st.session_state["show_daisy_page"] = False
 
-import cmdstanpy, os
+# ========== CSS : FOND D'ÉCRAN ==========
+st.markdown("""
+    <style>
+    .stApp {
+        background-image: url('https://wallpaper.forfun.com/fetch/16/16b882fa988ab528cbe12f8ae188c25c.jpeg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-cmdstanpy.install_cmdstan(overwrite=True)
-cmdstan_path = cmdstanpy.cmdstan_path()
-os.environ["CMDSTAN"] = cmdstan_path
+# ========== CSS : CURSEUR ÉTOILE ==========
+st.markdown("""
+    <style>
+    * {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="%23FFD700" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>') 16 16, auto !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-print(f"Prophet sera forcé à utiliser CmdStan depuis : {cmdstan_path}")
+# ========== CSS : CARTES UNIFORMES + CONTENEUR POUR BOUTON ==========
+st.markdown("""
+<style>
+    .main { background-color: transparent; }
 
-prophet_dir = "/usr/local/lib/python3.12/dist-packages/prophet/stan_model/cmdstan-2.33.1"
-if os.path.exists(prophet_dir):
-    import shutil
-    print(f"Suppression de l'ancienne installation défectueuse : {prophet_dir}")
-    shutil.rmtree(prophet_dir, ignore_errors=True)
-else:
-    print("Aucun ancien dossier cassé trouvé dans Prophet.")
+    .custom-card {
+        background-color: rgba(255, 255, 255, 0.45); 
+        backdrop-filter: blur(15px); 
+        -webkit-backdrop-filter: blur(15px); 
+        border-radius: 16px;
+        padding: 25px;
+        margin: 10px auto; 
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
 
-print(f"\nCmdStan en cours : {cmdstanpy.cmdstan_path()}")
+    .card-img {
+        width: 90px; 
+        margin-bottom: 12px;
+    }
+    
+    .custom-card h3 {
+        font-size: 1.3em; 
+        margin: 12px 0;
+        font-weight: 600;
+    }
+    
+    .custom-card p {
+        font-size: 1em; 
+        margin: 8px 0;
+    }
+    
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        width: 100%;
+    }
 
-# Change the index column and rename it
-income_stmt.reset_index(inplace=True)
-income_stmt.rename(columns={'index':'Metric'}, inplace=True)
+    .placeholder-box {
+        background-color: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 2px dashed rgba(94, 82, 64, 0.4);
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Style pour la page Daisy */
+    .daisy-container {
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 30px;
+        margin: 20px 0;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chart-container {
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 20px;
+        margin: 15px 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    
+    .intro-text {
+        background-color: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 20px 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        line-height: 1.8;
+        font-size: 1.05em;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-# Melt the DataFrame to transform date columns to the single 'Date' column
-income_stmt = income_stmt.melt(id_vars=['Metric'], var_name='Date', value_name='Value')
+# ========== HEADER ==========
+st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
-# Convert 'Date' column to datetime format
-income_stmt['Date'] = pd.to_datetime(income_stmt['Date'])
+# ========== GRID LAYOUT : CARTES ==========
+# On affiche les cartes SEULEMENT si la page Daisy n'est PAS ouverte
+if not st.session_state["show_daisy_page"]:
+    
+    col1, col2 = st.columns(2)
 
-# Now, df has the required structure for Prophet
-income_stmt
+    # ---------- PARTIE 1 : DAISY ----------
+    with col1:
+        st.markdown('<div class="card-container">', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
+            <h3>Financial Forecasting</h3>
+            <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
+            <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Conteneur centré pour le bouton
+        col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+        with col_btn2:
+            if st.button("🔍 Ouvrir le module Daisy", key="open_daisy", use_container_width=True):
+                st.session_state["show_daisy_page"] = True
+                st.rerun()
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# Create an empty DataFrame to store the forecasts for all metrics
-all_forecasts = pd.DataFrame()
+    # ---------- PARTIE 2 : PEACH ----------
+    with col2:
+        st.markdown('<div class="card-container">', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
+            <h3>Portfolio Optimization</h3>
+            <p style="opacity: 0.6;">Peach your assets! 🍑💼</p>
+            <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-# Get unique metric names from the data
-unique_metrics = income_stmt['Metric'].unique()
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Peach</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# Iterate through each unique metric and create forecasts
-for metric in unique_metrics:
-    # Select data for the specific metric
-    metric_data = income_stmt[income_stmt['Metric'] == metric].drop(columns='Metric')
+    # ---------- LIGNE 2 ----------
+    col3, col4 = st.columns(2)
 
-    # Rename columns to 'ds' and 'y' as strictly imposed by Prophet
-    metric_data.rename(columns={'Date': 'ds', 'Value': 'y'}, inplace=True)
+    # ---------- PARTIE 3 : BIRDO ----------
+    with col3:
+        st.markdown('<div class="card-container">', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/9bc8e27736eeeb46bd8af86f6956c3294355ea99b12f9b33751a6361.png" class="card-img">
+            <h3>Algorithmic Trading</h3>
+            <p style="opacity: 0.6;">Vos trades, pondus et gérés par Birdo 🥚📈</p>
+            <p style="opacity: 0.8;">Stratégies automatisées et backtesting.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Create and fit the Prophet model
-    prophet_model = Prophet()
-    prophet_model.fit(metric_data)
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Birdo</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Create a future dataframe for 5 years
-    future = prophet_model.make_future_dataframe(periods=5*1, freq='Y')  # 5 years with yearly frequency
+    # ---------- PARTIE 4 : BOWSER ----------
+    with col4:
+        st.markdown('<div class="card-container">', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
+            <h3>Option Pricing</h3>
+            <p style="opacity: 0.6;">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</p>
+            <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    # Make the forecast
-    forecast = prophet_model.predict(future)
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Bowser</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-    # Add the forecasted values to the 'all_forecasts' DataFrame
-    forecast['Metric'] = metric
-    all_forecasts = pd.concat([all_forecasts, forecast[['ds', 'Metric', 'yhat', 'yhat_lower', 'yhat_upper']]])
+    # ---------- LIGNE 3 : LUIGI (CENTRÉ) ----------
+    col5, col6, col7 = st.columns([1, 2, 1])
 
-# Prophet returns a large DataFrame with many interesting columns, but we subset our output to the columns most relevant to forecasting. These are:
+    with col6:
+        st.markdown('<div class="card-container">', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/63f4fbcbf84bd8532d9e041b3f6671c611706eb9ecc792f6fb74499a.png" class="card-img">
+            <h3>Risk Management</h3>
+            <p style="opacity: 0.6;">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</p>
+            <p style="opacity: 0.8;">Analyse des risques financiers.</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-# ds: the datestamp of the forecasted value
-# yhat: the forecasted value of our metric (in Statistics, yhat is a notation traditionally used to represent the predicted values of a value y)
-# yhat_lower: the lower bound of our forecasts
-# yhat_upper: the upper bound of our forecasts
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Luigi</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# Display the forecasts for all metrics in millions
-all_forecasts_millions = all_forecasts.copy()
-all_forecasts_millions['yhat'] = all_forecasts_millions['yhat'] / 1_000_000
-all_forecasts_millions['yhat_lower'] = all_forecasts_millions['yhat_lower'] / 1_000_000
-all_forecasts_millions['yhat_upper'] = all_forecasts_millions['yhat_upper'] / 1_000_000
+# ====================== PAGE DAISY FULL WIDTH ======================
+if st.session_state["show_daisy_page"]:
 
-all_forecasts_millions
-
-# Look at the projection of a specific metric
-all_forecasts[all_forecasts['Metric'] == 'Total Revenue']
-
-import plotly.graph_objects as go
-import plotly.colors
-from plotly.subplots import make_subplots
-
-chosen_metrics = ['Total Revenue', 'Total Expenses', 'Net Income',
-                  'Operating Income']
-
-chosen_metrics_forecasts = all_forecasts[all_forecasts['Metric'].isin(chosen_metrics)].copy()
-
-base_colors = plotly.colors.qualitative.Plotly
-
-# ---------- FAN CHART INTERACTIF ----------
-fig_fan = go.Figure()
-
-for i, metric in enumerate(chosen_metrics):
-    df_m = chosen_metrics_forecasts[chosen_metrics_forecasts['Metric'] == metric].copy()
-    color = base_colors[i % len(base_colors)]
-    visible = (i == 0)
-
-    fig_fan.add_trace(go.Scatter(
-        x=df_m['ds'],
-        y=df_m['yhat_upper'],
-        mode='lines',
-        line=dict(width=0),
-        showlegend=False,
-        hoverinfo='skip',
-        visible=visible
-    ))
-
-    fig_fan.add_trace(go.Scatter(
-        x=df_m['ds'],
-        y=df_m['yhat_lower'],
-        mode='lines',
-        line=dict(width=0),
-        fill='tonexty',
-        fillcolor='rgba(0, 0, 150, 0.15)',
-        showlegend=False,
-        hoverinfo='skip',
-        visible=visible
-    ))
-
-    fig_fan.add_trace(go.Scatter(
-        x=df_m['ds'],
-        y=df_m['yhat'],
-        mode='lines',
-        name=metric,
-        line=dict(width=2, color=color),
-        hovertemplate=f'<b>{metric}</b><br>Valeur: %{{y:,.0f}}<br>Date: %{{x|%Y-%m-%d}}<extra></extra>',
-        visible=visible
-    ))
-
-buttons = []
-for i, metric in enumerate(chosen_metrics):
-    visibility = [False] * (3 * len(chosen_metrics))
-    visibility[3 * i] = True
-    visibility[3 * i + 1] = True
-    visibility[3 * i + 2] = True
-    buttons.append(
-        dict(
-            label=metric,
-            method='update',
-            args=[
-                {'visible': visibility},
-                {'title': f'<b>Prévision {metric} (fan chart)</b>'}
-            ]
-        )
+    st.markdown("---")
+    
+    # Bouton retour en haut
+    col_back1, col_back2, col_back3 = st.columns([1, 2, 1])
+    with col_back2:
+        if st.button("⬅️ Retour au dashboard principal", key="close_daisy", use_container_width=True):
+            st.session_state["show_daisy_page"] = False
+            st.rerun()
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # En-tête stylisé
+    st.markdown(
+        "<h1 style='text-align:center; margin-top:10px; font-size: 2.5em;'>🌼 Module Daisy – Financial Forecasting</h1>",
+        unsafe_allow_html=True
     )
+    
+    # Texte d'introduction
+    st.markdown("""
+    <div class="intro-text">
+        <p style='text-align: justify; margin-bottom: 15px;'>
+            <strong>Bienvenue dans le module Daisy de prévision financière.</strong> Cet outil d'aide à la décision vous permet d'analyser 
+            en profondeur la performance financière de Nintendo Co., Ltd. et de ses principaux concurrents du secteur gaming.
+        </p>
+        <p style='text-align: justify; margin-bottom: 15px;'>
+            L'analyse couvre une <strong>période de 10 ans (30 septembre 2015 - 30 septembre 2025)</strong> et inclut une comparaison 
+            avec Sony Group Corporation, Microsoft Corporation, Electronic Arts Inc. et Tencent Holdings Corporation.
+        </p>
+        <p style='text-align: justify; margin: 0;'>
+            Les simulations Monte Carlo et projections de revenus vous offrent une vision probabiliste des performances futures, 
+            permettant d'évaluer différents scénarios d'investissement avec une approche quantitative rigoureuse.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-fig_fan.update_layout(
-    title={'text': f'<b>Prévision {chosen_metrics[0]} (fan chart)</b>', 'x': 0.5, 'xanchor': 'center'},
-    xaxis_title='Date',
-    yaxis_title='Valeur',
-    template='plotly_white',
-    hovermode='x unified',
-    height=500,
-    width=900,
-    updatemenus=[
-        dict(
-            type='dropdown',
-            direction='down',
-            showactive=True,
-            x=0.5,
-            xanchor='center',
-            y=1.15,
-            yanchor='top',
-            buttons=buttons
-        )
-    ]
-)
+    st.markdown("<br>", unsafe_allow_html=True)
 
-fig_fan.show()
+    # ---------- PARAMÈTRES GÉNÉRAUX ----------
+    start = "2015-09-30"
+    end = "2025-09-30"
 
-"""# Scenario Analysis"""
+    companies = {
+        "NTDOY": "Nintendo Co., Ltd.",
+        "SONY": "Sony Group Corporation",
+        "MSFT": "Microsoft Corporation",
+        "EA": "Electronic Arts Inc.",
+        "TCEHY": "Tencent Holdings Corporation"
+    }
 
-# =========================
-#       SCENARIO ANALYSIS
-# =========================
+    # ---------- LIGNE 1 : ÉTATS FINANCIERS & PRIX ----------
+    st.markdown("<div class='daisy-container'>", unsafe_allow_html=True)
+    
+    col_left, col_right = st.columns([1, 1])
 
-import numpy as np
-import plotly.graph_objects as go
-import plotly.colors
+    with col_left:
+        st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+        st.markdown("### 📊 États financiers – Nintendo")
+        
+        ntd = yf.Ticker("NTDOY")
+        balance_sheet = ntd.balance_sheet
+        income_stmt = ntd.income_stmt
+        cashflow_stmt = ntd.cashflow
 
-# ---------- 1) Paramètres généraux des scénarios ----------
+        tab1, tab2, tab3 = st.tabs(["📘 Bilan", "📗 Compte de résultat", "📙 Flux de trésorerie"])
+        
+        with tab1:
+            st.dataframe(balance_sheet, use_container_width=True, height=400)
+        
+        with tab2:
+            st.dataframe(income_stmt, use_container_width=True, height=400)
+        
+        with tab3:
+            st.dataframe(cashflow_stmt, use_container_width=True, height=400)
+        
+        st.markdown("</div>", unsafe_allow_html=True)
 
-scenario_factors = {
-    "Central": 1.00,
-    "Optimistic": 1.15,   # +15%
-    "Pessimistic": 0.85   # -15%
-}
+    with col_right:
+        st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+        st.markdown("### 📈 Performance boursière comparée")
 
-base_colors = plotly.colors.qualitative.Plotly
+        tickers = list(companies.keys())
+        prices = yf.download(tickers, start=start, end=end, progress=False)["Close"]
 
-# On cible ces KPI, mais on ne garde que ceux réellement présents
-target_metrics = [
-    "Total Revenue",
-    "Operating Income",
-    "Net Income",
-    "Operating Cash Flow"
-]
+        def base100(df):
+            return df / df.iloc[0] * 100
 
-available_metrics = all_forecasts_millions["Metric"].unique()
-scenario_metrics = [m for m in target_metrics if m in available_metrics]
+        px_norm = base100(prices)
+        px_norm.columns = [companies[c] for c in px_norm.columns]
 
-
-# ---------- 2) Construction des scénarios pour les KPI ----------
-
-kpi_scenarios = []
-
-for metric in scenario_metrics:
-    hist_mask = income_stmt["Metric"] == metric
-    last_hist_date = income_stmt.loc[hist_mask, "Date"].max()
-
-    df_forecast = all_forecasts_millions[
-        (all_forecasts_millions["Metric"] == metric)
-        & (all_forecasts_millions["ds"] > last_hist_date)
-    ].copy()
-
-    if df_forecast.empty:
-        continue
-
-    for scen_name, factor in scenario_factors.items():
-        tmp = df_forecast[["ds", "Metric", "yhat"]].copy()
-        tmp["Scenario"] = scen_name
-        tmp["Value"] = tmp["yhat"] * factor
-        kpi_scenarios.append(tmp)
-
-kpi_scenarios = pd.concat(kpi_scenarios, ignore_index=True)
-
-
-# ---------- 3) Graphique interactif des scénarios KPI ----------
-
-fig_kpi = go.Figure()
-
-for i, metric in enumerate(scenario_metrics):
-    df_metric = kpi_scenarios[kpi_scenarios["Metric"] == metric]
-    color = base_colors[i % len(base_colors)]
-    visible = (i == 0)
-
-    for j, scen_name in enumerate(scenario_factors.keys()):
-        df_scen = df_metric[df_metric["Scenario"] == scen_name]
-        fig_kpi.add_trace(
-            go.Scatter(
-                x=df_scen["ds"],
-                y=df_scen["Value"],
-                mode="lines",
-                name=f"{metric} – {scen_name}",
-                line=dict(
-                    width=2,
-                    color=color,
-                    dash=["solid", "dash", "dot"][j % 3]
-                ),
-                visible=visible,
-                hovertemplate=(
-                    f"<b>{metric} – {scen_name}</b><br>"
-                    "Valeur (M): %{y:,.1f}<br>Date: %{x|%Y-%m-%d}"
-                    "<extra></extra>"
+        fig_prices = go.Figure()
+        
+        colors = ['#E74C3C', '#3498DB', '#2ECC71', '#F39C12', '#9B59B6']
+        
+        for idx, col_name in enumerate(px_norm.columns):
+            fig_prices.add_trace(
+                go.Scatter(
+                    x=px_norm.index,
+                    y=px_norm[col_name],
+                    mode="lines",
+                    name=col_name,
+                    line=dict(width=2.5, color=colors[idx % len(colors)])
                 )
+            )
+
+        fig_prices.update_layout(
+            title={
+                'text': "Performance normalisée (Base 100)",
+                'font': {'size': 18, 'family': 'Arial, sans-serif'}
+            },
+            xaxis_title="Date",
+            yaxis_title="Indice (Base 100)",
+            height=520,
+            legend=dict(
+                orientation="v",
+                yanchor="top",
+                y=0.99,
+                xanchor="left",
+                x=0.01,
+                bgcolor="rgba(255, 255, 255, 0.8)",
+                bordercolor="rgba(0, 0, 0, 0.2)",
+                borderwidth=1
+            ),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font=dict(size=12)
+        )
+        
+        fig_prices.update_xaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        fig_prices.update_yaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        
+        st.plotly_chart(fig_prices, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ---------- LIGNE 2 : MONTE CARLO & FORECAST ----------
+    st.markdown("<div class='daisy-container'>", unsafe_allow_html=True)
+    
+    col_mc, col_fc = st.columns(2)
+
+    with col_mc:
+        st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+        st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
+        st.markdown("*Projection à 5 ans basée sur 500 trajectoires simulées*")
+
+        returns = prices["NTDOY"].pct_change().dropna()
+        r = returns.mean()
+        sigma = returns.std()
+
+        T = 5
+        M = 100
+        dt = T / M
+        I = 500
+
+        S = np.zeros((M + 1, I))
+        S0 = prices["NTDOY"].iloc[-1]
+        S[0] = S0
+
+        for t in range(1, M + 1):
+            S[t] = S[t - 1] * np.exp(
+                (r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * npr.randn(I)
+            )
+
+        fig_mc = go.Figure()
+        
+        for i in range(100):
+            fig_mc.add_trace(
+                go.Scatter(
+                    x=list(range(M + 1)),
+                    y=S[:, i],
+                    mode="lines",
+                    line=dict(width=0.8, color="rgba(255, 215, 0, 0.15)"),
+                    showlegend=False,
+                    hoverinfo='skip'
+                )
+            )
+
+        fig_mc.add_trace(
+            go.Scatter(
+                x=list(range(M + 1)),
+                y=S.mean(axis=1),
+                mode="lines",
+                name="Trajectoire moyenne",
+                line=dict(width=4, color="#FFD700")
+            )
+        )
+        
+        # Ajout des percentiles
+        fig_mc.add_trace(
+            go.Scatter(
+                x=list(range(M + 1)),
+                y=np.percentile(S, 90, axis=1),
+                mode="lines",
+                name="90e percentile",
+                line=dict(width=2, color="rgba(46, 204, 113, 0.6)", dash='dash')
+            )
+        )
+        
+        fig_mc.add_trace(
+            go.Scatter(
+                x=list(range(M + 1)),
+                y=np.percentile(S, 10, axis=1),
+                mode="lines",
+                name="10e percentile",
+                line=dict(width=2, color="rgba(231, 76, 60, 0.6)", dash='dash')
             )
         )
 
-# bouton par KPI (3 traces par KPI)
-buttons_kpi = []
-for i, metric in enumerate(scenario_metrics):
-    visibility = [False] * (len(scenario_metrics) * len(scenario_factors))
-    start = i * len(scenario_factors)
-    for k in range(len(scenario_factors)):
-        visibility[start + k] = True
-
-    buttons_kpi.append(
-        dict(
-            label=metric,
-            method="update",
-            args=[
-                {"visible": visibility},
-                {"title": f"<b>Scenario Analysis – {metric}</b>"}
-            ]
+        fig_mc.update_layout(
+            title={
+                'text': "Distribution future du cours NTDOY",
+                'font': {'size': 16}
+            },
+            xaxis_title="Pas de temps",
+            yaxis_title="Prix simulé (USD)",
+            height=500,
+            margin=dict(l=50, r=30, t=60, b=50),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            legend=dict(
+                yanchor="top",
+                y=0.99,
+                xanchor="left",
+                x=0.01,
+                bgcolor="rgba(255, 255, 255, 0.8)"
+            )
         )
-    )
+        
+        fig_mc.update_xaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        fig_mc.update_yaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        
+        st.plotly_chart(fig_mc, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-fig_kpi.update_layout(
-    title={"text": f"<b>Scenario Analysis – {scenario_metrics[0]}</b>", "x": 0.5, "xanchor": "center"},
-    xaxis_title="Date",
-    yaxis_title="Valeur (en millions)",
-    template="plotly_white",
-    hovermode="x unified",
-    height=550,
-    width=950,
-    updatemenus=[
-        dict(
-            type="dropdown",
-            direction="down",
-            showactive=True,
-            x=0.5,
-            xanchor="center",
-            y=1.15,
-            yanchor="top",
-            buttons=buttons_kpi
+    with col_fc:
+        st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+        st.markdown("### 🔮 Projection de revenus")
+        st.markdown("*Scénario de croissance simulée 2025-2030*")
+
+        metric = "Total Revenue"
+        years = np.arange(2025, 2031)
+        base_value = income_stmt.loc["Total Revenue"].mean()
+        growth = np.linspace(1.00, 1.25, len(years))
+
+        forecast = pd.DataFrame({
+            "Année": years,
+            "Prévision (JPY)": base_value * growth
+        })
+
+        # Formatage des valeurs
+        forecast["Prévision (Milliards JPY)"] = (forecast["Prévision (JPY)"] / 1e9).round(2)
+        
+        st.dataframe(
+            forecast[["Année", "Prévision (Milliards JPY)"]], 
+            use_container_width=True,
+            hide_index=True
         )
-    ]
-)
 
-fig_kpi.show()
+        fig_fc = go.Figure()
+        
+        fig_fc.add_trace(
+            go.Scatter(
+                x=forecast["Année"],
+                y=forecast["Prévision (JPY)"],
+                mode="lines+markers",
+                line=dict(width=4, color="#FF7F0E"),
+                marker=dict(size=10, color="#FF7F0E", line=dict(width=2, color='white')),
+                name="Revenus simulés",
+                fill='tozeroy',
+                fillcolor='rgba(255, 127, 14, 0.2)'
+            )
+        )
+        
+        fig_fc.update_layout(
+            title={
+                'text': "Projection Total Revenue",
+                'font': {'size': 16}
+            },
+            xaxis_title="Année",
+            yaxis_title="Revenus (JPY)",
+            height=480,
+            margin=dict(l=50, r=30, t=60, b=50),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            showlegend=False
+        )
+        
+        fig_fc.update_xaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        fig_fc.update_yaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        
+        st.plotly_chart(fig_fc, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ---------- LIGNE 3 : SCÉNARIOS KPI ----------
+    st.markdown("<div class='daisy-container'>", unsafe_allow_html=True)
+    st.markdown("### 🧪 Analyse de scénarios – Résultat opérationnel")
+    st.markdown("*Évaluation sous trois hypothèses de performance*")
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    scenario_factors = {"Pessimiste": 0.85, "Central": 1.00, "Optimiste": 1.15}
+    metric = "Operating Income"
+    base_value = income_stmt.loc["Operating Income"].mean()
+
+    df_scen = pd.DataFrame({
+        "Scénario": list(scenario_factors.keys()),
+        "Valeur (JPY)": [base_value * f for f in scenario_factors.values()]
+    })
+    
+    df_scen["Valeur (Milliards JPY)"] = (df_scen["Valeur (JPY)"] / 1e9).round(2)
+
+    col_tab, col_bar = st.columns([1, 2])
+
+    with col_tab:
+        st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+        st.dataframe(
+            df_scen[["Scénario", "Valeur (Milliards JPY)"]], 
+            use_container_width=True,
+            hide_index=True,
+            height=250
+        )
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.info("**Hypothèses:**\n\n- Pessimiste: -15%\n- Central: Baseline\n- Optimiste: +15%")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with col_bar:
+        st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+        
+        fig_scen = go.Figure()
+        
+        fig_scen.add_bar(
+            x=df_scen["Scénario"],
+            y=df_scen["Valeur (JPY)"],
+            marker_color=["#E15759", "#4E79A7", "#59A14F"],
+            text=df_scen["Valeur (Milliards JPY)"],
+            texttemplate='%{text:.2f}B JPY',
+            textposition='outside',
+            textfont=dict(size=14, color='black')
+        )
+        
+        fig_scen.update_layout(
+            title={
+                'text': "Operating Income par scénario",
+                'font': {'size': 16}
+            },
+            yaxis_title="Revenus opérationnels (JPY)",
+            height=420,
+            margin=dict(l=50, r=30, t=60, b=50),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            showlegend=False
+        )
+        
+        fig_scen.update_xaxes(showgrid=False)
+        fig_scen.update_yaxes(showgrid=True, gridwidth=0.5, gridcolor='rgba(128,128,128,0.2)')
+        
+        st.plotly_chart(fig_scen, use_container_width=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style='text-align: center; padding: 20px; background-color: rgba(255, 255, 255, 0.4); 
+                backdrop-filter: blur(10px); border-radius: 12px; margin: 20px 0;'>
+        <p style='margin: 0; opacity: 0.8; font-size: 0.95em;'>
+            📊 <strong>Module Daisy</strong> – Outil de support à la décision pour investisseurs institutionnels et retail
+        </p>
+        <p style='margin: 5px 0 0 0; opacity: 0.6; font-size: 0.85em;'>
+            Données fournies par Yahoo Finance – À des fins éducatives uniquement
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 
-# ---------- 4) Scénarios pour le prix NTDOY (à partir de S) ----------
+# ========== SIDEBAR ==========
+with st.sidebar:
+    st.markdown("### 🎮 Navigation")
+    st.markdown("---")
 
-# S : matrice (M+1, I) déjà calculée dans la partie Monte Carlo
-# On extrait trois trajectoires représentatives via quantiles
-time_steps = np.arange(S.shape[0])
+    if st.button("🌼 Partie 1 - Daisy", use_container_width=True):
+        st.image("images/Daisy.png", width=120)
 
-pess_path = np.quantile(S, 0.20, axis=1)   # scénario défavorable
-central_path = np.quantile(S, 0.50, axis=1)  # médian
-optim_path = np.quantile(S, 0.80, axis=1)  # scénario favorable
+    if st.button("🍑 Partie 2 - Peach", use_container_width=True):
+        st.image("images/Peach.png", width=120)
 
-fig_stock = go.Figure()
+    if st.button("🥚 Partie 3 - Birdo", use_container_width=True):
+        st.image("images/Birdo.png", width=120)
 
-fig_stock.add_trace(
-    go.Scatter(
-        x=time_steps,
-        y=central_path,
-        mode="lines",
-        name="Central",
-        line=dict(width=2, color=base_colors[0]),
-        hovertemplate="Step %{x}<br>Prix: %{y:,.2f}<extra></extra>"
-    )
-)
+    if st.button("🐢 Partie 4 - Bowser", use_container_width=True):
+        st.image("images/Bowser.png", width=120)
 
-fig_stock.add_trace(
-    go.Scatter(
-        x=time_steps,
-        y=optim_path,
-        mode="lines",
-        name="Optimistic",
-        line=dict(width=2, color=base_colors[1], dash="dash"),
-        hovertemplate="Step %{x}<br>Prix: %{y:,.2f}<extra></extra>"
-    )
-)
-
-fig_stock.add_trace(
-    go.Scatter(
-        x=time_steps,
-        y=pess_path,
-        mode="lines",
-        name="Pessimistic",
-        line=dict(width=2, color=base_colors[2], dash="dot"),
-        hovertemplate="Step %{x}<br>Prix: %{y:,.2f}<extra></extra>"
-    )
-)
-
-fig_stock.update_layout(
-    title={"text": "<b>Scenario Analysis – NTDOY Monte Carlo</b>", "x": 0.5, "xanchor": "center"},
-    xaxis_title="Time step (horizon Monte Carlo)",
-    yaxis_title="NTDOY Stock Price",
-    template="plotly_white",
-    height=550,
-    width=950,
-    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
-)
-
-fig_stock.show()
+    if st.button("👻 Partie 5 - Luigi", use_container_width=True):
+        st.image("images/Luigi.png", width=120)
