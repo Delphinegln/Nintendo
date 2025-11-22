@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="Nintendo Dashboard",
     layout="wide",
     initial_sidebar_state="expanded",
-    
+)    
 sns.set_theme(style="whitegrid")
 
 # ====== SESSION STATE GLOBAL ======
