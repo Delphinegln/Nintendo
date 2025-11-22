@@ -100,7 +100,7 @@ st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>S
 # On affiche les cartes SEULEMENT si la page Daisy n'est PAS ouverte
 if not st.session_state["show_daisy_page"]:
     
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
 # ---------- PARTIE 1 : DAISY ----------
     with col1:
