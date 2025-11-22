@@ -26,29 +26,42 @@ st.markdown("""
 # CSS pour uniformiser les cartes
 st.markdown("""
 <style>
-    .main { background-color: #FCF9F3; }
+    .main { background-color: transparent; }
 
     .custom-card {
-        background-color: white;
+        background-color: rgba(255, 255, 255, 0.85); 
+        backdrop-filter: blur(10px); 
+        -webkit-backdrop-filter: blur(10px); 
         border-radius: 12px;
-        padding: 20px;
-        margin: 10px 0;
-        border: 3px solid rgba(0,0,0,0.1);
+        padding: 15px;
+        margin: 10px auto; 
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         text-align: center;
+        max-width: 280px; 
     }
 
     .card-img {
-        width: 90px;
-        margin-bottom: 10px;
+        width: 70px; 
+        margin-bottom: 8px;
     }
-
+    
+    .custom-card h3 {
+        font-size: 1.1em; 
+        margin: 8px 0;
+    }
+    
+    .custom-card p {
+        font-size: 0.9em; 
+        margin: 5px 0;
+    }
     .placeholder-box {
         background-color: rgba(94, 82, 64, 0.05);
         border: 2px dashed rgba(94, 82, 64, 0.3);
         border-radius: 8px;
-        padding: 30px;
+        padding: 20px;
         text-align: center;
-        min-height: 120px;
+        min-height: 100px;
         display: flex;
         flex-direction: column;
         align-items: center;
