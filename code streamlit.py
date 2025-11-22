@@ -9,13 +9,23 @@ import plotly.colors
 from datetime import datetime
 import numpy.random as npr
 
+
+sns.set_theme(style="whitegrid")
+
+# ====== SESSION STATE GLOBAL ======
+if "show_daisy_page" not in st.session_state:
+    st.session_state["show_daisy_page"] = False
+    
 st.set_page_config(
     page_title="Nintendo Dashboard",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-
+# Initialiser l'état une seule fois
+if "show_daisy_page" not in st.session_state:
+    st.session_state["show_daisy_page"] = False
+    
 # CSS pour mettre l'image en fond d'écran
 st.markdown("""
     <style>
@@ -112,9 +122,7 @@ st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>S
 # --- GRID LAYOUT ---
 col1, col2 = st.columns(2)
 
-# Initialiser l'état une seule fois
-if "show_daisy_page" not in st.session_state:
-    st.session_state["show_daisy_page"] = False
+
 
 # ------------------------------------------------------------------
 # PARTIE 1 : DAISY
