@@ -29,7 +29,13 @@ def daisy_popup():
         Monte-Carlo projections, and scenario analysis.
         """
     )
+    st.markdown("### 🌼 Daisy – Nintendo Financial Forecasting")
+    st.write("Daisy fait fleurir vos profits !")
 
+    if st.button("Fermer la fenêtre"):
+        st.session_state["daisy_open"] = False
+        st.rerun()
+    
     # ============================
     # SECTION 1 — DATA PREPARATION
     # ============================
@@ -294,69 +300,18 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# CSS pour le modal fullscreen Daisy
+
 st.markdown("""
 <style>
-/* Overlay */
-#daisy-modal {
-    position: fixed;
-    top:0; left:0;
-    width:100vw; height:100vh;
-    background: rgba(0,0,0,0.55);
+/* Élargir le dialog Daisy en format horizontal */
+.stDialog > div {
+    width: 90vw !important;      /* très large */
+    max-width: 1100px !important; /* limite sur grands écrans */
+}
+
+/* Optionnel : un fond légèrement flouté derrière le dialog */
+.stDialog::backdrop {
     backdrop-filter: blur(3px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-}
-
-/* Modal box */
-.daisy-box {
-    width: 90%;
-    height: 90%;
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 0 30px rgba(0,0,0,0.25);
-    animation: popup 0.25s ease;
-}
-
-/* Animation */
-@keyframes popup {
-    from { transform: scale(0.9); opacity:0; }
-    to { transform: scale(1); opacity:1; }
-}
-
-/* Close button */
-.close-btn {
-    position:absolute;
-    right:25px;
-    top:15px;
-    font-size:32px;
-    cursor:pointer;
-    color:#444;
-    transition:0.2s;
-}
-.close-btn:hover {
-    color:#ff7f00;
-}
-
-/* Titles */
-.daisy-title {
-    font-size: 42px;
-    font-weight: 800;
-    color: #e9a21f;
-    text-align:center;
-    margin-bottom: 15px;
-}
-
-.daisy-sub {
-    font-size:22px;
-    color:#555;
-    text-align:center;
-    margin-bottom:30px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -408,21 +363,20 @@ col1, col2 = st.columns(2)
 # ------------------------------------------------------------------
 # PARTIE 1 : DAISY
 with col1:
-    # bouton invisible
-    if st.button("", key="daisy_click"):
+    # bouton qui ouvre le dialog officiel Streamlit
+    if st.button(" ", key="daisy_click"):
         st.session_state["daisy_open"] = True
 
-    # carte Daisy
     st.markdown("""
     <div class="custom-card">
-        <img src="..." class="card-img">
-        <h3>Financial Forecasting</h3>
-        <p style="opacity:0.8;">Cliquez n'importe où sur la carte</p>
+        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png"
+        <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
+        <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
     </div>
     """, unsafe_allow_html=True)
 
-# Ouvrir le popup si session_state True
-if "daisy_open" in st.session_state and st.session_state["daisy_open"]:
+# ouvrir le dialog si besoin
+if st.session_state.get("daisy_open", False):
     daisy_popup()
 # ------------------------------------------------------------------
 # PARTIE 2 : PEACH
@@ -505,10 +459,6 @@ with col6:
         """, unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
-
-# Affiche le modal Daisy si nécessaire
-if st.session_state["daisy_open"]:
-    show_daisy_modal()
 
 # SIDEBAR
 with st.sidebar:
