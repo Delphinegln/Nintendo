@@ -44,15 +44,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ========== CSS : CARTES UNIFORMES ==========
+# ========== CSS : CARTES PLUS TRANSPARENTES ==========
 st.markdown("""
 <style>
     .main { background-color: transparent; }
 
     .custom-card {
-        background-color: rgba(255, 255, 255, 0.85); 
-        backdrop-filter: blur(10px); 
-        -webkit-backdrop-filter: blur(10px); 
+        background-color: rgba(255, 255, 255, 0.25) !important; 
+        backdrop-filter: blur(15px) !important; 
+        -webkit-backdrop-filter: blur(15px) !important; 
         border-radius: 12px;
         padding: 15px;
         margin: 10px auto; 
@@ -88,6 +88,31 @@ st.markdown("""
         flex-direction: column;
         align-items: center;
         justify-content: center;
+    }
+    
+    /* Conteneurs pour graphiques Daisy */
+    .chart-container {
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 25px;
+        margin: 20px 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .intro-box {
+        background-color: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 12px;
+        padding: 25px;
+        margin: 20px 0;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        line-height: 1.8;
+        font-size: 1.05em;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -224,192 +249,323 @@ if st.session_state["show_daisy_page"]:
         "TCEHY": "Tencent Holdings Corporation"
     }
 
-    st.markdown("### 📁 Paramètres d'analyse")
-    st.write(f"Période analysée : **{start} → {end}**")
-    st.code(
-        'start = "2015-09-30"\nend   = "2025-09-30"\ncompanies = {"NTDOY": "Nintendo", ...}',
-        language="python"
+    # ---------- TEXTE DESCRIPTIF AU LIEU DU CODE ----------
+    st.markdown("""
+    <div class="intro-box">
+        <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
+            Nous avons analysé le titre <strong>Nintendo Co., Ltd.</strong> sur une période de <strong>10 ans</strong>, 
+            du <strong>30 septembre 2015</strong> au <strong>30 septembre 2025</strong>. Cette analyse comparative 
+            inclut également les performances de <strong>Sony Group Corporation</strong>, <strong>Microsoft Corporation</strong>, 
+            <strong>Electronic Arts Inc.</strong> et <strong>Tencent Holdings Corporation</strong>, permettant une 
+            vision holistique du secteur du gaming et du divertissement interactif.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS (PLEINE LARGEUR) ----------
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+    st.markdown("### 📊 États financiers – Nintendo")
+    
+    ntd = yf.Ticker("NTDOY")
+    balance_sheet = ntd.balance_sheet
+    income_stmt = ntd.income_stmt
+    cashflow_stmt = ntd.cashflow
+
+    tab1, tab2, tab3 = st.tabs(["📘 Bilan", "📗 Compte de résultat", "📙 Flux de trésorerie"])
+    
+    with tab1:
+        st.dataframe(balance_sheet, use_container_width=True, height=500)
+    
+    with tab2:
+        st.dataframe(income_stmt, use_container_width=True, height=500)
+    
+    with tab3:
+        st.dataframe(cashflow_stmt, use_container_width=True, height=500)
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÈRE (PLEINE LARGEUR) ----------
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+    st.markdown("### 📈 Performance boursière comparée")
+
+    tickers = list(companies.keys())
+    prices = yf.download(tickers, start=start, end=end, progress=False)["Close"]
+
+    def base100(df):
+        return df / df.iloc[0] * 100
+
+    px_norm = base100(prices)
+    px_norm.columns = [companies[c] for c in px_norm.columns]
+
+    fig_prices = go.Figure()
+    
+    colors = ['#E74C3C', '#3498DB', '#2ECC71', '#F39C12', '#9B59B6']
+    
+    for idx, col_name in enumerate(px_norm.columns):
+        fig_prices.add_trace(
+            go.Scatter(
+                x=px_norm.index,
+                y=px_norm[col_name],
+                mode="lines",
+                name=col_name,
+                line=dict(width=3, color=colors[idx % len(colors)])
+            )
+        )
+
+    fig_prices.update_layout(
+        title={
+            'text': "Performance normalisée (Base 100)",
+            'font': {'size': 20, 'family': 'Arial, sans-serif'}
+        },
+        xaxis_title="Date",
+        yaxis_title="Indice (Base 100)",
+        height=600,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            bgcolor="rgba(255, 255, 255, 0.9)",
+            bordercolor="rgba(0, 0, 0, 0.2)",
+            borderwidth=1
+        ),
+        plot_bgcolor='rgba(240, 240, 240, 0.3)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(size=13)
+    )
+    
+    fig_prices.update_xaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    fig_prices.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    
+    st.plotly_chart(fig_prices, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # ---------- GRAPHIQUE 3 : MONTE CARLO (PLEINE LARGEUR) ----------
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+    st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
+    st.markdown("*Projection à 5 ans basée sur 500 trajectoires simulées*")
+
+    returns = prices["NTDOY"].pct_change().dropna()
+    r = returns.mean()
+    sigma = returns.std()
+
+    T = 5
+    M = 100
+    dt = T / M
+    I = 500
+
+    S = np.zeros((M + 1, I))
+    S0 = prices["NTDOY"].iloc[-1]
+    S[0] = S0
+
+    for t in range(1, M + 1):
+        S[t] = S[t - 1] * np.exp(
+            (r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * npr.randn(I)
+        )
+
+    fig_mc = go.Figure()
+    
+    for i in range(120):
+        fig_mc.add_trace(
+            go.Scatter(
+                x=list(range(M + 1)),
+                y=S[:, i],
+                mode="lines",
+                line=dict(width=0.8, color="rgba(255, 215, 0, 0.15)"),
+                showlegend=False,
+                hoverinfo='skip'
+            )
+        )
+
+    fig_mc.add_trace(
+        go.Scatter(
+            x=list(range(M + 1)),
+            y=S.mean(axis=1),
+            mode="lines",
+            name="Trajectoire moyenne",
+            line=dict(width=5, color="#FFD700")
+        )
+    )
+    
+    fig_mc.add_trace(
+        go.Scatter(
+            x=list(range(M + 1)),
+            y=np.percentile(S, 90, axis=1),
+            mode="lines",
+            name="90e percentile",
+            line=dict(width=3, color="rgba(46, 204, 113, 0.8)", dash='dash')
+        )
+    )
+    
+    fig_mc.add_trace(
+        go.Scatter(
+            x=list(range(M + 1)),
+            y=np.percentile(S, 10, axis=1),
+            mode="lines",
+            name="10e percentile",
+            line=dict(width=3, color="rgba(231, 76, 60, 0.8)", dash='dash')
+        )
+    )
+
+    fig_mc.update_layout(
+        title={
+            'text': "Distribution future du cours NTDOY",
+            'font': {'size': 20}
+        },
+        xaxis_title="Pas de temps",
+        yaxis_title="Prix simulé (USD)",
+        height=600,
+        margin=dict(l=70, r=40, t=80, b=60),
+        plot_bgcolor='rgba(240, 240, 240, 0.3)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="center",
+            x=0.5,
+            bgcolor="rgba(255, 255, 255, 0.9)"
+        )
+    )
+    
+    fig_mc.update_xaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    fig_mc.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    
+    st.plotly_chart(fig_mc, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # ---------- GRAPHIQUE 4 : PROJECTION REVENUS (PLEINE LARGEUR) ----------
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+    st.markdown("### 🔮 Projection de revenus")
+    st.markdown("*Scénario de croissance simulée 2025-2030*")
+
+    metric = "Total Revenue"
+    years = np.arange(2025, 2031)
+    base_value = income_stmt.loc["Total Revenue"].mean()
+    growth = np.linspace(1.00, 1.25, len(years))
+
+    forecast = pd.DataFrame({
+        "Année": years,
+        "Prévision (JPY)": base_value * growth
+    })
+
+    forecast["Prévision (Milliards JPY)"] = (forecast["Prévision (JPY)"] / 1e9).round(2)
+    
+    st.dataframe(
+        forecast[["Année", "Prévision (Milliards JPY)"]], 
+        use_container_width=True,
+        hide_index=True,
+        height=250
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ---------- LIGNE 1 : ÉTATS FINANCIERS & PRIX ----------
-    col_left, col_right = st.columns([2, 3])
-
-    with col_left:
-        st.markdown("### 📊 États financiers – Nintendo")
-        ntd = yf.Ticker("NTDOY")
-        balance_sheet = ntd.balance_sheet
-        income_stmt = ntd.income_stmt
-        cashflow_stmt = ntd.cashflow
-
-        st.markdown("**📘 Bilan**")
-        st.dataframe(balance_sheet)
-
-        st.markdown("**📗 Compte de résultat**")
-        st.dataframe(income_stmt)
-
-        st.markdown("**📙 Tableau de flux de trésorerie**")
-        st.dataframe(cashflow_stmt)
-
-    with col_right:
-        st.markdown("### 📈 Performance boursière comparée")
-
-        tickers = list(companies.keys())
-        prices = yf.download(tickers, start=start, end=end, progress=False)["Close"]
-
-        def base100(df):
-            return df / df.iloc[0] * 100
-
-        px_norm = base100(prices)
-        px_norm.columns = [companies[c] for c in px_norm.columns]
-
-        fig_prices = go.Figure()
-        for col_name in px_norm.columns:
-            fig_prices.add_trace(
-                go.Scatter(
-                    x=px_norm.index,
-                    y=px_norm[col_name],
-                    mode="lines",
-                    name=col_name
-                )
-            )
-
-        fig_prices.update_layout(
-            title="Performance normalisée (Base 100)",
-            xaxis_title="Date",
-            yaxis_title="Indice (Base 100)",
-            height=420,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    fig_fc = go.Figure()
+    
+    fig_fc.add_trace(
+        go.Scatter(
+            x=forecast["Année"],
+            y=forecast["Prévision (JPY)"],
+            mode="lines+markers",
+            line=dict(width=5, color="#FF7F0E"),
+            marker=dict(size=14, color="#FF7F0E", line=dict(width=3, color='white')),
+            name="Revenus simulés",
+            fill='tozeroy',
+            fillcolor='rgba(255, 127, 14, 0.2)'
         )
-        st.plotly_chart(fig_prices, use_container_width=True)
+    )
+    
+    fig_fc.update_layout(
+        title={
+            'text': "Projection Total Revenue",
+            'font': {'size': 20}
+        },
+        xaxis_title="Année",
+        yaxis_title="Revenus (JPY)",
+        height=600,
+        margin=dict(l=70, r=40, t=80, b=60),
+        plot_bgcolor='rgba(240, 240, 240, 0.3)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False
+    )
+    
+    fig_fc.update_xaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    fig_fc.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    
+    st.plotly_chart(fig_fc, use_container_width=True)
+    st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- LIGNE 2 : MONTE CARLO & FORECAST ----------
-    col_mc, col_fc = st.columns(2)
-
-    with col_mc:
-        st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
-
-        returns = prices["NTDOY"].pct_change().dropna()
-        r = returns.mean()
-        sigma = returns.std()
-
-        T = 5
-        M = 100
-        dt = T / M
-        I = 500
-
-        S = np.zeros((M + 1, I))
-        S0 = prices["NTDOY"].iloc[-1]
-        S[0] = S0
-
-        for t in range(1, M + 1):
-            S[t] = S[t - 1] * np.exp(
-                (r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * npr.randn(I)
-            )
-
-        fig_mc = go.Figure()
-        for i in range(80):
-            fig_mc.add_trace(
-                go.Scatter(
-                    x=list(range(M + 1)),
-                    y=S[:, i],
-                    mode="lines",
-                    line=dict(width=1, color="rgba(255, 215, 0, 0.25)"),
-                    showlegend=False
-                )
-            )
-
-        fig_mc.add_trace(
-            go.Scatter(
-                x=list(range(M + 1)),
-                y=S.mean(axis=1),
-                mode="lines",
-                name="Trajectoire moyenne",
-                line=dict(width=3, color="#FFD700")
-            )
-        )
-
-        fig_mc.update_layout(
-            title="Monte Carlo – Distribution future du cours NTDOY",
-            xaxis_title="Pas de temps",
-            yaxis_title="Prix simulé",
-            height=380,
-            margin=dict(l=40, r=20, t=50, b=40)
-        )
-        st.plotly_chart(fig_mc, use_container_width=True)
-
-    with col_fc:
-        st.markdown("### 🔮 Projection de revenus (simulation)")
-
-        metric = "Total Revenue"
-        years = np.arange(2025, 2031)
-        base_value = income_stmt.loc["Total Revenue"].mean()
-        growth = np.linspace(1.00, 1.25, len(years))
-
-        forecast = pd.DataFrame({
-            "Year": years,
-            "Simulated Forecast": base_value * growth
-        })
-
-        st.dataframe(forecast)
-
-        fig_fc = go.Figure()
-        fig_fc.add_trace(
-            go.Scatter(
-                x=forecast["Year"],
-                y=forecast["Simulated Forecast"],
-                mode="lines+markers",
-                line=dict(width=3, color="#FF7F0E"),
-                name="Revenus simulés"
-            )
-        )
-        fig_fc.update_layout(
-            title="Projection simulée – Total Revenue",
-            xaxis_title="Année",
-            yaxis_title="JPY (simulé)",
-            height=380,
-            margin=dict(l=40, r=20, t=50, b=40)
-        )
-        st.plotly_chart(fig_fc, use_container_width=True)
-
-    st.markdown("---")
-
-    # ---------- LIGNE 3 : SCÉNARIOS KPI ----------
+    # ---------- GRAPHIQUE 5 : SCÉNARIOS (PLEINE LARGEUR) ----------
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🧪 Scénarios de résultat opérationnel")
+    st.markdown("*Évaluation sous trois hypothèses de performance*")
 
-    scenario_factors = {"Pessimistic": 0.85, "Central": 1.00, "Optimistic": 1.15}
+    scenario_factors = {"Pessimiste": 0.85, "Central": 1.00, "Optimiste": 1.15}
     metric = "Operating Income"
     base_value = income_stmt.loc["Operating Income"].mean()
 
     df_scen = pd.DataFrame({
-        "Scenario": list(scenario_factors.keys()),
-        "Value": [base_value * f for f in scenario_factors.values()]
+        "Scénario": list(scenario_factors.keys()),
+        "Valeur (JPY)": [base_value * f for f in scenario_factors.values()]
     })
+    
+    df_scen["Valeur (Milliards JPY)"] = (df_scen["Valeur (JPY)"] / 1e9).round(2)
 
-    col_tab, col_bar = st.columns([1, 2])
-
-    with col_tab:
-        st.dataframe(df_scen)
-
-    with col_bar:
-        fig_scen = go.Figure()
-        fig_scen.add_bar(
-            x=df_scen["Scenario"],
-            y=df_scen["Value"],
-            marker_color=["#E15759", "#4E79A7", "#59A14F"]
-        )
-        fig_scen.update_layout(
-            title="Scénarios sur l'Operating Income",
-            yaxis_title="JPY (simulé)",
-            height=360,
-            margin=dict(l=40, r=20, t=50, b=40)
-        )
-        st.plotly_chart(fig_scen, use_container_width=True)
-
+    st.dataframe(
+        df_scen[["Scénario", "Valeur (Milliards JPY)"]], 
+        use_container_width=True,
+        hide_index=True,
+        height=200
+    )
+    
     st.markdown("<br>", unsafe_allow_html=True)
+    
+    fig_scen = go.Figure()
+    
+    fig_scen.add_bar(
+        x=df_scen["Scénario"],
+        y=df_scen["Valeur (JPY)"],
+        marker_color=["#E15759", "#4E79A7", "#59A14F"],
+        text=df_scen["Valeur (Milliards JPY)"],
+        texttemplate='%{text:.2f}B JPY',
+        textposition='outside',
+        textfont=dict(size=16, color='black', family='Arial')
+    )
+    
+    fig_scen.update_layout(
+        title={
+            'text': "Operating Income par scénario",
+            'font': {'size': 20}
+        },
+        yaxis_title="Revenus opérationnels (JPY)",
+        height=600,
+        margin=dict(l=70, r=40, t=80, b=60),
+        plot_bgcolor='rgba(240, 240, 240, 0.3)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False
+    )
+    
+    fig_scen.update_xaxes(showgrid=False)
+    fig_scen.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
+    
+    st.plotly_chart(fig_scen, use_container_width=True)
+    
+    st.info("**Hypothèses de scénarios :** Pessimiste (-15%), Central (baseline), Optimiste (+15%)")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
     st.caption("Module Daisy : outil de support à la décision pour les investisseurs Nintendo.")
 
 
