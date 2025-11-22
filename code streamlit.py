@@ -408,21 +408,22 @@ col1, col2 = st.columns(2)
 # ------------------------------------------------------------------
 # PARTIE 1 : DAISY
 with col1:
-    # On crée un bouton invisible autour de la carte
-    if st.button("🌼 Ouvrir Daisy", key="daisy_card_click"):
+    # bouton invisible
+    if st.button("", key="daisy_click"):
         st.session_state["daisy_open"] = True
 
-    # Affichage de la carte
+    # carte Daisy
     st.markdown("""
     <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
+        <img src="..." class="card-img">
         <h3>Financial Forecasting</h3>
-        <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
-        <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
-        <p style="opacity:0;">Clique ici pour ouvrir</p>
+        <p style="opacity:0.8;">Cliquez n'importe où sur la carte</p>
     </div>
     """, unsafe_allow_html=True)
 
+# Ouvrir le popup si session_state True
+if "daisy_open" in st.session_state and st.session_state["daisy_open"]:
+    daisy_popup()
 # ------------------------------------------------------------------
 # PARTIE 2 : PEACH
 with col2:
