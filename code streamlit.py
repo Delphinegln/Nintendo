@@ -294,9 +294,113 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# CSS pour le modal fullscreen Daisy
+st.markdown("""
+<style>
+/* Overlay */
+#daisy-modal {
+    position: fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Modal box */
+.daisy-box {
+    width: 90%;
+    height: 90%;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0,0,0,0.25);
+    animation: popup 0.25s ease;
+}
+
+/* Animation */
+@keyframes popup {
+    from { transform: scale(0.9); opacity:0; }
+    to { transform: scale(1); opacity:1; }
+}
+
+/* Close button */
+.close-btn {
+    position:absolute;
+    right:25px;
+    top:15px;
+    font-size:32px;
+    cursor:pointer;
+    color:#444;
+    transition:0.2s;
+}
+.close-btn:hover {
+    color:#ff7f00;
+}
+
+/* Titles */
+.daisy-title {
+    font-size: 42px;
+    font-weight: 800;
+    color: #e9a21f;
+    text-align:center;
+    margin-bottom: 15px;
+}
+
+.daisy-sub {
+    font-size:22px;
+    color:#555;
+    text-align:center;
+    margin-bottom:30px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+def show_daisy_modal():
+    st.markdown('<div id="daisy-modal">', unsafe_allow_html=True)
+    st.markdown('<div class="daisy-box">', unsafe_allow_html=True)
+
+    # Close button
+    if st.button("✖", key="close_daisy", help="Close"):
+        st.session_state["daisy_open"] = False
+
+    # TITLE
+    st.markdown('<h1 class="daisy-title">🌼 Daisy – Financial Forecasting</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="daisy-sub">“Daisy makes your profits bloom!”</p>', unsafe_allow_html=True)
+
+    st.write("---")
+
+    # FINANCIAL DATA
+    ticker = yf.Ticker("NTDOY")
+    balance_sheet = ticker.balance_sheet
+    income_stmt = ticker.financials
+
+    st.markdown("## **Income Statement (JPY)**")
+    st.dataframe((income_stmt/1e9).round(2))
+
+    st.markdown("## **Balance Sheet (JPY)**")
+    st.dataframe((balance_sheet/1e9).round(2))
+
+    st.write("---")
+    st.markdown("### Forecast Preview")
+    st.write("Prévisions futures bientôt disponibles.")
+
+    st.markdown('</div></div>', unsafe_allow_html=True)
+
 # HEADER
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
+
+# Initialiser la variable de session pour le popup Daisy
+if "daisy_open" not in st.session_state:
+    st.session_state["daisy_open"] = False
+    
 
 # --- GRID LAYOUT ---
 col1, col2 = st.columns(2)
@@ -304,6 +408,10 @@ col1, col2 = st.columns(2)
 # ------------------------------------------------------------------
 # PARTIE 1 : DAISY
 with col1:
+    # La carte Daisy devient clickable
+    if st.button("", key="daisy_card"):
+        st.session_state["daisy_open"] = True
+
     st.markdown("""
     <div class="custom-card">
         <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
@@ -312,9 +420,6 @@ with col1:
         <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
     </div>
     """, unsafe_allow_html=True)
-
-    if st.button("Ouvrir le module Daisy 🌼"):
-        daisy_popup()
 
 # ------------------------------------------------------------------
 # PARTIE 2 : PEACH
@@ -397,6 +502,11 @@ with col6:
         """, unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
+
+# Affiche le modal Daisy si nécessaire
+if st.session_state["daisy_open"]:
+    show_daisy_modal()
+
 # SIDEBAR
 with st.sidebar:
     st.markdown("### Navigation")
