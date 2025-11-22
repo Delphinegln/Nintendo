@@ -9,32 +9,14 @@ import plotly.colors
 from datetime import datetime
 import numpy.random as npr
 
-#################################################################
-#                DAISY – FINANCIAL FORECASTING POPUP           
-#################################################################
+st.set_page_config(
+    page_title="Nintendo Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
 sns.set_theme(style="whitegrid")
 
-
-@st.dialog("🌼 Daisy – Financial Forecasting")
-def daisy_popup():
-
-    st.title("🌼 Daisy – Nintendo Financial Forecasting")
-    st.write(
-        """
-        Welcome to the *Financial Forecasting* module, inspired by Daisy’s bright 
-        forward-looking optimism.  
-        
-        This section explores Nintendo’s fundamentals, historical performance, 
-        Monte-Carlo projections, and scenario analysis.
-        """
-    )
-    st.markdown("### 🌼 Daisy – Nintendo Financial Forecasting")
-    st.write("Daisy fait fleurir vos profits !")
-
-    if st.button("Fermer la fenêtre"):
-        st.session_state["daisy_open"] = False
-        st.rerun()
     
     # ============================
     # SECTION 1 — DATA PREPARATION
@@ -317,45 +299,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-def show_daisy_modal():
-    st.markdown('<div id="daisy-modal">', unsafe_allow_html=True)
-    st.markdown('<div class="daisy-box">', unsafe_allow_html=True)
-
-    # Close button
-    if st.button("✖", key="close_daisy", help="Close"):
-        st.session_state["daisy_open"] = False
-
-    # TITLE
-    st.markdown('<h1 class="daisy-title">🌼 Daisy – Financial Forecasting</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="daisy-sub">“Daisy makes your profits bloom!”</p>', unsafe_allow_html=True)
-
-    st.write("---")
-
-    # FINANCIAL DATA
-    ticker = yf.Ticker("NTDOY")
-    balance_sheet = ticker.balance_sheet
-    income_stmt = ticker.financials
-
-    st.markdown("## **Income Statement (JPY)**")
-    st.dataframe((income_stmt/1e9).round(2))
-
-    st.markdown("## **Balance Sheet (JPY)**")
-    st.dataframe((balance_sheet/1e9).round(2))
-
-    st.write("---")
-    st.markdown("### Forecast Preview")
-    st.write("Prévisions futures bientôt disponibles.")
-
-    st.markdown('</div></div>', unsafe_allow_html=True)
-
 # HEADER
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
-# Initialiser la variable de session pour le popup Daisy
-if "daisy_open" not in st.session_state:
-    st.session_state["daisy_open"] = False
-    
 
 # --- GRID LAYOUT ---
 col1, col2 = st.columns(2)
@@ -363,21 +310,20 @@ col1, col2 = st.columns(2)
 # ------------------------------------------------------------------
 # PARTIE 1 : DAISY
 with col1:
-    # bouton qui ouvre le dialog officiel Streamlit
-    if st.button(" ", key="daisy_click"):
-        st.session_state["daisy_open"] = True
-
     st.markdown("""
     <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png"
+        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
+        <h3>Financial Forecasting</h3>
         <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
         <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
     </div>
     """, unsafe_allow_html=True)
 
-# ouvrir le dialog si besoin
-if st.session_state.get("daisy_open", False):
-    daisy_popup()
+    # bouton propre sous la carte
+    if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
+        st.session_state["show_daisy_page"] = True
+
+
 # ------------------------------------------------------------------
 # PARTIE 2 : PEACH
 with col2:
@@ -459,6 +405,170 @@ with col6:
         """, unsafe_allow_html=True)
 
 # ------------------------------------------------------------------
+
+# Initialiser l'état une seule fois
+if "show_daisy_page" not in st.session_state:
+    st.session_state["show_daisy_page"] = False
+
+# ====================== PAGE DAISY FULL WIDTH ======================
+if st.session_state["show_daisy_page"]:
+
+    st.markdown("---")
+    st.markdown(
+        "<h2 style='text-align:center; margin-top:10px;'>🌼 Daisy – Nintendo Financial Forecasting</h2>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<p style='text-align:center; opacity:0.8;'>Vue analyste complète : états financiers, historiques, simulations et scénarios.</p>",
+        unsafe_allow_html=True
+    )
+
+    # bouton de fermeture
+    if st.button("⬅️ Retour au dashboard", key="close_daisy"):
+        st.session_state["show_daisy_page"] = False
+        st.rerun()
+
+    # layout large analytique
+    col_left, col_right = st.columns([2, 3])
+
+    # ==== COLONNE GAUCHE : états financiers ====
+    with col_left:
+        st.subheader("📊 États financiers Nintendo")
+        ntd = yf.Ticker("NTDOY")
+        balance_sheet = ntd.balance_sheet
+        income_stmt = ntd.income_stmt
+        cashflow_stmt = ntd.cashflow
+
+        tab1, tab2, tab3 = st.tabs(["Bilan", "Compte de résultat", "Cash-flow"])
+
+        with tab1:
+            st.dataframe(balance_sheet)
+
+        with tab2:
+            st.dataframe(income_stmt)
+
+        with tab3:
+            st.dataframe(cashflow_stmt)
+
+    # ==== COLONNE DROITE : prix & simulations ====
+    with col_right:
+        st.subheader("📈 Performance boursière & simulations")
+
+        start = "2015-09-30"
+        end = "2025-09-30"
+        companies = {
+            "NTDOY": "Nintendo Co., Ltd.",
+            "SONY": "Sony Group Corporation",
+            "MSFT": "Microsoft Corporation",
+            "EA": "Electronic Arts Inc.",
+            "TCEHY": "Tencent Holdings Corporation"
+        }
+
+        tickers = list(companies.keys())
+        prices = yf.download(tickers, start=start, end=end, progress=False)["Close"]
+
+        def base100(df):
+            return df / df.iloc[0] * 100
+
+        px_norm = base100(prices)
+        px_norm.columns = [companies[c] for c in px_norm.columns]
+
+        # graphique normalisé
+        fig, ax = plt.subplots(figsize=(10, 4))
+        px_norm.plot(ax=ax)
+        ax.set_title("Normalised Performance (Base 100)")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Index Level")
+        st.pyplot(fig)
+
+        st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
+
+        returns = prices["NTDOY"].pct_change().dropna()
+        r = returns.mean()
+        sigma = returns.std()
+
+        T = 5
+        M = 100
+        dt = T / M
+        I = 500
+
+        S = np.zeros((M+1, I))
+        S0 = prices["NTDOY"].iloc[-1]
+        S[0] = S0
+
+        for t in range(1, M+1):
+            S[t] = S[t-1] * np.exp(
+                (r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * npr.randn(I)
+            )
+
+        fig_mc = go.Figure()
+        for i in range(80):
+            fig_mc.add_trace(go.Scatter(
+                y=S[:, i], mode="lines", line=dict(width=1), opacity=0.25,
+                showlegend=False
+            ))
+        fig_mc.add_trace(go.Scatter(
+            y=S.mean(axis=1), mode="lines", name="Mean trajectory", line=dict(width=3)
+        ))
+        fig_mc.update_layout(
+            height=400,
+            margin=dict(l=40, r=20, t=50, b=40)
+        )
+        st.plotly_chart(fig_mc, use_container_width=True)
+
+    # ==== deuxième rangée : forecast + scénarios ====
+    st.markdown("---")
+    col_a, col_b = st.columns(2)
+
+    with col_a:
+        st.subheader("🔮 Projection de revenus (simulation)")
+        metric = "Total Revenue"
+        years = np.arange(2025, 2031)
+        base_value = income_stmt.loc["Total Revenue"].mean()
+        growth = np.linspace(1.00, 1.25, len(years))
+
+        forecast = pd.DataFrame({
+            "Year": years,
+            "Simulated Forecast": base_value * growth
+        })
+
+        st.dataframe(forecast)
+
+        fig_fc = go.Figure()
+        fig_fc.add_trace(go.Scatter(
+            x=forecast["Year"],
+            y=forecast["Simulated Forecast"],
+            mode="lines+markers",
+            line=dict(width=3)
+        ))
+        fig_fc.update_layout(
+            height=350,
+            margin=dict(l=40, r=20, t=50, b=40)
+        )
+        st.plotly_chart(fig_fc, use_container_width=True)
+
+    with col_b:
+        st.subheader("🧪 Scénarios de résultat opérationnel")
+
+        scenario_factors = {"Pessimistic": 0.85, "Central": 1.00, "Optimistic": 1.15}
+        metric = "Operating Income"
+        base_value = income_stmt.loc["Operating Income"].mean()
+
+        df_scen = pd.DataFrame({
+            "Scenario": list(scenario_factors.keys()),
+            "Value": [base_value * f for f in scenario_factors.values()]
+        })
+
+        st.dataframe(df_scen)
+
+        fig_scen = go.Figure()
+        fig_scen.add_bar(x=df_scen["Scenario"], y=df_scen["Value"])
+        fig_scen.update_layout(
+            height=350,
+            margin=dict(l=40, r=20, t=50, b=40)
+        )
+        st.plotly_chart(fig_scen, use_container_width=True)
+
 
 # SIDEBAR
 with st.sidebar:
