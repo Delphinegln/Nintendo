@@ -9,7 +9,11 @@ import plotly.colors
 from datetime import datetime
 import numpy.random as npr
 
-
+st.set_page_config(
+    page_title="Nintendo Dashboard",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    
 sns.set_theme(style="whitegrid")
 
 # ====== SESSION STATE GLOBAL ======
@@ -224,14 +228,10 @@ with col6:
 # ------------------------------------------------------------------
 
 
-
 # ====================== PAGE DAISY FULL WIDTH ======================
 if st.session_state["show_daisy_page"]:
 
-    # Ligne de séparation avec le dashboard
     st.markdown("---")
-
-    # ========= TITRE PRINCIPAL =========
     st.markdown(
         "<h2 style='text-align:center; margin-top:10px;'>🌼 Daisy – Nintendo Financial Forecasting</h2>",
         unsafe_allow_html=True
@@ -241,17 +241,12 @@ if st.session_state["show_daisy_page"]:
         unsafe_allow_html=True
     )
 
-    # bouton de fermeture / retour
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("⬅️ Retour au dashboard principal", key="close_daisy"):
         st.session_state["show_daisy_page"] = False
         st.rerun()
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ========= PARAMÈTRES COMMUNS & DONNÉES =========
-    # SECTION A — Paramètres d'analyse
-    st.markdown("### 📁 Paramètres d'analyse")
+    # ---------- PARAMÈTRES GÉNÉRAUX ----------
     start = "2015-09-30"
     end = "2025-09-30"
 
@@ -263,23 +258,16 @@ if st.session_state["show_daisy_page"]:
         "TCEHY": "Tencent Holdings Corporation"
     }
 
-    with st.container():
-        col_pa, col_pb = st.columns(2)
-        with col_pa:
-            st.write(f"Période analysée : **{start} → {end}**")
-            st.write("Univers : Nintendo et principaux pairs du secteur jeux/tech.")
-        with col_pb:
-            st.code(
-                'start = "2015-09-30"\nend   = "2025-09-30"\ncompanies = {"NTDOY": "Nintendo", ...}',
-                language="python"
-            )
+    st.markdown("### 📁 Paramètres d'analyse")
+    st.write(f"Période analysée : **{start} → {end}**")
+    st.code(
+        'start = "2015-09-30"\nend   = "2025-09-30"\ncompanies = {"NTDOY": "Nintendo", ...}',
+        language="python"
+    )
 
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    # ========= LIGNE 1 : ÉTATS FINANCIERS & PRIX =========
+    # ---------- LIGNE 1 : ÉTATS FINANCIERS & PRIX ----------
     col_left, col_right = st.columns([2, 3])
 
-    # ---- COLONNE GAUCHE : États financiers ----
     with col_left:
         st.markdown("### 📊 États financiers – Nintendo")
         ntd = yf.Ticker("NTDOY")
@@ -287,7 +275,6 @@ if st.session_state["show_daisy_page"]:
         income_stmt = ntd.income_stmt
         cashflow_stmt = ntd.cashflow
 
-        # on affiche chaque état l'un sous l'autre pour garder un style "rapport"
         st.markdown("**📘 Bilan**")
         st.dataframe(balance_sheet)
 
@@ -297,15 +284,11 @@ if st.session_state["show_daisy_page"]:
         st.markdown("**📙 Tableau de flux de trésorerie**")
         st.dataframe(cashflow_stmt)
 
-    # ---- COLONNE DROITE : Prix historiques + comparables ----
     with col_right:
         st.markdown("### 📈 Performance boursière comparée")
 
         tickers = list(companies.keys())
         prices = yf.download(tickers, start=start, end=end, progress=False)["Close"]
-
-        st.write("Dernières observations de clôture :")
-        st.dataframe(prices.tail())
 
         def base100(df):
             return df / df.iloc[0] * 100
@@ -333,13 +316,11 @@ if st.session_state["show_daisy_page"]:
         )
         st.plotly_chart(fig_prices, use_container_width=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("---")
 
-    # ========= LIGNE 2 : MONTE CARLO & FORECAST =========
+    # ---------- LIGNE 2 : MONTE CARLO & FORECAST ----------
     col_mc, col_fc = st.columns(2)
 
-    # ---- Colonne gauche : Monte Carlo ----
     with col_mc:
         st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
 
@@ -347,10 +328,10 @@ if st.session_state["show_daisy_page"]:
         r = returns.mean()
         sigma = returns.std()
 
-        T = 5       # horizon en années
-        M = 100     # pas de temps
+        T = 5
+        M = 100
         dt = T / M
-        I = 500     # trajectoires
+        I = 500
 
         S = np.zeros((M + 1, I))
         S0 = prices["NTDOY"].iloc[-1]
@@ -373,7 +354,6 @@ if st.session_state["show_daisy_page"]:
                 )
             )
 
-        # Trajectoire moyenne
         fig_mc.add_trace(
             go.Scatter(
                 x=list(range(M + 1)),
@@ -391,12 +371,8 @@ if st.session_state["show_daisy_page"]:
             height=380,
             margin=dict(l=40, r=20, t=50, b=40)
         )
-
         st.plotly_chart(fig_mc, use_container_width=True)
 
-        st.caption("Simulation géométrique brownienne basée sur la moyenne et la volatilité historique des rendements.")
-
-    # ---- Colonne droite : Forecast revenus ----
     with col_fc:
         st.markdown("### 🔮 Projection de revenus (simulation)")
 
@@ -431,10 +407,9 @@ if st.session_state["show_daisy_page"]:
         )
         st.plotly_chart(fig_fc, use_container_width=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("---")
 
-    # ========= LIGNE 3 : SCÉNARIOS KPI =========
+    # ---------- LIGNE 3 : SCÉNARIOS KPI ----------
     st.markdown("### 🧪 Scénarios de résultat opérationnel")
 
     scenario_factors = {"Pessimistic": 0.85, "Central": 1.00, "Optimistic": 1.15}
@@ -466,8 +441,6 @@ if st.session_state["show_daisy_page"]:
         )
         st.plotly_chart(fig_scen, use_container_width=True)
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.caption("Module Daisy : outil de support à la décision pour les investisseurs Nintendo.")
 
 # SIDEBAR
 with st.sidebar:
