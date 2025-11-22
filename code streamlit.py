@@ -221,7 +221,7 @@ companies = {"NTDOY": "Nintendo", ...}
 
         st.plotly_chart(fig_scen)
 
-    st.success("🌼 Daisy’s Financial Forecasting module loaded successfully!")
+
 
 # CSS pour mettre l'image en fond d'écran
 st.markdown("""
