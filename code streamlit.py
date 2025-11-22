@@ -102,7 +102,7 @@ if not st.session_state["show_daisy_page"]:
     
     col1, col2 = st.columns(2)
 
-# ---------- PARTIE 1 : DAISY ----------
+    # ---------- PARTIE 1 : DAISY ----------
     with col1:
         st.markdown("""
         <div class="custom-card">
@@ -117,82 +117,82 @@ if not st.session_state["show_daisy_page"]:
             st.session_state["show_daisy_page"] = True
             st.rerun()
 
-# ---------- PARTIE 2 : PEACH ----------
-with col2:
-    st.markdown("""
-    <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
-        <h3>Portfolio Optimization</h3>
-        <p style="opacity: 0.6;">Peach your assets! 🍑💼</p>
-        <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    with st.expander("Voir les détails et intégrer le code"):
+    # ---------- PARTIE 2 : PEACH ----------
+    with col2:
         st.markdown("""
-        <div class="placeholder-box">
-            <div class="placeholder-text">Section à compléter par Peach</div>
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
+            <h3>Portfolio Optimization</h3>
+            <p style="opacity: 0.6;">Peach your assets! 🍑💼</p>
+            <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
         </div>
         """, unsafe_allow_html=True)
 
-# ---------- LIGNE 2 ----------
-col3, col4 = st.columns(2)
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Peach</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-# ---------- PARTIE 3 : BIRDO ----------
-with col3:
-    st.markdown("""
-    <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/9bc8e27736eeeb46bd8af86f6956c3294355ea99b12f9b33751a6361.png" class="card-img">
-        <h3>Algorithmic Trading</h3>
-        <p style="opacity: 0.6;">Vos trades, pondus et gérés par Birdo 🥚📈</p>
-        <p style="opacity: 0.8;">Stratégies automatisées et backtesting.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # ---------- LIGNE 2 ----------
+    col3, col4 = st.columns(2)
 
-    with st.expander("Voir les détails et intégrer le code"):
+    # ---------- PARTIE 3 : BIRDO ----------
+    with col3:
         st.markdown("""
-        <div class="placeholder-box">
-            <div class="placeholder-text">Section à compléter par Birdo</div>
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/9bc8e27736eeeb46bd8af86f6956c3294355ea99b12f9b33751a6361.png" class="card-img">
+            <h3>Algorithmic Trading</h3>
+            <p style="opacity: 0.6;">Vos trades, pondus et gérés par Birdo 🥚📈</p>
+            <p style="opacity: 0.8;">Stratégies automatisées et backtesting.</p>
         </div>
         """, unsafe_allow_html=True)
 
-# ---------- PARTIE 4 : BOWSER ----------
-with col4:
-    st.markdown("""
-    <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
-        <h3>Option Pricing</h3>
-        <p style="opacity: 0.6;">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</p>
-        <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
-    </div>
-    """, unsafe_allow_html=True)
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Birdo</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-    with st.expander("Voir les détails et intégrer le code"):
+    # ---------- PARTIE 4 : BOWSER ----------
+    with col4:
         st.markdown("""
-        <div class="placeholder-box">
-            <div class="placeholder-text">Section à compléter par Bowser</div>
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
+            <h3>Option Pricing</h3>
+            <p style="opacity: 0.6;">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</p>
+            <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
         </div>
         """, unsafe_allow_html=True)
 
-# ---------- LIGNE 3 : LUIGI (CENTRÉ) ----------
-col5, col6, col7 = st.columns([1, 2, 1])
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Bowser</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-with col6:
-    st.markdown("""
-    <div class="custom-card">
-        <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/63f4fbcbf84bd8532d9e041b3f6671c611706eb9ecc792f6fb74499a.png" class="card-img">
-        <h3>Risk management</h3>
-        <p style="opacity: 0.6;">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</p>
-        <p style="opacity: 0.8;">Analyse des risques financiers.</p>
-    </div>
-    """, unsafe_allow_html=True)
+    # ---------- LIGNE 3 : LUIGI (CENTRÉ) ----------
+    col5, col6, col7 = st.columns([1, 2, 1])
 
-    with st.expander("Voir les détails et intégrer le code"):
+    with col6:
         st.markdown("""
-        <div class="placeholder-box">
-            <div class="placeholder-text">Section à compléter par Luigi</div>
+        <div class="custom-card">
+            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/63f4fbcbf84bd8532d9e041b3f6671c611706eb9ecc792f6fb74499a.png" class="card-img">
+            <h3>Risk management</h3>
+            <p style="opacity: 0.6;">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</p>
+            <p style="opacity: 0.8;">Analyse des risques financiers.</p>
         </div>
         """, unsafe_allow_html=True)
+
+        with st.expander("Voir les détails et intégrer le code"):
+            st.markdown("""
+            <div class="placeholder-box">
+                <div class="placeholder-text">Section à compléter par Luigi</div>
+            </div>
+            """, unsafe_allow_html=True)
 
 # ====================== PAGE DAISY FULL WIDTH ======================
 if st.session_state["show_daisy_page"]:
@@ -411,6 +411,7 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.caption("Module Daisy : outil de support à la décision pour les investisseurs Nintendo.")
+
 
 # ========== SIDEBAR ==========
 with st.sidebar:
