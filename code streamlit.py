@@ -19,9 +19,9 @@ from scipy.spatial.distance import squareform
 
 try:
     import cvxpy as cp
-        HAS_CVXPY = True
+    HAS_CVXPY = True
 except Exception:
-        HAS_CVXPY = False
+    HAS_CVXPY = False
 
 warnings.filterwarnings("ignore")
 
