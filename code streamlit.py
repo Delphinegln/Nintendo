@@ -91,25 +91,23 @@ st.markdown("""
     }
     
     .chart-container {
-    background-color: white !important;
-    border-radius: 10px;
-    padding: 25px;
-    margin: 20px 0;
-    border: 1px solid #DDD;
-}
-
-    .intro-box {
-        background-color: rgba(255, 255, 255, 0.55);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 12px;
+        background-color: white !important;
+        border-radius: 10px;
         padding: 25px;
         margin: 20px 0;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 1px solid #DDD;
+    }
+
+    .intro-box {
+        background-color: white !important;
+        border-radius: 8px;
+        padding: 25px;
+        margin: 20px 0;
+        border: 1px solid #EEE;
         line-height: 1.8;
         font-size: 1.05em;
     }
+    
 </style>
 """, unsafe_allow_html=True)
 
