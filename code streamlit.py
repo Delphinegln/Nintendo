@@ -265,7 +265,7 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS (PLEINE LARGEUR) ----------
-    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
+
     st.markdown("### 📊 États financiers – Nintendo")
     
     ntd = yf.Ticker("NTDOY")
