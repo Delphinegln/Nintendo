@@ -952,10 +952,20 @@ if st.session_state["show_luigi_page"]:
         st.rerun()
 
 # --- DATA LOADING ---
-Nintendo = yf.download("NTDOY", start="2015-09-30", end="2025-09-30")["Close"]
-data = pd.DataFrame(Nintendo)
-data["returns"] = np.log(data["Close"] / data["Close"].shift(1))
-data = data.dropna()
+    # -------- CONFIG --------
+    NINTENDO = "NTDOY"
+    START, END = "2015-09-30", "2025-09-30"
+
+    TICKER_NAME = {
+        "NTDOY": "Nintendo (ADR)",
+    }
+
+    @dataclass
+    class Constraints:
+        min_center_weight: float = 0.10
+        max_center_weight: float = 0.80
+        max_weight_per_name: float = 0.25
+
 
 # VALUE AT RISK ---------------
 st.markdown("### 🎯 1. Value-at-Risk — Approche Paramétrique")
