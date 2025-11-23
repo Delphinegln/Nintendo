@@ -43,6 +43,10 @@ if "show_daisy_page" not in st.session_state:
 if "show_peach_page" not in st.session_state:
     st.session_state["show_peach_page"] = False
 
+# ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
+if "show_luigi_page" not in st.session_state:
+    st.session_state["show_luigi_page"] = False
+
 # ========== CSS : FOND D'ÉCRAN ==========
 st.markdown("""
     <style>
@@ -143,10 +147,13 @@ st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors<
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
 # ========== GRID LAYOUT : CARTES ==========
-if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"]):
+if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
     col1, col2 = st.columns(2)
     
     col1, col2 = st.columns(2)
+
+    col1, col2 = st.columns(2)
+    
     # ---------- PARTIE 1 : DAISY ----------
     with col1:
         st.markdown("""
@@ -229,12 +236,9 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
         </div>
         """, unsafe_allow_html=True)
 
-        with st.expander("Voir les détails et intégrer le code"):
-            st.markdown("""
-            <div class="placeholder-box">
-                <div class="placeholder-text">Section à compléter par Luigi</div>
-            </div>
-            """, unsafe_allow_html=True)
+        if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
+            st.session_state["show_luigi_page"] = True
+            st.rerun()
 
 # ====================== PAGE DAISY FULL WIDTH ======================================================================================================
 if st.session_state["show_daisy_page"]:
@@ -927,6 +931,160 @@ if st.session_state["show_peach_page"]:
 
         except Exception as e:
             st.error(f"Erreur : {e}")
+
+# ====================== PAGE LUIGI FULL WIDTH ======================================================================================================
+if st.session_state["show_luigi_page"]:
+
+    st.markdown("---")
+    st.markdown(
+        "<h2 style='text-align:center; margin-top:10px;'>👻 Luigi – Risk Management & Modeling </h2>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("⬅️ Retour au dashboard principal", key="close_daisy"):
+        st.session_state["show_daisy_page"] = False
+        st.rerun()
+
+# --- DATA LOADING ---
+Nintendo = yf.download("NTDOY", start="2015-09-30", end="2025-09-30")["Close"]
+data = pd.DataFrame(Nintendo)
+data["returns"] = np.log(data["Close"] / data["Close"].shift(1))
+data = data.dropna()
+
+# VALUE AT RISK ---------------
+st.markdown("### 🎯 1. Value-at-Risk — Approche Paramétrique")
+
+last_price = data["Close"].iloc[-1]
+shares = 1000
+portfolio_value = last_price * shares
+mu = data["returns"].mean()
+sigma = data["returns"].std()
+alpha = 0.05
+z = stats.norm.ppf(1 - alpha)
+
+VaR = mu - z * sigma
+VaR_portfolio = portfolio_value * VaR
+
+st.metric("VaR (Parametric, 5%)", f"{VaR*100:.2f}%")
+st.metric("Perte potentielle du portefeuille", f"${VaR_portfolio:,.0f}")
+
+# HISTOGRAMME -----------------------
+
+num_samples = 1000
+sim_returns = np.random.normal(mu, sigma, num_samples)
+
+fig = go.Figure()
+fig.add_trace(go.Histogram(x=sim_returns, nbinsx=50, opacity=0.7, name="Rendements simulés"))
+fig.add_vline(x=VaR, line_width=3, line_dash="dash", line_color="red", 
+              annotation_text="VaR 5%", annotation_position="top")
+
+fig.update_layout(
+    title="Distribution simulée — VaR Paramétrique",
+    xaxis_title="Rendement",
+    yaxis_title="Fréquence",
+    paper_bgcolor="white",
+    plot_bgcolor="white"
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+st.markdown("### 📉 2. Value-at-Risk — Approche Historique")
+
+VaR_hist = data["returns"].quantile(alpha)
+VaR_hist_portfolio = VaR_hist * portfolio_value
+
+st.metric("Historical VaR (5%)", f"{VaR_hist*100:.2f}%")
+st.metric("Perte potentielle du portefeuille", f"${VaR_hist_portfolio:,.0f}")
+
+fig2 = go.Figure()
+fig2.add_trace(go.Histogram(x=data["returns"], nbinsx=40, opacity=0.7))
+fig2.add_vline(x=VaR_hist, line_width=3, line_dash="dash", line_color="red",
+               annotation_text="VaR 5%", annotation_position="top")
+
+fig2.update_layout(
+    title="Distribution des rendements — VaR Historique",
+    xaxis_title="Rendement",
+    yaxis_title="Densité",
+    paper_bgcolor="white",
+    plot_bgcolor="white"
+)
+
+st.plotly_chart(fig2, use_container_width=True)
+
+st.markdown("### 🔍 3. Backtesting du VaR (1%)")
+
+alpha_bt = 0.01
+z_bt = stats.norm.ppf(1 - alpha_bt)
+VaR_cutoff = mu - z_bt * sigma
+returns = data["returns"]
+
+violations = returns[returns <= VaR_cutoff]
+ratio = len(violations) / len(returns)
+
+st.write(f"Nombre de violations : **{len(violations)}**")
+st.write(f"Taux de violation observé : **{ratio*100:.2f}%** (théorique 1%)")
+
+st.markdown("### 🧨 4. Expected Shortfall (Parametric & Historical)")
+
+# Parametric ES
+ES_param = mu - (stats.norm.pdf(z) / (1 - alpha)) * sigma
+ES_param_portfolio = ES_param * portfolio_value
+
+# Historical ES
+tail_losses = data["returns"][data["returns"] <= VaR_hist]
+ES_hist = tail_losses.mean()
+ES_hist_portfolio = ES_hist * portfolio_value
+
+col1, col2 = st.columns(2)
+col1.metric("Expected Shortfall (Parametric)", f"{ES_param*100:.2f}%")
+col1.metric("Perte attendue", f"${ES_param_portfolio:,.0f}")
+
+col2.metric("Expected Shortfall (Historique)", f"{ES_hist*100:.2f}%")
+col2.metric("Perte attendue", f"${ES_hist_portfolio:,.0f}")
+
+st.markdown("### 🏦 5. Credit Risk Modeling (Default Simulation)")
+
+S0 = last_price
+T = 1
+I = 100_000
+
+ST = S0 * np.exp((mu - 0.5*sigma**2)*T + sigma*np.sqrt(T) * np.random.standard_normal(I))
+
+L = 0.5
+p = 0.01
+D = np.random.poisson(p*T, I)
+D = np.where(D > 1, 1, D)
+
+import math
+discount = math.exp(-mu*T)
+
+S0_CVA = discount * np.mean((1 - L*D) * ST)
+CreditVaR = discount * np.mean(L * D * ST)
+S0_adj = S0 - CreditVaR
+
+st.write(f"Prix ajusté au risque de crédit : **${S0_adj:,.2f}**")
+st.write(f"Credit VaR estimé : **${CreditVaR:,.4f}**")
+st.write(f"Événements de défaut simulés : **{np.count_nonzero(L*D*ST)}**")
+
+
+fig3 = go.Figure()
+fig3.add_trace(go.Histogram(x=L * D * ST, nbinsx=50))
+
+fig3.update_layout(
+    title="Distribution des pertes liées au risque de crédit",
+    xaxis_title="Perte",
+    yaxis_title="Fréquence",
+    paper_bgcolor="white",
+    plot_bgcolor="white"
+)
+
+st.plotly_chart(fig3, use_container_width=True)
 
 
 
