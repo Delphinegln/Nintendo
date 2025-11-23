@@ -11,6 +11,7 @@ import numpy.random as npr
 import warnings
 from dataclasses import dataclass
 from typing import List
+import scipy.stats as stats
 
 
 # HRP
