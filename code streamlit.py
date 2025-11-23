@@ -947,8 +947,8 @@ if st.session_state["show_luigi_page"]:
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("⬅️ Retour au dashboard principal", key="close_daisy"):
-        st.session_state["show_daisy_page"] = False
+    if st.button("⬅️ Retour au dashboard principal", key="close_luigi"):
+        st.session_state["show_luigi_page"] = False
         st.rerun()
 
     with st.spinner("📊 Chargement des données Nintendo pour l'analyse de risque..."):
