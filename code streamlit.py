@@ -265,7 +265,6 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS (PLEINE LARGEUR) ----------
-
     st.markdown("### 📊 États financiers – Nintendo")
     
     ntd = yf.Ticker("NTDOY")
@@ -289,7 +288,6 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÈRE (PLEINE LARGEUR) ----------
-    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 📈 Performance boursière comparée")
 
     tickers = list(companies.keys())
@@ -348,7 +346,6 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 3 : MONTE CARLO (PLEINE LARGEUR) ----------
-    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
     st.markdown("*Projection à 5 ans basée sur 500 trajectoires simulées*")
 
@@ -444,7 +441,6 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 4 : PROJECTION REVENUS (PLEINE LARGEUR) ----------
-    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🔮 Projection de revenus")
     st.markdown("*Scénario de croissance simulée 2025-2030*")
 
@@ -507,7 +503,6 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 5 : SCÉNARIOS (PLEINE LARGEUR) ----------
-    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🧪 Scénarios de résultat opérationnel")
     st.markdown("*Évaluation sous trois hypothèses de performance*")
 
