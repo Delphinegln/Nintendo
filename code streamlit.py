@@ -90,24 +90,30 @@ st.markdown("""
         justify-content: center;
     }
     
+    /* Conteneurs pour graphiques Daisy */
     .chart-container {
-        background-color: white !important;
-        border-radius: 10px;
+        background-color: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 16px;
         padding: 25px;
         margin: 20px 0;
-        border: 1px solid #DDD;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
-
+    
     .intro-box {
-        background-color: white !important;
-        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.55);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 12px;
         padding: 25px;
         margin: 20px 0;
-        border: 1px solid #EEE;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         line-height: 1.8;
         font-size: 1.05em;
     }
-    
 </style>
 """, unsafe_allow_html=True)
 
@@ -259,7 +265,7 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS (PLEINE LARGEUR) ----------
-    st.markdown("<div style='background:white; padding:20px; border-radius:10px; border:1px solid #DDD;'>", unsafe_allow_html=True)
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 📊 États financiers – Nintendo")
     
     ntd = yf.Ticker("NTDOY")
@@ -283,7 +289,7 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÈRE (PLEINE LARGEUR) ----------
-    st.markdown("<div style='background:white; padding:20px; border-radius:10px; border:1px solid #DDD;'>", unsafe_allow_html=True)
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 📈 Performance boursière comparée")
 
     tickers = list(companies.keys())
@@ -342,7 +348,7 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 3 : MONTE CARLO (PLEINE LARGEUR) ----------
-    st.markdown("<div style='background:white; padding:20px; border-radius:10px; border:1px solid #DDD;'>", unsafe_allow_html=True)
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
     st.markdown("*Projection à 5 ans basée sur 500 trajectoires simulées*")
 
@@ -438,7 +444,7 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 4 : PROJECTION REVENUS (PLEINE LARGEUR) ----------
-    st.markdown("<div style='background:white; padding:20px; border-radius:10px; border:1px solid #DDD;'>", unsafe_allow_html=True)
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🔮 Projection de revenus")
     st.markdown("*Scénario de croissance simulée 2025-2030*")
 
@@ -501,7 +507,7 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 5 : SCÉNARIOS (PLEINE LARGEUR) ----------
-    st.markdown("<div style='background:white; padding:20px; border-radius:10px; border:1px solid #DDD;'>", unsafe_allow_html=True)
+    st.markdown("<div class='chart-container'>", unsafe_allow_html=True)
     st.markdown("### 🧪 Scénarios de résultat opérationnel")
     st.markdown("*Évaluation sous trois hypothèses de performance*")
 
