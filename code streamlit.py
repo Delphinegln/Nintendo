@@ -341,6 +341,22 @@ if st.session_state["show_daisy_page"]:
     fig_prices.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
     
     st.plotly_chart(fig_prices, use_container_width=True)
+    st.markdown("""
+<div class="intro-box">
+    <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
+        La performance boursière comparée met en lumière la solidité du titre <strong>Nintendo</strong> 
+        au cours des dix dernières années. Le titre suit globalement une trajectoire ascendante tout en 
+        affichant une volatilité maîtrisée. <strong>Microsoft</strong> reste l’acteur le plus performant 
+        du panel, soutenu par une diversification forte et une croissance structurelle du cloud. 
+        <strong>Tencent</strong> présente une évolution dynamique mais irrégulière, affectée par 
+        les régulations chinoises récentes.  
+        <br><br>
+        Dans ce contexte, Nintendo occupe une position intermédiaire : une croissance régulière, 
+        peu de drawdowns sévères et une capacité de résilience élevée. Cela confirme la robustesse 
+        du modèle économique basé sur les franchises propriétaires et un pipeline de produits très stable.
+    </p>
+</div>
+""", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
