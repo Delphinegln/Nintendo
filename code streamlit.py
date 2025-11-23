@@ -334,8 +334,8 @@ if st.session_state["show_daisy_page"]:
             bordercolor="rgba(0, 0, 0, 0.2)",
             borderwidth=1
         ),
-        plot_bgcolor='rgba(240, 240, 240, 0.3)',
-        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
         font=dict(size=13)
     )
     
@@ -423,8 +423,8 @@ if st.session_state["show_daisy_page"]:
         yaxis_title="Prix simulé (USD)",
         height=600,
         margin=dict(l=70, r=40, t=80, b=60),
-        plot_bgcolor='rgba(240, 240, 240, 0.3)',
-        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
         legend=dict(
             orientation="h",
             yanchor="bottom",
@@ -493,8 +493,8 @@ if st.session_state["show_daisy_page"]:
         yaxis_title="Revenus (JPY)",
         height=600,
         margin=dict(l=70, r=40, t=80, b=60),
-        plot_bgcolor='rgba(240, 240, 240, 0.3)',
-        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
         showlegend=False
     )
     
@@ -551,8 +551,8 @@ if st.session_state["show_daisy_page"]:
         yaxis_title="Revenus opérationnels (JPY)",
         height=600,
         margin=dict(l=70, r=40, t=80, b=60),
-        plot_bgcolor='rgba(240, 240, 240, 0.3)',
-        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='white',
+        paper_bgcolor='white',
         showlegend=False
     )
     
