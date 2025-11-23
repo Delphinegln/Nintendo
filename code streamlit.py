@@ -153,12 +153,9 @@ if not st.session_state["show_daisy_page"]:
         </div>
         """, unsafe_allow_html=True)
 
-        with st.expander("Voir les détails et intégrer le code"):
-            st.markdown("""
-            <div class="placeholder-box">
-                <div class="placeholder-text">Section à compléter par Peach</div>
-            </div>
-            """, unsafe_allow_html=True)
+        if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
+            st.session_state["show_daisy_page"] = True
+            st.rerun()
 
     # ---------- LIGNE 2 ----------
     col3, col4 = st.columns(2)
