@@ -452,6 +452,23 @@ if st.session_state["show_daisy_page"]:
     fig_mc.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
     
     st.plotly_chart(fig_mc, use_container_width=True)
+    st.markdown("""
+<div class="intro-box">
+    <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
+        La simulation Monte Carlo réalisée sur 500 trajectoires projette un prix futur de 
+        <strong>Nintendo</strong> sur un horizon de 5 ans. Le scénario central indique une tendance 
+        haussière progressive, cohérente avec le rendement annuel moyen observé historiquement.  
+        <br><br>
+        L'écart croissant entre les percentiles <strong>10</strong> et <strong>90</strong> illustre 
+        une incertitude naturelle mais contenue : le modèle suggère que la probabilité d’un effondrement 
+        significatif est très faible, tandis que les scénarios optimistes restent plausibles, surtout en cas 
+        de lancement de nouvelles consoles ou d’expansion transversale de l’univers Nintendo (licensing, cinéma, mobile).  
+        <br><br>
+        Globalement, la distribution simulée soutient une thèse d’investissement de long terme avec 
+        un profil rendement/risque équilibré.
+    </p>
+</div>
+""", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
@@ -514,6 +531,23 @@ if st.session_state["show_daisy_page"]:
     fig_fc.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
     
     st.plotly_chart(fig_fc, use_container_width=True)
+    st.markdown("""
+<div class="intro-box">
+    <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
+        Les projections de revenus sur la période <strong>2025–2030</strong> s’appuient sur une 
+        croissance progressive comprise entre 0 % et 25 %. Ce rythme est cohérent avec les cycles produits 
+        observés chez Nintendo, caractérisés par des phases de montée en puissance lors du lancement d’une 
+        nouvelle console suivies d’une stabilisation.  
+        <br><br>
+        Les résultats montrent une évolution prévisible et régulière, renforcée par la récurrence des ventes 
+        logicielles et la force des franchises historiques. En milliards de JPY, la croissance projetée 
+        traduit l’ancrage durable de Nintendo comme l’un des acteurs les plus rentables du secteur.  
+        <br><br>
+        Cette trajectoire suggère un risque faible de contraction durable du chiffre d’affaires, ce qui 
+        constitue un signal positif pour les investisseurs à horizon moyen terme.
+    </p>
+</div>
+""", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
@@ -571,6 +605,24 @@ if st.session_state["show_daisy_page"]:
     fig_scen.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(200,200,200,0.3)')
     
     st.plotly_chart(fig_scen, use_container_width=True)
+    st.markdown("""
+<div class="intro-box">
+    <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
+        L’analyse par scénarios permet de mesurer la sensibilité du <strong>résultat opérationnel</strong> 
+        aux variations de performance. Le scénario pessimiste (-15 %) illustre une marge de sécurité 
+        relativement élevée : même en cas de contexte défavorable, Nintendo maintient un niveau de rentabilité 
+        important.  
+        <br><br>
+        Le scénario central correspond à la trajectoire historique, marquée par une efficacité opérationnelle 
+        constante et une politique de coûts maîtrisée. Le scénario optimiste (+15 %) reflète l’impact potentiel 
+        d’un nouveau cycle matériel ou d’un élargissement du revenu récurrent (licences, partenariats, contenus).  
+        <br><br>
+        Cette distribution par scénarios souligne une asymétrie favorable : le potentiel haussier est significatif, 
+        tandis que la baisse potentielle reste limitée. Cela renforce la thèse d’un actif défensif avec un levier 
+        de croissance crédible.
+    </p>
+</div>
+""", unsafe_allow_html=True)
     
     st.info("**Hypothèses de scénarios :** Pessimiste (-15%), Central (baseline), Optimiste (+15%)")
     
