@@ -143,13 +143,8 @@ st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors<
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
 # ========== GRID LAYOUT : CARTES ==========
-# On affiche les cartes SEULEMENT si la page Daisy n'est PAS ouverte
-if not st.session_state["show_daisy_page"]:
-    
+if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"]):
     col1, col2 = st.columns(2)
-
-# On affiche les cartes SEULEMENT si la page Peach n'est PAS ouverte
-if not st.session_state["show_peach_page"]:
     
     col1, col2 = st.columns(2)
     # ---------- PARTIE 1 : DAISY ----------
