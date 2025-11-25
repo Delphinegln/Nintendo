@@ -178,9 +178,9 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
             st.markdown("Optimisation du portefeuille.")
         
 
-        if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
-            st.session_state["show_peach_page"] = True
-            st.rerun()
+            if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
+                st.session_state["show_peach_page"] = True
+                st.rerun()
 
     # ---------- LIGNE 2 ----------
     col3, col4 = st.columns(2)
