@@ -174,9 +174,9 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
         #</div>
         #""", unsafe_allow_html=True)
 
-        if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
-            st.session_state["show_daisy_page"] = True
-            st.rerun()
+            if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
+                st.session_state["show_daisy_page"] = True
+                st.rerun()
 
     # ---------- PARTIE 2 : PEACH ----------
     with col2:
