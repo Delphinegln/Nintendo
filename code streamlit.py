@@ -15,6 +15,12 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 
+@st.cache_data
+def img_to_base64(path: str) -> str:
+    img_bytes = Path(path).read_bytes()
+    return base64.b64encode(img_bytes).decode()
+
+
 
 # HRP
 from scipy.cluster.hierarchy import linkage, leaves_list
@@ -159,9 +165,10 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     
     # ---------- PARTIE 1 : DAISY ----------
     with col1:
+        daisy_b64=img_to_base64("image/Daisy.png")
         st.markdown("""
         <div class="custom-card">
-            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/2ad3a5c2b5b8309627236c3eb193e4bd0b5b54fea0c8950a1b8c2dcb.png" class="card-img">
+            <img src="data:image/png;base64,{daisy_b64}" class="card-img">
             <h3>Financial Forecasting</h3>
             <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
             <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
