@@ -12,6 +12,8 @@ import warnings
 from dataclasses import dataclass
 from typing import List
 import scipy.stats as stats
+import base64
+from pathlib import Path
 
 
 # HRP
