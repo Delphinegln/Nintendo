@@ -165,10 +165,10 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     
     # ---------- PARTIE 1 : DAISY ----------
     with col1:
-        daisy_b64=img_to_base64("image/Daisy.png")
+        daisy_b64=img_to_base64("images/Daisy.png")
         st.markdown("""
         <div class="custom-card">
-            <img src="data:image/png;base64,{daisy_b64}" class="card-img">
+            <img src="data:images/png;base64,{daisy_b64}" class="card-img">
             <h3>Financial Forecasting</h3>
             <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
             <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
