@@ -165,14 +165,6 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
             st.markdown("Daisy fait fleurir vos profits ! 🌼💰")
             st.markdown("Module de prévision des tendances financières.")
         
-        #st.markdown("""
-        #<div class="custom-card">
-            #<img src="data:images/png;base64,{daisy_b64}" class="card-img">
-            #<h3>Financial Forecasting</h3>
-            #<p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
-            #<p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
-        #</div>
-        #""", unsafe_allow_html=True)
 
             if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
                 st.session_state["show_daisy_page"] = True
@@ -180,14 +172,11 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     # ---------- PARTIE 2 : PEACH ----------
     with col2:
-        st.markdown("""
-        <div class="custom-card">
-            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/60b3f7c1d2a16cffef93fcf29e0af2b4da2ff4482a5c9a1db9b1d85e.png" class="card-img">
-            <h3>Portfolio Optimization</h3>
-            <p style="opacity: 0.6;">Peach your assets! 🍑💼</p>
-            <p style="opacity: 0.8;">Optimisation du portefeuille.</p>
-        </div>
-        """, unsafe_allow_html=True)
+            st.image(str(IMG / "Peach.png"), width=70)
+            st.markdown("### Portfolio Optimization")
+            st.markdown("Peach your assets! 🍑💼")
+            st.markdown("Optimisation du portefeuille.")
+        
 
         if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
             st.session_state["show_peach_page"] = True
