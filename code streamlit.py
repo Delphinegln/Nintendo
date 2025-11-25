@@ -15,12 +15,7 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 
-@st.cache_data
-def img_to_base64(path: str) -> str:
-    img_bytes = Path(path).read_bytes()
-    return base64.b64encode(img_bytes).decode()
-
-
+IMG=Path.cwd()/"images"
 
 # HRP
 from scipy.cluster.hierarchy import linkage, leaves_list
@@ -165,15 +160,19 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     
     # ---------- PARTIE 1 : DAISY ----------
     with col1:
-        daisy_b64=img_to_base64("images/Daisy.png")
-        st.markdown("""
-        <div class="custom-card">
-            <img src="data:images/png;base64,{daisy_b64}" class="card-img">
-            <h3>Financial Forecasting</h3>
-            <p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
-            <p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
-        </div>
-        """, unsafe_allow_html=True)
+            st.image(str(IMG / "Daisy.png"), width=70)
+            st.markdown("### Financial Forecasting")
+            st.markdown("Daisy fait fleurir vos profits ! 🌼💰")
+            st.markdown("Module de prévision des tendances financières.")
+        
+        #st.markdown("""
+        #<div class="custom-card">
+            #<img src="data:images/png;base64,{daisy_b64}" class="card-img">
+            #<h3>Financial Forecasting</h3>
+            #<p style="opacity: 0.6;">Daisy fait fleurir vos profits ! 🌼💰</p>
+            #<p style="opacity: 0.8;">Module de prévision des tendances financières.</p>
+        #</div>
+        #""", unsafe_allow_html=True)
 
         if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
             st.session_state["show_daisy_page"] = True
