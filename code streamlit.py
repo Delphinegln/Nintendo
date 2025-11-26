@@ -187,56 +187,38 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     # ---------- PARTIE 3 : BIRDO ----------
     with col3:
-        st.markdown("""
-        <div class="custom-card">
-            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/9bc8e27736eeeb46bd8af86f6956c3294355ea99b12f9b33751a6361.png" class="card-img">
-            <h3>Algorithmic Trading</h3>
-            <p style="opacity: 0.6;">Vos trades, pondus et gérés par Birdo 🥚📈</p>
-            <p style="opacity: 0.8;">Stratégies automatisées et backtesting.</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-        with st.expander("Voir les détails et intégrer le code"):
-            st.markdown("""
-            <div class="placeholder-box">
-                <div class="placeholder-text">Section à compléter par Birdo</div>
-            </div>
-            """, unsafe_allow_html=True)
+            st.image(str(IMG / "Birdo.png"), width=70)
+            st.markdown("### Algorithmic Trading")
+            st.markdown("Vos trades, pondus et gérés par Birdo 🥚📈")
+            st.markdown("Stratégies automatisées et backtesting.")
+            
+            if st.button("🔍 Ouvrir le module Birdo", key="open_birdo"):
+                st.session_state["show_birdo_page"] = True
+                st.rerun()
 
     # ---------- PARTIE 4 : BOWSER ----------
     with col4:
-        st.markdown("""
-        <div class="custom-card">
-            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/828f7ec3955d9049a1295309226e2c0696daadf60c3202fdedac0992.png" class="card-img">
-            <h3>Option Pricing</h3>
-            <p style="opacity: 0.6;">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</p>
-            <p style="opacity: 0.8;">Modélisation et valorisation des options.</p>
-        </div>
-        """, unsafe_allow_html=True)
+            st.image(str(IMG / "Bowser.png"), width=70)
+            st.markdown("### Option Pricing")
+            st.markdown("Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼")
+            st.markdown("Modélisation et valorisation des options.")
 
-        with st.expander("Voir les détails et intégrer le code"):
-            st.markdown("""
-            <div class="placeholder-box">
-                <div class="placeholder-text">Section à compléter par Bowser</div>
-            </div>
-            """, unsafe_allow_html=True)
+            if st.button("🔍 Ouvrir le module Bowser", key="open_bowser"):
+                st.session_state["show_bowser_page"] = True
+                st.rerun()
 
     # ---------- LIGNE 3 : LUIGI (CENTRÉ) ----------
     col5, col6, col7 = st.columns([1, 2, 1])
 
     with col6:
-        st.markdown("""
-        <div class="custom-card">
-            <img src="https://nintendo-jx9pmih3bmjrbdhfzb8xd5.streamlit.app/~/+/media/63f4fbcbf84bd8532d9e041b3f6671c611706eb9ecc792f6fb74499a.png" class="card-img">
-            <h3>Risk management</h3>
-            <p style="opacity: 0.6;">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</p>
-            <p style="opacity: 0.8;">Analyse des risques financiers.</p>
-        </div>
-        """, unsafe_allow_html=True)
+            st.image(str(IMG / "Luigi.png"), width=70)
+            st.markdown("### Risk management")
+            st.markdown("Ne laissez pas vos risques vous hanter : Luigi est là 👻💸")
+            st.markdown("Analyse des risques financiers.")
 
-        if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
-            st.session_state["show_luigi_page"] = True
-            st.rerun()
+            if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
+                st.session_state["show_luigi_page"] = True
+                st.rerun()
 
 # ====================== PAGE DAISY FULL WIDTH ======================================================================================================
 if st.session_state["show_daisy_page"]:
