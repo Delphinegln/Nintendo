@@ -199,7 +199,7 @@ def card_with_button(img_path, title, subtitle, desc, btn_label, key):
 
 
 # ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
-if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
+if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"] or st.session_state["show_bowser_page"]):
 
 
 
@@ -242,7 +242,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
             "Algorithmic Trading",
             "Birdo gère tes trades 🥚📈",
             "Stratégies automatisées & backtesting.",
-            "🔍 Module Birdo (à venir)",
+            "🔍 Module Birdo",
             "open_birdo"
         )
 
@@ -252,7 +252,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
             "Option Pricing",
             "Bowser hedge vos positions 🐢🔥",
             "Modélisation des options.",
-            "🔍 Module Bowser (à venir)",
+            "🔍 Module Bowser",
             "open_bowser"
         )
 
