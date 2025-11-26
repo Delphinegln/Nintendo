@@ -199,20 +199,6 @@ def card_with_button(img_path, title, subtitle, desc, btn_label, key):
 # ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
 if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
 
-    def card_with_button(img, title, subtitle, desc, btn_label, key):
-        st.markdown(
-            f'''
-            <div class="card-glass">
-                <img src="{img}" width="70">
-                <h3>{title}</h3>
-                <div class="sous-titre">{subtitle}</div>
-                <div class="desc">{desc}</div>
-            ''',
-            unsafe_allow_html=True
-        )
-        clicked = st.button(btn_label, key=key)
-        st.markdown("</div>", unsafe_allow_html=True)
-        return clicked
 
 
     # ===== LIGNE 1 : DAISY + PEACH (CENTRÉES EN HAUT) =====
