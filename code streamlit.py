@@ -15,7 +15,6 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 
-IMG = Path.cwd() / "images"
 
 # HRP
 from scipy.cluster.hierarchy import linkage, leaves_list
@@ -28,6 +27,85 @@ except Exception:
     HAS_CVXPY = False
 
 warnings.filterwarnings("ignore")
+
+
+# ---------- Résolution des problèmes d'images & fonction card_with_button robuste ----------
+from pathlib import Path
+from PIL import Image
+import os
+
+# 1) Trouver le dossier images de façon fiable :
+#    Si ce fichier est exécuté comme script, __file__ existe -> Path(__file__).parent
+#    Sinon (ex: environnements où __file__ n'existe pas) fallback sur Path.cwd()
+try:
+    BASE_DIR = Path(__file__).parent
+except NameError:
+    BASE_DIR = Path.cwd()
+
+# Priorité : dossier 'images' à côté du script, sinon './images'
+IMG_DIR = (BASE_DIR / "images")
+if not IMG_DIR.exists():
+    IMG_DIR = Path.cwd() / "images"
+
+# 2) Diagnostic : afficher dans la sidebar les fichiers trouvés (utile pour debug)
+with st.sidebar:
+    st.markdown("### Debug images")
+    st.write(f"BASE_DIR = `{str(BASE_DIR)}`")
+    st.write(f"IMG_DIR = `{str(IMG_DIR)}`")
+    if IMG_DIR.exists():
+        files = sorted([p.name for p in IMG_DIR.iterdir() if p.is_file()])
+        st.write("Fichiers trouvés:")
+        for f in files:
+            st.write("- " + f)
+    else:
+        st.error("Dossier images introuvable : vérifie le chemin et nom du dossier (sensible à la casse).")
+
+# 3) Utilitaire pour ouvrir une image proprement (retourne objet PIL ou bytes)
+def load_image_for_streamlit(img_path: Path):
+    """
+    Essaie d'ouvrir l'image avec PIL. Si échec, retourne None.
+    Utilise Path ou string dans l'appel.
+    """
+    try:
+        p = Path(img_path)
+        if not p.exists():
+            return None
+        # Ouvrir via PIL (plus fiable que laisser streamlit chercher le chemin)
+        img = Image.open(p).convert("RGBA")
+        return img
+    except Exception as e:
+        # Retourne None si problème
+        return None
+
+# 4) Fonction card_with_button qui utilise st.image sur l'objet PIL
+def card_with_button(img_path, title, subtitle, desc, btn_label, key):
+    """
+    img_path peut être un Path ou une string relative.
+    Affiche l'image avec st.image (PIL) à l'intérieur d'une boîte HTML .card-glass.
+    """
+    with st.container():
+        st.markdown('<div class="card-glass">', unsafe_allow_html=True)
+
+        # Essayer d'ouvrir l'image via notre utilitaire
+        img_obj = load_image_for_streamlit(Path(img_path))
+        if img_obj is not None:
+            # Affiche l'image (PIL Image) — méthode fiable
+            st.image(img_obj, width=70)
+        else:
+            # Si l'image introuvable, affiche un placeholder et un message (utile pour debug)
+            st.markdown("<div style='width:70px; height:70px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:rgba(0,0,0,0.05);'>⚠️</div>", unsafe_allow_html=True)
+            st.write(f"Image introuvable: `{img_path}`")
+
+        st.markdown(f"### {title}")
+        st.markdown(f"<div class='sous-titre'>{subtitle}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='desc'>{desc}</div>", unsafe_allow_html=True)
+
+        clicked = st.button(btn_label, key=key)
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    return clicked
+
 
 # ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
 st.set_page_config(
