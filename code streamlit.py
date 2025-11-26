@@ -199,7 +199,7 @@ def card_with_button(img_path, title, subtitle, desc, btn_label, key):
 
 
 # ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
-if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"] or st.session_state["show_bowser_page"]):
+if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
 
 
 
