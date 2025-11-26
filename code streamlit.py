@@ -29,6 +29,23 @@ except Exception:
 
 warnings.filterwarnings("ignore")
 
+#CARTE---------------
+st.markdown("""
+<style>
+.card-container {
+    background: rgba(255, 255, 255, 0.6); /* Fond blanc semi-transparent */
+    backdrop-filter: blur(10px); /* Flou d'arrière-plan */
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin: 10px 8px 10px 8px; /* Espacement horizontal léger, vertical réduit */
+}
+.row-cards {
+    display: flex;
+    gap: 20px; /* Espacement entre les cartes dans la ligne */
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
 st.set_page_config(
