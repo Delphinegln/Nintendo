@@ -1331,7 +1331,7 @@ profil_key = st.radio(
     )
     
     # Paramètres de données
-    st.subheader("2️⃣ Paramètres de Données")
+st.subheader("2️⃣ Paramètres de Données")
     
     ticker = "NTDOY"
     start_date = "2015-09-01"
