@@ -179,88 +179,94 @@ st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>S
 
 # ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
 if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
-    
-    # ===== LIGNE 1 : DAISY ET PEACH =====
-    st.markdown('<div class="row-custom-cards">', unsafe_allow_html=True)
-    
-    st.markdown(
-        f'''
-        <div class="card-glass">
-            <img src="{str(IMG / "Daisy.png")}" width="70">
-            <h3>Financial Forecasting</h3>
-            <div class="sous-titre">Daisy fait fleurir vos profits ! 🌼💰</div>
-            <div class="desc">Module de prévision des tendances financières.</div>
-        </div>
-        ''', unsafe_allow_html=True
-    )
-    
-    if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
-        st.session_state["show_daisy_page"] = True
-        st.rerun()
-    
-    st.markdown(
-        f'''
-        <div class="card-glass">
-            <img src="{str(IMG / "Peach.png")}" width="70">
-            <h3>Portfolio Optimization</h3>
-            <div class="sous-titre">Peach your assets! 🍑💼</div>
-            <div class="desc">Optimisation du portefeuille.</div>
-        </div>
-        ''', unsafe_allow_html=True
-    )
-    
-    if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
-        st.session_state["show_peach_page"] = True
-        st.rerun()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # ===== LIGNE 2 : BIRDO ET BOWSER =====
-    st.markdown('<div class="row-custom-cards">', unsafe_allow_html=True)
-    
-    st.markdown(
-        f'''
-        <div class="card-glass">
-            <img src="{str(IMG / "Birdo.png")}" width="70">
-            <h3>Algorithmic Trading</h3>
-            <div class="sous-titre">Vos trades, pondus et gérés par Birdo 🥚📈</div>
-            <div class="desc">Stratégies automatisées et backtesting.</div>
-        </div>
-        ''', unsafe_allow_html=True
-    )
-    
-    st.markdown(
-        f'''
-        <div class="card-glass">
-            <img src="{str(IMG / "Bowser.png")}" width="70">
-            <h3>Option Pricing</h3>
-            <div class="sous-titre">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</div>
-            <div class="desc">Modélisation et valorisation des options.</div>
-        </div>
-        ''', unsafe_allow_html=True
-    )
-    
-    st.markdown('</div>', unsafe_allow_html=True)
-    
-    # ===== LIGNE 3 : LUIGI (CENTRÉ) =====
-    st.markdown('<div class="row-custom-cards">', unsafe_allow_html=True)
-    
-    st.markdown(
-        f'''
-        <div class="card-glass">
-            <img src="{str(IMG / "Luigi.png")}" width="70">
-            <h3>Risk management</h3>
-            <div class="sous-titre">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</div>
-            <div class="desc">Analyse des risques financiers.</div>
-        </div>
-        ''', unsafe_allow_html=True
-    )
-    
-    if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
-        st.session_state["show_luigi_page"] = True
-        st.rerun()
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+
+    def card_with_button(img, title, subtitle, desc, btn_label, key):
+        st.markdown(
+            f'''
+            <div class="card-glass">
+                <img src="{img}" width="70">
+                <h3>{title}</h3>
+                <div class="sous-titre">{subtitle}</div>
+                <div class="desc">{desc}</div>
+            ''',
+            unsafe_allow_html=True
+        )
+        clicked = st.button(btn_label, key=key)
+        st.markdown("</div>", unsafe_allow_html=True)
+        return clicked
+
+
+    # ===== LIGNE 1 : DAISY + PEACH (CENTRÉES EN HAUT) =====
+    col1, col2, col3, col4, col5 = st.columns([1, 2, 0.5, 2, 1])
+
+    with col2:
+        if card_with_button(
+            str(IMG / "Daisy.png"),
+            "Financial Forecasting",
+            "Daisy fait fleurir vos profits 🌼💰",
+            "Prévision des tendances financières.",
+            "🔍 Ouvrir le module Daisy",
+            "open_daisy"
+        ):
+            st.session_state["show_daisy_page"] = True
+            st.rerun()
+
+    with col4:
+        if card_with_button(
+            str(IMG / "Peach.png"),
+            "Portfolio Optimization",
+            "Peach your assets 🍑💼",
+            "Optimisation du portefeuille.",
+            "🔍 Ouvrir le module Peach",
+            "open_peach"
+        ):
+            st.session_state["show_peach_page"] = True
+            st.rerun()
+
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ===== LIGNE 2 : BIRDO + BOWSER =====
+    col1, col2, col3, col4, col5 = st.columns([1, 2, 0.5, 2, 1])
+
+    with col2:
+        card_with_button(
+            str(IMG / "Birdo.png"),
+            "Algorithmic Trading",
+            "Birdo gère tes trades 🥚📈",
+            "Stratégies automatisées & backtesting.",
+            "🔍 Module Birdo (à venir)",
+            "open_birdo"
+        )
+
+    with col4:
+        card_with_button(
+            str(IMG / "Bowser.png"),
+            "Option Pricing",
+            "Bowser hedge vos positions 🐢🔥",
+            "Modélisation des options.",
+            "🔍 Module Bowser (à venir)",
+            "open_bowser"
+        )
+
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # ===== LIGNE 3 : LUIGI SEUL PARFAITEMENT CENTRÉ =====
+    col1, col2, col3 = st.columns([1.5, 2, 1.5])
+
+    with col2:
+        if card_with_button(
+            str(IMG / "Luigi.png"),
+            "Risk Management",
+            "Luigi protège vos investissements 👻💸",
+            "Analyse avancée des risques financiers.",
+            "🔍 Ouvrir le module Luigi",
+            "open_luigi"
+        ):
+            st.session_state["show_luigi_page"] = True
+            st.rerun()
+
 # ====================== PAGE DAISY FULL WIDTH ======================================================================================================
 if st.session_state["show_daisy_page"]:
 
