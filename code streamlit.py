@@ -15,7 +15,7 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 
-IMG=Path.cwd()/"images"
+IMG = Path.cwd() / "images"
 
 # HRP
 from scipy.cluster.hierarchy import linkage, leaves_list
@@ -29,40 +29,6 @@ except Exception:
 
 warnings.filterwarnings("ignore")
 
-#CARTE---------------
-st.markdown("""
-<style>
-.cards-flex {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 28px;
-    justify-content: center;
-    margin-top: 25px;
-    margin-bottom: 30px;
-}
-.card-glass {
-    background: rgba(255,255,255,0.7);
-    border-radius: 18px;
-    padding: 24px 22px 22px 22px;
-    box-shadow: 0 4px 24px rgba(50, 50, 93, 0.11), 0 1.5px 2.5px rgba(0,0,0,0.07);
-    backdrop-filter: blur(8px);
-    width: 240px;
-    min-width: 220px;
-    max-width: 260px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: box-shadow 0.2s;
-}
-.card-glass:hover { box-shadow: 0 6px 30px rgba(0,0,0,0.18);}
-.card-glass img { margin-bottom: 18px; border-radius: 12px; }
-.card-glass h3 { margin-bottom: 8px; font-size: 1.18em;}
-.card-glass .sous-titre { opacity: 0.7; font-size:1em; margin-bottom: 8px;}
-.card-glass .desc { font-size: 1em; opacity:0.88; margin-bottom: 15px; text-align:center;}
-</style>
-""", unsafe_allow_html=True)
-
-
 # ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
 st.set_page_config(
     page_title="Nintendo Dashboard",
@@ -72,16 +38,13 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
-
 # ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
 if "show_daisy_page" not in st.session_state:
     st.session_state["show_daisy_page"] = False
 
-# ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
 if "show_peach_page" not in st.session_state:
     st.session_state["show_peach_page"] = False
 
-# ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
 if "show_luigi_page" not in st.session_state:
     st.session_state["show_luigi_page"] = False
 
@@ -107,37 +70,67 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ========== CSS : CARTES PLUS TRANSPARENTES ==========
+# ========== CSS : CARTES AVEC GRILLE 2+2+1 ==========
 st.markdown("""
 <style>
     .main { background-color: transparent; }
 
-    .custom-card {
-        background-color: rgba(255, 255, 255, 0.25) !important; 
-        backdrop-filter: blur(15px) !important; 
-        -webkit-backdrop-filter: blur(15px) !important; 
-        border-radius: 12px;
-        padding: 15px;
-        margin: 10px auto; 
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        max-width: 280px; 
+    .row-custom-cards {
+        display: flex;
+        gap: 38px;
+        justify-content: center;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
     }
 
-    .card-img {
-        width: 70px; 
+    .card-glass {
+        background: rgba(255,255,255,0.7);
+        border-radius: 18px;
+        padding: 24px 22px 22px 22px;
+        box-shadow: 0 4px 24px rgba(50, 50, 93, 0.11), 0 1.5px 2.5px rgba(0,0,0,0.07);
+        backdrop-filter: blur(8px);
+        width: 240px;
+        min-width: 220px;
+        max-width: 260px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: box-shadow 0.2s;
+        margin: 0 auto;
+    }
+
+    .card-glass:hover { 
+        box-shadow: 0 6px 30px rgba(0,0,0,0.18);
+    }
+
+    .card-glass img { 
+        margin-bottom: 18px; 
+        border-radius: 12px; 
+    }
+
+    .card-glass h3 { 
+        margin-bottom: 8px; 
+        font-size: 1.18em;
+    }
+
+    .card-glass .sous-titre { 
+        opacity: 0.7; 
+        font-size: 1em; 
         margin-bottom: 8px;
     }
-    
-    .custom-card h3 {
-        font-size: 1.1em; 
-        margin: 8px 0;
+
+    .card-glass .desc { 
+        font-size: 1em; 
+        opacity: 0.88; 
+        margin-bottom: 15px; 
+        text-align: center;
     }
-    
-    .custom-card p {
-        font-size: 0.9em; 
-        margin: 5px 0;
+
+    @media (max-width: 900px) {
+        .row-custom-cards { 
+            flex-direction: column; 
+            align-items: center; 
+        }
     }
 
     .placeholder-box {
@@ -184,72 +177,90 @@ st.markdown("""
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
-# ========== GRID LAYOUT : CARTES ==========
+# ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
 if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
-    col1, col2 = st.columns(2)
     
-    col1, col2 = st.columns(2)
-
-    col1, col2 = st.columns(2)
+    # ===== LIGNE 1 : DAISY ET PEACH =====
+    st.markdown('<div class="row-custom-cards">', unsafe_allow_html=True)
     
-st.markdown('<div class="cards-flex">', unsafe_allow_html=True)
-
-st.markdown(
-    f'''
-    <div class="card-glass">
-        <img src="{str(IMG / "Daisy.png")}" width="70">
-        <h3>Financial Forecasting</h3>
-        <div class="sous-titre">Daisy fait fleurir vos profits ! 🌼💰</div>
-        <div class="desc">Module de prévision des tendances financières.</div>
-        {st.button("🔍 Ouvrir le module Daisy", key="open_daisy")}
-    </div>
-    ''', unsafe_allow_html=True
-)
-st.markdown(
-    f'''
-    <div class="card-glass">
-        <img src="{str(IMG / "Peach.png")}" width="70">
-        <h3>Portfolio Optimization</h3>
-        <div class="sous-titre">Peach your assets! 🍑💼</div>
-        <div class="desc">Optimisation du portefeuille.</div>
-        {st.button("🔍 Ouvrir le module Peach", key="open_peach")}
-    </div>
-    ''', unsafe_allow_html=True
-)
-st.markdown(
-    f'''
-    <div class="card-glass">
-        <img src="{str(IMG / "Birdo.png")}" width="70">
-        <h3>Algorithmic Trading</h3>
-        <div class="sous-titre">Vos trades, pondus et gérés par Birdo 🥚📈</div>
-        <div class="desc">Stratégies automatisées et backtesting.</div>
-    </div>
-    ''', unsafe_allow_html=True
-)
-st.markdown(
-    f'''
-    <div class="card-glass">
-        <img src="{str(IMG / "Bowser.png")}" width="70">
-        <h3>Option Pricing</h3>
-        <div class="sous-titre">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</div>
-        <div class="desc">Modélisation et valorisation des options.</div>
-    </div>
-    ''', unsafe_allow_html=True
-)
-st.markdown(
-    f'''
-    <div class="card-glass">
-        <img src="{str(IMG / "Luigi.png")}" width="70">
-        <h3>Risk management</h3>
-        <div class="sous-titre">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</div>
-        <div class="desc">Analyse des risques financiers.</div>
-        {st.button("🔍 Ouvrir le module Luigi", key="open_luigi")}
-    </div>
-    ''', unsafe_allow_html=True
-)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
+    st.markdown(
+        f'''
+        <div class="card-glass">
+            <img src="{str(IMG / "Daisy.png")}" width="70">
+            <h3>Financial Forecasting</h3>
+            <div class="sous-titre">Daisy fait fleurir vos profits ! 🌼💰</div>
+            <div class="desc">Module de prévision des tendances financières.</div>
+        </div>
+        ''', unsafe_allow_html=True
+    )
+    
+    if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
+        st.session_state["show_daisy_page"] = True
+        st.rerun()
+    
+    st.markdown(
+        f'''
+        <div class="card-glass">
+            <img src="{str(IMG / "Peach.png")}" width="70">
+            <h3>Portfolio Optimization</h3>
+            <div class="sous-titre">Peach your assets! 🍑💼</div>
+            <div class="desc">Optimisation du portefeuille.</div>
+        </div>
+        ''', unsafe_allow_html=True
+    )
+    
+    if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
+        st.session_state["show_peach_page"] = True
+        st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # ===== LIGNE 2 : BIRDO ET BOWSER =====
+    st.markdown('<div class="row-custom-cards">', unsafe_allow_html=True)
+    
+    st.markdown(
+        f'''
+        <div class="card-glass">
+            <img src="{str(IMG / "Birdo.png")}" width="70">
+            <h3>Algorithmic Trading</h3>
+            <div class="sous-titre">Vos trades, pondus et gérés par Birdo 🥚📈</div>
+            <div class="desc">Stratégies automatisées et backtesting.</div>
+        </div>
+        ''', unsafe_allow_html=True
+    )
+    
+    st.markdown(
+        f'''
+        <div class="card-glass">
+            <img src="{str(IMG / "Bowser.png")}" width="70">
+            <h3>Option Pricing</h3>
+            <div class="sous-titre">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</div>
+            <div class="desc">Modélisation et valorisation des options.</div>
+        </div>
+        ''', unsafe_allow_html=True
+    )
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+    
+    # ===== LIGNE 3 : LUIGI (CENTRÉ) =====
+    st.markdown('<div class="row-custom-cards">', unsafe_allow_html=True)
+    
+    st.markdown(
+        f'''
+        <div class="card-glass">
+            <img src="{str(IMG / "Luigi.png")}" width="70">
+            <h3>Risk management</h3>
+            <div class="sous-titre">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</div>
+            <div class="desc">Analyse des risques financiers.</div>
+        </div>
+        ''', unsafe_allow_html=True
+    )
+    
+    if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
+        st.session_state["show_luigi_page"] = True
+        st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 # ====================== PAGE DAISY FULL WIDTH ======================================================================================================
 if st.session_state["show_daisy_page"]:
 
