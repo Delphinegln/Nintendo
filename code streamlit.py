@@ -1221,6 +1221,28 @@ if st.session_state["show_luigi_page"]:
     
     st.caption("🎮 Module Luigi - Analyse complète des risques financiers pour Nintendo")
 
+# ====================== PAGE BOWSER FULL WIDTH ======================================================================================================
+if st.session_state["show_bowser_page"]:
+
+    st.markdown("---")
+    st.markdown(
+        "<h2 style='text-align:center; margin-top:10px;'>👻 Bowser – Option Pricing </h2>",
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("⬅️ Retour au dashboard principal", key="close_bowser"):
+        st.session_state["show_bowser_page"] = False
+        st.rerun()
+
+
+
+
+
 
 
 # ========== SIDEBAR ==========
