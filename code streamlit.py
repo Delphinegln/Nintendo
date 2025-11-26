@@ -1314,7 +1314,7 @@ st.markdown("---")  # séparation visuelle propre avant les résultats
 
     
     # Sélection du profil d'investisseur
-    st.subheader("1️⃣ Profil d'Investisseur")
+st.subheader("1️⃣ Profil d'Investisseur")
     profils_dict = {
         1: 'COUVERTURE (HEDGING)',
         2: 'SPÉCULATION HAUSSIÈRE',
