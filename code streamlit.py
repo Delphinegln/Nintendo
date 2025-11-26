@@ -39,6 +39,22 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
+#CARTE----------------
+st.markdown("""
+<style>
+.card-container {
+    background: rgba(255, 255, 255, 0.6); /* fond blanc semi-transparent */
+    backdrop-filter: blur(10px); /* flou d’arrière-plan */
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 20px; /* espace vertical entre cartes */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+
 # ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
 if "show_daisy_page" not in st.session_state:
     st.session_state["show_daisy_page"] = False
@@ -160,6 +176,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     
     # ---------- PARTIE 1 : DAISY ----------
     with col1:
+            st.markdown('<div class="card-container">', unsafe_allow_html=True)
             st.image(str(IMG / "Daisy.png"), width=70)
             st.markdown("### Financial Forecasting")
             st.markdown("Daisy fait fleurir vos profits ! 🌼💰")
@@ -172,6 +189,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     # ---------- PARTIE 2 : PEACH ----------
     with col2:
+            st.markdown('<div class="card-container">', unsafe_allow_html=True)
             st.image(str(IMG / "Peach.png"), width=70)
             st.markdown("### Portfolio Optimization")
             st.markdown("Peach your assets! 🍑💼")
@@ -187,6 +205,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     # ---------- PARTIE 3 : BIRDO ----------
     with col3:
+            st.markdown('<div class="card-container">', unsafe_allow_html=True)
             st.image(str(IMG / "Birdo.png"), width=70)
             st.markdown("### Algorithmic Trading")
             st.markdown("Vos trades, pondus et gérés par Birdo 🥚📈")
@@ -198,6 +217,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     # ---------- PARTIE 4 : BOWSER ----------
     with col4:
+            st.markdown('<div class="card-container">', unsafe_allow_html=True)
             st.image(str(IMG / "Bowser.png"), width=70)
             st.markdown("### Option Pricing")
             st.markdown("Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼")
@@ -211,6 +231,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     col5, col6, col7 = st.columns([1, 2, 1])
 
     with col6:
+            st.markdown('<div class="card-container">', unsafe_allow_html=True)
             st.image(str(IMG / "Luigi.png"), width=70)
             st.markdown("### Risk management")
             st.markdown("Ne laissez pas vos risques vous hanter : Luigi est là 👻💸")
