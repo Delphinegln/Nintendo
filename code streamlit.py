@@ -176,72 +176,54 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     col1, col2 = st.columns(2)
     
-    # ---------- PARTIE 1 : DAISY ----------
-    with col1:
+st.markdown('<div class="row-cards">', unsafe_allow_html=True)
 
-            st.image(str(IMG / "Daisy.png"), width=70)
-            st.markdown("### Financial Forecasting")
-            st.markdown("Daisy fait fleurir vos profits ! 🌼💰")
-            st.markdown("Module de prévision des tendances financières.")
-        
+st.markdown('<div class="card-container">', unsafe_allow_html=True)
+st.image(str(IMG / "Daisy.png"), width=70)
+st.markdown("### Financial Forecasting")
+st.markdown("Daisy fait fleurir vos profits ! 🌼💰")
+st.markdown("Module de prévision des tendances financières.")
+if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
+    st.session_state["show_daisy_page"] = True
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
-            if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
-                st.session_state["show_daisy_page"] = True
-                st.rerun()
+st.markdown('<div class="card-container">', unsafe_allow_html=True)
+st.image(str(IMG / "Peach.png"), width=70)
+st.markdown("### Portfolio Optimization")
+st.markdown("Peach your assets! 🍑💼")
+st.markdown("Optimisation du portefeuille.")
+if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
+    st.session_state["show_peach_page"] = True
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
-    # ---------- PARTIE 2 : PEACH ----------
-    with col2:
+st.markdown('<div class="card-container">', unsafe_allow_html=True)
+st.image(str(IMG / "Birdo.png"), width=70)
+st.markdown("### Algorithmic Trading")
+st.markdown("Vos trades, pondus et gérés par Birdo 🥚📈")
+st.markdown("Stratégies automatisées et backtesting.")
+st.markdown('</div>', unsafe_allow_html=True)
 
-            st.image(str(IMG / "Peach.png"), width=70)
-            st.markdown("### Portfolio Optimization")
-            st.markdown("Peach your assets! 🍑💼")
-            st.markdown("Optimisation du portefeuille.")
-        
+st.markdown('<div class="card-container">', unsafe_allow_html=True)
+st.image(str(IMG / "Bowser.png"), width=70)
+st.markdown("### Option Pricing")
+st.markdown("Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼")
+st.markdown("Modélisation et valorisation des options.")
+st.markdown('</div>', unsafe_allow_html=True)
 
-            if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
-                st.session_state["show_peach_page"] = True
-                st.rerun()
+st.markdown('<div class="card-container">', unsafe_allow_html=True)
+st.image(str(IMG / "Luigi.png"), width=70)
+st.markdown("### Risk management")
+st.markdown("Ne laissez pas vos risques vous hanter : Luigi est là 👻💸")
+st.markdown("Analyse des risques financiers.")
+if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
+    st.session_state["show_luigi_page"] = True
+    st.rerun()
+st.markdown('</div>', unsafe_allow_html=True)
 
-    # ---------- LIGNE 2 ----------
-    col3, col4 = st.columns(2)
+st.markdown('</div>', unsafe_allow_html=True)
 
-    # ---------- PARTIE 3 : BIRDO ----------
-    with col3:
-
-            st.image(str(IMG / "Birdo.png"), width=70)
-            st.markdown("### Algorithmic Trading")
-            st.markdown("Vos trades, pondus et gérés par Birdo 🥚📈")
-            st.markdown("Stratégies automatisées et backtesting.")
-            
-            if st.button("🔍 Ouvrir le module Birdo", key="open_birdo"):
-                st.session_state["show_birdo_page"] = True
-                st.rerun()
-
-    # ---------- PARTIE 4 : BOWSER ----------
-    with col4:
-
-            st.image(str(IMG / "Bowser.png"), width=70)
-            st.markdown("### Option Pricing")
-            st.markdown("Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼")
-            st.markdown("Modélisation et valorisation des options.")
-
-            if st.button("🔍 Ouvrir le module Bowser", key="open_bowser"):
-                st.session_state["show_bowser_page"] = True
-                st.rerun()
-
-    # ---------- LIGNE 3 : LUIGI (CENTRÉ) ----------
-    col5, col6, col7 = st.columns([1, 2, 1])
-
-    with col6:
-
-            st.image(str(IMG / "Luigi.png"), width=70)
-            st.markdown("### Risk management")
-            st.markdown("Ne laissez pas vos risques vous hanter : Luigi est là 👻💸")
-            st.markdown("Analyse des risques financiers.")
-
-            if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
-                st.session_state["show_luigi_page"] = True
-                st.rerun()
 
 # ====================== PAGE DAISY FULL WIDTH ======================================================================================================
 if st.session_state["show_daisy_page"]:
