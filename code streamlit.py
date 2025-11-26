@@ -250,16 +250,14 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
         )
 
     with col4:
-        card_with_button(
+        if card_with_button(
             IMG / "Bowser.png",
             "Option Pricing",
             "Bowser hedge vos positions 🐢🔥",
             "Modélisation des options.",
             "🔍 Module Bowser",
             "open_bowser"
-        )
-
-        if st.button("🔍 Module Bowser", key="btn_open_bowser"):
+        ):
             st.session_state["show_bowser_page"] = True
             st.rerun()
     
@@ -1241,21 +1239,11 @@ if st.session_state["show_bowser_page"]:
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("⬅️ Retour au dashboard principal", key="close_bowser"):
-        st.session_state["show_bowser_page"] = False
-        st.rerun()
 
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CONFIGURATION STREAMLIT
 # ═══════════════════════════════════════════════════════════════════════════
-
-st.set_page_config(
-    page_title="Option Pricing - Nintendo",
-    page_icon="📊",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 st.markdown("""
 <style>
@@ -1289,8 +1277,41 @@ st.markdown("""
 # BARRE LATÉRALE - PARAMÈTRES
 # ═══════════════════════════════════════════════════════════════════════════
 
-with st.sidebar:
-    st.header("⚙️ Paramètres")
+st.markdown("## ⚙️ Paramètres de configuration Bowser")
+
+param_container = st.container()
+
+with param_container:
+    colA, colB, colC = st.columns(3)
+
+    with colA:
+        profils_dict = {
+            1: 'COUVERTURE (HEDGING)',
+            2: 'SPÉCULATION HAUSSIÈRE',
+            3: 'SPÉCULATION BAISSIÈRE',
+            4: 'GÉNÉRATION DE REVENUS',
+            5: 'VOLATILITÉ'
+        }
+
+        profil_key = st.radio(
+            "Profil investisseur",
+            options=list(profils_dict.keys()),
+            format_func=lambda x: profils_dict[x],
+            index=1
+        )
+
+    with colB:
+        r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
+        n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1)
+
+    with colC:
+        strikes_min = st.slider("Strike min (%)", 80, 100, 90, step=5)
+        strikes_max = st.slider("Strike max (%)", 100, 130, 110, step=5)
+        maturity_min = st.slider("Maturité min (mois)", 1, 12, 3)
+        maturity_max = st.slider("Maturité max (mois)", 1, 12, 12)
+
+st.markdown("---")  # séparation visuelle propre avant les résultats
+
     
     # Sélection du profil d'investisseur
     st.subheader("1️⃣ Profil d'Investisseur")
