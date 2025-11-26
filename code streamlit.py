@@ -1240,7 +1240,886 @@ if st.session_state["show_bowser_page"]:
         st.rerun()
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+# CONFIGURATION STREAMLIT
+# ═══════════════════════════════════════════════════════════════════════════
 
+st.set_page_config(
+    page_title="Option Pricing - Nintendo",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+st.markdown("""
+<style>
+    .main {
+        padding: 20px;
+    }
+    .stMetric {
+        background-color: #f0f2f6;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TITRE PRINCIPAL
+# ═══════════════════════════════════════════════════════════════════════════
+
+st.title("💰 Conseil en Pricing d'Options - NINTENDO (NTDOY)")
+st.markdown("---")
+st.markdown("""
+**Types d'options évalués:**
+- ✅ Options Européennes (Black-Scholes-Merton)
+- ✅ Options Américaines (Binomial Tree)
+- ✅ Options Bermudéennes (Binomial Tree modifié)
+- ✅ Options Exotiques - Asiatiques (Monte Carlo)
+- ✅ Greeks pour gestion du risque
+""")
+
+# ═══════════════════════════════════════════════════════════════════════════
+# BARRE LATÉRALE - PARAMÈTRES
+# ═══════════════════════════════════════════════════════════════════════════
+
+with st.sidebar:
+    st.header("⚙️ Paramètres")
+    
+    # Sélection du profil d'investisseur
+    st.subheader("1️⃣ Profil d'Investisseur")
+    profils_dict = {
+        1: 'COUVERTURE (HEDGING)',
+        2: 'SPÉCULATION HAUSSIÈRE',
+        3: 'SPÉCULATION BAISSIÈRE',
+        4: 'GÉNÉRATION DE REVENUS',
+        5: 'VOLATILITÉ'
+    }
+    
+    profil_key = st.radio(
+        "Sélectionnez votre profil:",
+        options=list(profils_dict.keys()),
+        format_func=lambda x: profils_dict[x],
+        index=1
+    )
+    
+    # Paramètres de données
+    st.subheader("2️⃣ Paramètres de Données")
+    
+    ticker = "NTDOY"
+    start_date = "2015-09-01"
+    end_date = "2025-09-30"
+    
+    r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
+    n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1)
+    
+    # Paramètres de strikes et maturités
+    st.subheader("3️⃣ Paramet Évaluation")
+    
+    strikes_min = st.slider("Strike minimum (% du prix)", 80, 100, 90, step=5)
+    strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5)
+    
+    maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1)
+    maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1)
+    
+    if maturity_min > maturity_max:
+        st.error("La maturité min doit être inférieure à max")
+        maturity_min = maturity_max
+
+# ═══════════════════════════════════════════════════════════════════════════
+# DÉFINITION DES PROFILS
+# ═══════════════════════════════════════════════════════════════════════════
+
+profils_investisseur = {
+    1: {
+        'nom': 'COUVERTURE (HEDGING)',
+        'strategie_principale': 'Achat de Puts pour protection',
+        'options_recommandees': ['Put Européen', 'Put Américain'],
+        'horizon_typique': 'Court à Moyen terme (3-6 mois)',
+        'delta_target': 'Négatif (protection)',
+        'description': 'Minimiser les pertes en cas de baisse du sous-jacent'
+    },
+    2: {
+        'nom': 'SPÉCULATION HAUSSIÈRE',
+        'strategie_principale': 'Achat de Calls',
+        'options_recommandees': ['Call Européen', 'Call Américain', 'Call Asiatique'],
+        'horizon_typique': 'Moyen terme (6-12 mois)',
+        'delta_target': 'Positif élevé (>0.5)',
+        'description': 'Profiter d\'une hausse anticipée avec effet de levier'
+    },
+    3: {
+        'nom': 'SPÉCULATION BAISSIÈRE',
+        'strategie_principale': 'Achat de Puts',
+        'options_recommandees': ['Put Européen', 'Put Américain'],
+        'horizon_typique': 'Court à Moyen terme (3-9 mois)',
+        'delta_target': 'Négatif (<-0.3)',
+        'description': 'Profiter d\'une baisse anticipée'
+    },
+    4: {
+        'nom': 'GÉNÉRATION DE REVENUS',
+        'strategie_principale': 'Vente de Calls couverts (Covered Calls)',
+        'options_recommandees': ['Call Européen OTM', 'Call Bermudéen'],
+        'horizon_typique': 'Court terme répété (1-3 mois)',
+        'delta_target': 'Légèrement positif (0.3-0.5)',
+        'description': 'Collecter des primes en vendant des calls sur actions détenues'
+    },
+    5: {
+        'nom': 'VOLATILITÉ',
+        'strategie_principale': 'Straddle/Strangle',
+        'options_recommandees': ['Call & Put Européens', 'Options Exotiques'],
+        'horizon_typique': 'Court terme (1-3 mois)',
+        'delta_target': 'Neutre (proche de 0)',
+        'description': 'Profiter des mouvements de prix importants sans direction précise'
+    }
+}
+
+profil = profils_investisseur[profil_key]
+
+# ═══════════════════════════════════════════════════════════════════════════
+# TÉLÉCHARGEMENT DES DONNÉES
+# ═══════════════════════════════════════════════════════════════════════════
+
+@st.cache_data
+def download_data(ticker, start, end):
+    try:
+        data = yf.download(ticker, start=start, end=end, progress=False)
+        return data['Close']
+    except:
+        st.error(f"Erreur lors du téléchargement de {ticker}")
+        return None
+
+# Affichage du statut de chargement
+with st.spinner("📥 Téléchargement des données Nintendo..."):
+    data = download_data(ticker, start_date, end_date)
+
+if data is not None:
+    S0 = data.iloc[-1]
+    returns = np.log(data / data.shift(1))
+    volatility_hist = returns.std() * np.sqrt(252)
+    
+    # Affichage des métriques
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("💵 Prix actuel", f"${S0:.2f}")
+    with col2:
+        st.metric("📊 Volatilité historique", f"{volatility_hist*100:.2f}%")
+    with col3:
+        st.metric("📅 Jours de trading", len(data))
+    with col4:
+        st.metric("💹 Taux sans risque", f"{r*100:.2f}%")
+    
+    st.markdown("---")
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # MODÈLES DE PRICING
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    # Black-Scholes
+    def black_scholes_call(S, K, T, r, sigma):
+        if T <= 0:
+            return max(S - K, 0)
+        d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+        d2 = d1 - sigma * np.sqrt(T)
+        call_price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+        return call_price
+
+    def black_scholes_put(S, K, T, r, sigma):
+        if T <= 0:
+            return max(K - S, 0)
+        d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+        d2 = d1 - sigma * np.sqrt(T)
+        put_price = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
+        return put_price
+
+    def bs_greeks(S, K, T, r, sigma, option_type='call'):
+        if T <= 0:
+            return {'delta': 0, 'gamma': 0, 'vega': 0, 'theta': 0, 'rho': 0}
+        
+        d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
+        d2 = d1 - sigma * np.sqrt(T)
+        
+        if option_type == 'call':
+            delta = norm.cdf(d1)
+            theta = (-(S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T)) - r * K * np.exp(-r * T) * norm.cdf(d2)) / 365
+            rho = K * T * np.exp(-r * T) * norm.cdf(d2) / 100
+        else:
+            delta = -norm.cdf(-d1)
+            theta = (-(S * norm.pdf(d1) * sigma) / (2 * np.sqrt(T)) + r * K * np.exp(-r * T) * norm.cdf(-d2)) / 365
+            rho = -K * T * np.exp(-r * T) * norm.cdf(-d2) / 100
+        
+        gamma = norm.pdf(d1) / (S * sigma * np.sqrt(T))
+        vega = S * norm.pdf(d1) * np.sqrt(T) / 100
+        
+        return {'delta': delta, 'gamma': gamma, 'vega': vega, 'theta': theta, 'rho': rho}
+
+    # Binomial Tree
+    def binomial_tree_american(S, K, T, r, sigma, N=100, option_type='call'):
+        dt = T / N
+        u = np.exp(sigma * np.sqrt(dt))
+        d = 1 / u
+        p = (np.exp(r * dt) - d) / (u - d)
+        
+        stock_tree = np.zeros((N + 1, N + 1))
+        option_tree = np.zeros((N + 1, N + 1))
+        
+        for i in range(N + 1):
+            stock_tree[i, N] = S * (u ** (N - i)) * (d ** i)
+        
+        for i in range(N + 1):
+            if option_type == 'call':
+                option_tree[i, N] = max(stock_tree[i, N] - K, 0)
+            else:
+                option_tree[i, N] = max(K - stock_tree[i, N], 0)
+        
+        for j in range(N - 1, -1, -1):
+            for i in range(j + 1):
+                stock_tree[i, j] = S * (u ** (j - i)) * (d ** i)
+                continuation = np.exp(-r * dt) * (p * option_tree[i, j + 1] + (1 - p) * option_tree[i + 1, j + 1])
+                
+                if option_type == 'call':
+                    exercise = max(stock_tree[i, j] - K, 0)
+                else:
+                    exercise = max(K - stock_tree[i, j], 0)
+                
+                option_tree[i, j] = max(continuation, exercise)
+        
+        return option_tree[0, 0]
+
+    # Monte Carlo
+    def asian_option_monte_carlo(S, K, T, r, sigma, n_simulations=30000, n_steps=252, option_type='call'):
+        dt = T / n_steps
+        discount_factor = np.exp(-r * T)
+        payoffs = []
+        
+        for _ in range(n_simulations):
+            prices = [S]
+            for _ in range(n_steps):
+                z = np.random.standard_normal()
+                S_next = prices[-1] * np.exp((r - 0.5 * sigma**2) * dt + sigma * np.sqrt(dt) * z)
+                prices.append(S_next)
+            
+            avg_price = np.mean(prices)
+            
+            if option_type == 'call':
+                payoff = max(avg_price - K, 0)
+            else:
+                payoff = max(K - avg_price, 0)
+            
+            payoffs.append(payoff)
+        
+        option_price = discount_factor * np.mean(payoffs)
+        std_error = discount_factor * np.std(payoffs) / np.sqrt(n_simulations)
+        
+        return option_price, std_error
+
+    # ═══════════════════════════════════════════════════════════════════════════
+    # CALCUL DES RÉSULTATS
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    st.subheader(f"📊 Profil: {profil['nom']}")
+    st.write(f"**Stratégie:** {profil['strategie_principale']}")
+    st.write(f"**Description:** {profil['description']}")
+    
+    # Paramètres selon le profil
+    if profil_key == 1:  # COUVERTURE
+        option_types_focus = ['put']
+    elif profil_key == 2:  # HAUSSIER
+        option_types_focus = ['call']
+    elif profil_key == 3:  # BAISSIER
+        option_types_focus = ['put']
+    elif profil_key == 4:  # REVENUS
+        option_types_focus = ['call']
+    else:  # VOLATILITÉ
+        option_types_focus = ['call', 'put']
+    
+    # Génération des strikes et maturités
+    strikes_pct = np.linspace(strikes_min/100, strikes_max/100, 5)
+    K_values = [S0 * mult for mult in strikes_pct]
+    
+    maturities = list(range(maturity_min, maturity_max + 1))
+    T_values = [m/12 for m in maturities]
+    
+    st.markdown("---")
+    st.subheader("⚙️ Configuration de l'évaluation")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.info(f"✅ Strikes évalués: {len(K_values)}")
+        st.info(f"✅ Maturités évaluées: {len(T_values)}")
+    with col2:
+        st.info(f"✅ Volatilité: {volatility_hist*100:.2f}%")
+        st.info(f"✅ Taux sans risque: {r*100:.2f}%")
+    
+    # Calcul des options
+    with st.spinner("⏳ Calcul des options en cours..."):
+        results_all = []
+        
+        for K in K_values:
+            for T in T_values:
+                T_months = int(T * 12)
+                moneyness = S0 / K
+                
+                if moneyness > 1.05:
+                    status = 'ITM'
+                elif moneyness > 0.95:
+                    status = 'ATM'
+                else:
+                    status = 'OTM'
+                
+                result = {
+                    'Strike': K,
+                    'Maturité (mois)': T_months,
+                    'Maturité (années)': T,
+                    'Moneyness': moneyness,
+                    'Status': status
+                }
+                
+                if 'call' in option_types_focus:
+                    call_euro = black_scholes_call(S0, K, T, r, volatility_hist)
+                    result['Call Européen'] = call_euro
+                    
+                    call_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='call')
+                    result['Call Américain'] = call_american
+                    
+                    call_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='call')
+                    result['Call Asiatique'] = call_asian
+                    
+                    greeks_call = bs_greeks(S0, K, T, r, volatility_hist, 'call')
+                    result['Call Delta'] = greeks_call['delta']
+                    result['Call Gamma'] = greeks_call['gamma']
+                    result['Call Vega'] = greeks_call['vega']
+                    result['Call Theta'] = greeks_call['theta']
+                
+                if 'put' in option_types_focus:
+                    put_euro = black_scholes_put(S0, K, T, r, volatility_hist)
+                    result['Put Européen'] = put_euro
+                    
+                    put_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='put')
+                    result['Put Américain'] = put_american
+                    
+                    put_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='put')
+                    result['Put Asiatique'] = put_asian
+                    
+                    greeks_put = bs_greeks(S0, K, T, r, volatility_hist, 'put')
+                    result['Put Delta'] = greeks_put['delta']
+                    result['Put Gamma'] = greeks_put['gamma']
+                    result['Put Vega'] = greeks_put['vega']
+                    result['Put Theta'] = greeks_put['theta']
+                
+                results_all.append(result)
+        
+        df_results = pd.DataFrame(results_all)
+    
+    st.success(f"✅ {len(df_results)} configurations d'options évaluées")
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # ONGLETS INTERACTIFS
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(
+        ["📊 Résultats", "📈 Visualisations", "🎯 Recommandations", "📉 P&L", "📋 Tableau"]
+    )
+    
+    # TAB 1: RÉSULTATS
+    with tab1:
+        st.subheader("Résultats des Évaluations")
+        
+        # Filtrage optionnel
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            selected_status = st.multiselect("Filtrer par Status", ['ITM', 'ATM', 'OTM'], default=['ITM', 'ATM', 'OTM'])
+        with col2:
+            selected_maturity = st.multiselect("Filtrer par Maturité", sorted(df_results['Maturité (mois)'].unique()), 
+                                              default=sorted(df_results['Maturité (mois)'].unique()))
+        with col3:
+            precision = st.slider("Décimales", 2, 4, 2)
+        
+        # Filtrage
+        df_filtered = df_results[
+            (df_results['Status'].isin(selected_status)) &
+            (df_results['Maturité (mois)'].isin(selected_maturity))
+        ]
+        
+        # Arrondir les colonnes numériques
+        numeric_cols = df_filtered.select_dtypes(include=[np.number]).columns
+        df_display = df_filtered.copy()
+        for col in numeric_cols:
+            df_display[col] = df_display[col].round(precision)
+        
+        st.dataframe(df_display, use_container_width=True)
+        
+        # Export
+        csv = df_display.to_csv(index=False)
+        st.download_button(
+            label="📥 Télécharger CSV",
+            data=csv,
+            file_name="nintendo_options.csv",
+            mime="text/csv"
+        )
+    
+    # TAB 2: VISUALISATIONS
+    with tab2:
+        st.subheader("Graphiques Interactifs")
+        
+        sub_tab1, sub_tab2, sub_tab3 = st.tabs(["3D Surface", "Comparaison", "Greeks"])
+        
+        # 3D Surface
+        with sub_tab1:
+            if 'call' in option_types_focus:
+                st.markdown("#### Surface 3D - Call Européen")
+                
+                strikes_unique = sorted(df_results['Strike'].unique())
+                maturities_unique = sorted(df_results['Maturité (années)'].unique())
+                
+                Z_call = []
+                for T in maturities_unique:
+                    row = []
+                    for K in strikes_unique:
+                        val = df_results[(df_results['Strike'] == K) & 
+                                        (df_results['Maturité (années)'] == T)]['Call Européen'].values
+                        row.append(val[0] if len(val) > 0 else 0)
+                    Z_call.append(row)
+                
+                fig_3d_call = go.Figure(data=[go.Surface(
+                    x=strikes_unique,
+                    y=maturities_unique,
+                    z=Z_call,
+                    colorscale='Viridis'
+                )])
+                
+                fig_3d_call.update_layout(
+                    title='Prix Call Européen - Surface 3D',
+                    scene=dict(
+                        xaxis_title='Strike ($)',
+                        yaxis_title='Maturité (années)',
+                        zaxis_title='Prix ($)'
+                    ),
+                    height=600
+                )
+                
+                st.plotly_chart(fig_3d_call, use_container_width=True)
+            
+            if 'put' in option_types_focus:
+                st.markdown("#### Surface 3D - Put Européen")
+                
+                Z_put = []
+                for T in maturities_unique:
+                    row = []
+                    for K in strikes_unique:
+                        val = df_results[(df_results['Strike'] == K) & 
+                                        (df_results['Maturité (années)'] == T)]['Put Européen'].values
+                        row.append(val[0] if len(val) > 0 else 0)
+                    Z_put.append(row)
+                
+                fig_3d_put = go.Figure(data=[go.Surface(
+                    x=strikes_unique,
+                    y=maturities_unique,
+                    z=Z_put,
+                    colorscale='Reds'
+                )])
+                
+                fig_3d_put.update_layout(
+                    title='Prix Put Européen - Surface 3D',
+                    scene=dict(
+                        xaxis_title='Strike ($)',
+                        yaxis_title='Maturité (années)',
+                        zaxis_title='Prix ($)'
+                    ),
+                    height=600
+                )
+                
+                st.plotly_chart(fig_3d_put, use_container_width=True)
+        
+        # Comparaison
+        with sub_tab2:
+            target_maturity = 6
+            closest_maturity = min(maturities, key=lambda x: abs(x - target_maturity))
+            df_comp = df_results[df_results['Maturité (mois)'] == closest_maturity].copy()
+            
+            if 'call' in option_types_focus and len(df_comp) > 0:
+                st.markdown(f"#### Comparaison des Calls (Maturité: {closest_maturity} mois)")
+                
+                fig_comp_call = go.Figure()
+                
+                fig_comp_call.add_trace(go.Scatter(
+                    x=df_comp['Strike'],
+                    y=df_comp['Call Européen'],
+                    name='Call Européen',
+                    mode='lines+markers',
+                    line=dict(color='blue', width=3)
+                ))
+                
+                if 'Call Américain' in df_comp.columns:
+                    fig_comp_call.add_trace(go.Scatter(
+                        x=df_comp['Strike'],
+                        y=df_comp['Call Américain'],
+                        name='Call Américain',
+                        mode='lines+markers',
+                        line=dict(color='green', width=3)
+                    ))
+                
+                fig_comp_call.add_vline(x=S0, line_dash="dash", line_color="red")
+                
+                fig_comp_call.update_layout(
+                    title=f'Comparaison des Calls',
+                    xaxis_title='Strike ($)',
+                    yaxis_title='Prix ($)',
+                    height=500
+                )
+                
+                st.plotly_chart(fig_comp_call, use_container_width=True)
+            
+            if 'put' in option_types_focus and len(df_comp) > 0:
+                st.markdown(f"#### Comparaison des Puts (Maturité: {closest_maturity} mois)")
+                
+                fig_comp_put = go.Figure()
+                
+                fig_comp_put.add_trace(go.Scatter(
+                    x=df_comp['Strike'],
+                    y=df_comp['Put Européen'],
+                    name='Put Européen',
+                    mode='lines+markers',
+                    line=dict(color='blue', width=3)
+                ))
+                
+                if 'Put Américain' in df_comp.columns:
+                    fig_comp_put.add_trace(go.Scatter(
+                        x=df_comp['Strike'],
+                        y=df_comp['Put Américain'],
+                        name='Put Américain',
+                        mode='lines+markers',
+                        line=dict(color='green', width=3)
+                    ))
+                
+                fig_comp_put.add_vline(x=S0, line_dash="dash", line_color="red")
+                
+                fig_comp_put.update_layout(
+                    title=f'Comparaison des Puts',
+                    xaxis_title='Strike ($)',
+                    yaxis_title='Prix ($)',
+                    height=500
+                )
+                
+                st.plotly_chart(fig_comp_put, use_container_width=True)
+        
+        # Greeks
+        with sub_tab3:
+            if len(df_comp) > 0:
+                if 'call' in option_types_focus and 'Call Delta' in df_comp.columns:
+                    st.markdown("#### Greeks - Calls")
+                    
+                    fig_greeks = make_subplots(
+                        rows=2, cols=2,
+                        subplot_titles=('Delta', 'Gamma', 'Vega', 'Theta')
+                    )
+                    
+                    fig_greeks.add_trace(
+                        go.Scatter(x=df_comp['Strike'], y=df_comp['Call Delta'],
+                                  name='Delta', line=dict(color='blue')),
+                        row=1, col=1
+                    )
+                    fig_greeks.add_trace(
+                        go.Scatter(x=df_comp['Strike'], y=df_comp['Call Gamma'],
+                                  name='Gamma', line=dict(color='green')),
+                        row=1, col=2
+                    )
+                    fig_greeks.add_trace(
+                        go.Scatter(x=df_comp['Strike'], y=df_comp['Call Vega'],
+                                  name='Vega', line=dict(color='orange')),
+                        row=2, col=1
+                    )
+                    fig_greeks.add_trace(
+                        go.Scatter(x=df_comp['Strike'], y=df_comp['Call Theta'],
+                                  name='Theta', line=dict(color='red')),
+                        row=2, col=2
+                    )
+                    
+                    fig_greeks.update_layout(height=600, showlegend=False)
+                    st.plotly_chart(fig_greeks, use_container_width=True)
+    
+    # TAB 3: RECOMMANDATIONS
+    with tab3:
+        st.subheader(f"🎯 Recommandations pour {profil['nom']}")
+        
+        if profil_key == 1:  # COUVERTURE
+            st.markdown("""
+            ### Stratégie de Couverture (Hedging)
+            
+            Vous détenez des actions Nintendo et voulez vous protéger contre une baisse.
+            
+            **Options recommandées:** Protective Puts
+            """)
+            
+            best_hedge = df_results[df_results['Status'] == 'ATM'].nsmallest(3, 'Maturité (mois)')
+            
+            for i, (_, row) in enumerate(best_hedge.iterrows(), 1):
+                with st.expander(f"Option {i}: Put ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Prix", f"${row['Put Européen']:.2f}")
+                    with col2:
+                        st.metric("Delta", f"{row['Put Delta']:.3f}")
+                    with col3:
+                        st.metric("Gamma", f"{row['Put Gamma']:.6f}")
+                    with col4:
+                        st.metric("Theta", f"{row['Put Theta']:.6f}")
+        
+        elif profil_key == 2:  # HAUSSIER
+            st.markdown("""
+            ### Spéculation Haussière
+            
+            Vous anticipez une hausse - Achetez des Calls pour profiter de l'effet de levier.
+            
+            **Options recommandées:** Long Calls
+            """)
+            
+            best_calls = df_results[df_results['Status'].isin(['ATM', 'OTM'])].nsmallest(3, 'Call Européen')
+            
+            for i, (_, row) in enumerate(best_calls.iterrows(), 1):
+                leverage = S0 / row['Call Européen'] if row['Call Européen'] > 0 else 0
+                breakeven = row['Strike'] + row['Call Européen']
+                required_move = ((breakeven / S0) - 1) * 100
+                
+                with st.expander(f"Option {i}: Call ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Prix", f"${row['Call Européen']:.2f}")
+                    with col2:
+                        st.metric("Levier", f"{leverage:.1f}x")
+                    with col3:
+                        st.metric("Point mort", f"${breakeven:.2f}")
+                    with col4:
+                        st.metric("Hausse requise", f"{required_move:.1f}%")
+        
+        elif profil_key == 3:  # BAISSIER
+            st.markdown("""
+            ### Spéculation Baissière
+            
+            Vous anticipez une baisse - Achetez des Puts pour profiter du mouvement baissier.
+            
+            **Options recommandées:** Long Puts
+            """)
+            
+            best_puts = df_results[df_results['Status'].isin(['ATM', 'OTM'])].nsmallest(3, 'Put Européen')
+            
+            for i, (_, row) in enumerate(best_puts.iterrows(), 1):
+                leverage = S0 / row['Put Européen'] if row['Put Européen'] > 0 else 0
+                breakeven = row['Strike'] - row['Put Européen']
+                required_move = ((S0 / breakeven) - 1) * 100
+                
+                with st.expander(f"Option {i}: Put ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Prix", f"${row['Put Européen']:.2f}")
+                    with col2:
+                        st.metric("Levier", f"{leverage:.1f}x")
+                    with col3:
+                        st.metric("Point mort", f"${breakeven:.2f}")
+                    with col4:
+                        st.metric("Baisse requise", f"{required_move:.1f}%")
+        
+        elif profil_key == 4:  # REVENUS
+            st.markdown("""
+            ### Génération de Revenus (Covered Calls)
+            
+            Vous détenez des actions et voulez générer des revenus réguliers en vendant des Calls.
+            
+            **Options recommandées:** Covered Calls OTM
+            """)
+            
+            covered_calls = df_results[
+                (df_results['Status'].isin(['ATM', 'OTM'])) &
+                (df_results['Maturité (mois)'] <= 3)
+            ].sort_values('Maturité (mois)').head(3)
+            
+            for i, (_, row) in enumerate(covered_calls.iterrows(), 1):
+                annualized = (row['Call Européen'] / S0) * (12 / row['Maturité (mois)']) * 100
+                
+                with st.expander(f"Option {i}: Vendre Call ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Prime reçue", f"${row['Call Européen']:.2f}")
+                    with col2:
+                        st.metric("Annualisé", f"{annualized:.2f}%")
+                    with col3:
+                        st.metric("Strike au-dessus", f"{((row['Strike']/S0)-1)*100:.1f}%")
+                    with col4:
+                        st.metric("Delta", f"{row['Call Delta']:.3f}")
+        
+        else:  # VOLATILITÉ
+            st.markdown("""
+            ### Stratégie sur Volatilité (Straddle)
+            
+            Vous anticipez un mouvement important - Achetez un Call + Put ATM.
+            
+            **Options recommandées:** Long Straddle
+            """)
+            
+            straddles = df_results[df_results['Status'] == 'ATM'].copy()
+            straddles['Straddle Cost'] = straddles['Call Européen'] + straddles['Put Européen']
+            straddles = straddles.nsmallest(3, 'Maturité (mois)')
+            
+            for i, (_, row) in enumerate(straddles.iterrows(), 1):
+                move_required = (row['Straddle Cost'] / S0) * 100
+                
+                with st.expander(f"Option {i}: Straddle ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
+                    col1, col2, col3, col4 = st.columns(4)
+                    with col1:
+                        st.metric("Coût total", f"${row['Straddle Cost']:.2f}")
+                    with col2:
+                        st.metric("Mouvement requis", f"±{move_required:.1f}%")
+                    with col3:
+                        st.metric("Call Vega", f"{row['Call Vega']:.3f}")
+                    with col4:
+                        st.metric("Put Vega", f"{row['Put Vega']:.3f}")
+    
+    # TAB 4: P&L
+    with tab4:
+        st.subheader("📉 Analyse Profit & Loss")
+        
+        # Sélection d'une option
+        option_selected = st.selectbox(
+            "Sélectionnez une option pour analyser",
+            options=range(len(df_results)),
+            format_func=lambda x: f"{df_results.iloc[x]['Status']} - ${df_results.iloc[x]['Strike']:.2f} ({int(df_results.iloc[x]['Maturité (mois)'])} mois)"
+        )
+        
+        selected_option = df_results.iloc[option_selected]
+        
+        if 'call' in option_types_focus:
+            K_call = selected_option['Strike']
+            premium_call = selected_option['Call Européen']
+            
+            price_range = np.linspace(S0 * 0.7, S0 * 1.3, 100)
+            payoff_call = np.maximum(price_range - K_call, 0) - premium_call
+            breakeven_call = K_call + premium_call
+            
+            fig_pl_call = go.Figure()
+            
+            fig_pl_call.add_trace(go.Scatter(
+                x=price_range,
+                y=payoff_call,
+                name='Long Call',
+                line=dict(color='green', width=3),
+                fill='tozeroy'
+            ))
+            
+            fig_pl_call.add_hline(y=0, line_dash="solid", line_color="black")
+            fig_pl_call.add_vline(x=S0, line_dash="dash", line_color="blue")
+            fig_pl_call.add_vline(x=breakeven_call, line_dash="dash", line_color="red")
+            
+            fig_pl_call.update_layout(
+                title=f'Long Call: Strike ${K_call:.2f}, Prime ${premium_call:.2f}',
+                xaxis_title='Prix à maturité ($)',
+                yaxis_title='Profit / Perte ($)',
+                height=500
+            )
+            
+            st.plotly_chart(fig_pl_call, use_container_width=True)
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Max loss", f"-${premium_call:.2f}")
+            with col2:
+                st.metric("Max gain", "Illimité")
+            with col3:
+                st.metric("Point mort", f"${breakeven_call:.2f}")
+        
+        if 'put' in option_types_focus:
+            K_put = selected_option['Strike']
+            premium_put = selected_option['Put Européen']
+            
+            price_range = np.linspace(S0 * 0.5, S0 * 1.5, 100)
+            payoff_put = np.maximum(K_put - price_range, 0) - premium_put
+            breakeven_put = K_put - premium_put
+            
+            fig_pl_put = go.Figure()
+            
+            fig_pl_put.add_trace(go.Scatter(
+                x=price_range,
+                y=payoff_put,
+                name='Long Put',
+                line=dict(color='red', width=3),
+                fill='tozeroy'
+            ))
+            
+            fig_pl_put.add_hline(y=0, line_dash="solid", line_color="black")
+            fig_pl_put.add_vline(x=S0, line_dash="dash", line_color="blue")
+            fig_pl_put.add_vline(x=breakeven_put, line_dash="dash", line_color="red")
+            
+            fig_pl_put.update_layout(
+                title=f'Long Put: Strike ${K_put:.2f}, Prime ${premium_put:.2f}',
+                xaxis_title='Prix à maturité ($)',
+                yaxis_title='Profit / Perte ($)',
+                height=500
+            )
+            
+            st.plotly_chart(fig_pl_put, use_container_width=True)
+            
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Max loss", f"-${premium_put:.2f}")
+            with col2:
+                st.metric("Max gain", f"${K_put - premium_put:.2f}")
+            with col3:
+                st.metric("Point mort", f"${breakeven_put:.2f}")
+    
+    # TAB 5: TABLEAU COMPLET
+    with tab5:
+        st.subheader("📊 Tableau Complet")
+        
+        # Options d'affichage
+        col1, col2 = st.columns(2)
+        with col1:
+            show_greeks = st.checkbox("Afficher les Greeks", value=True)
+        with col2:
+            decimals = st.slider("Décimales", 2, 6, 2)
+        
+        # Préparation du tableau
+        df_display = df_results.copy()
+        
+        if not show_greeks:
+            greek_cols = [col for col in df_display.columns if any(x in col for x in ['Delta', 'Gamma', 'Vega', 'Theta'])]
+            df_display = df_display.drop(columns=greek_cols, errors='ignore')
+        
+        # Arrondir
+        numeric_cols = df_display.select_dtypes(include=[np.number]).columns
+        for col in numeric_cols:
+            df_display[col] = df_display[col].round(decimals)
+        
+        # Affichage
+        st.dataframe(df_display, use_container_width=True)
+        
+        # Statistiques descriptives
+        st.subheader("📈 Statistiques Descriptives")
+        
+        if 'call' in option_types_focus:
+            st.markdown("#### Calls")
+            call_stats = df_results[['Call Européen', 'Call Américain', 'Call Asiatique']].describe()
+            st.dataframe(call_stats.round(decimals))
+        
+        if 'put' in option_types_focus:
+            st.markdown("#### Puts")
+            put_stats = df_results[['Put Européen', 'Put Américain', 'Put Asiatique']].describe()
+            st.dataframe(put_stats.round(decimals))
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # PIED DE PAGE
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    st.markdown("---")
+    st.markdown("""
+    ### ⚠️ Avertissements Importants
+    
+    - **Modèles théoriques:** Les prix affichés sont des prix théoriques calculés avec des modèles mathématiques
+    - **Hypothèses simplificatrices:** Volatilité constante, pas de dividendes, marchés parfaits, etc.
+    - **Risque élevé:** Les options sont des produits complexes destinés à des investisseurs avertis
+    - **Spread bid-ask:** Les prix réels incluent le spread du marché
+    - **Volatilité implicite:** La volatilité du marché peut différer de l'historique
+    - **Consultez un professionnel:** Avant toute décision d'investissement
+    
+    ---
+    *Analyse réalisée le {datetime.now().strftime('%d/%m/%Y à %H:%M')}*
+    """)
 
 
 
