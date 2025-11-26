@@ -1333,25 +1333,25 @@ profil_key = st.radio(
     # Paramètres de données
 st.subheader("2️⃣ Paramètres de Données")
     
-    ticker = "NTDOY"
-    start_date = "2015-09-01"
-    end_date = "2025-09-30"
+ticker = "NTDOY"
+start_date = "2015-09-01"
+end_date = "2025-09-30"
     
-    r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
-    n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1)
+ r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
+n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1)
     
-    # Paramètres de strikes et maturités
-    st.subheader("3️⃣ Paramet Évaluation")
+ # Paramètres de strikes et maturités
+st.subheader("3️⃣ Paramet Évaluation")
     
-    strikes_min = st.slider("Strike minimum (% du prix)", 80, 100, 90, step=5)
-    strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5)
+ strikes_min = st.slider("Strike minimum (% du prix)", 80, 100, 90, step=5)
+ strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5)
     
-    maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1)
-    maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1)
+ maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1)
+ maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1)
     
-    if maturity_min > maturity_max:
-        st.error("La maturité min doit être inférieure à max")
-        maturity_min = maturity_max
+  if maturity_min > maturity_max:
+      st.error("La maturité min doit être inférieure à max")
+       maturity_min = maturity_max
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DÉFINITION DES PROFILS
