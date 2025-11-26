@@ -1337,7 +1337,7 @@ ticker = "NTDOY"
 start_date = "2015-09-01"
 end_date = "2025-09-30"
     
- r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
+r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
 n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1)
     
  # Paramètres de strikes et maturités
