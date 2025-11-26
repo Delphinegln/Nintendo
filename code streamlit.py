@@ -17,8 +17,6 @@ from pathlib import Path
 
 IMG = Path.cwd() / "images"
 
-if "show_bowser_page" not in st.session_state:
-    st.session_state["show_bowser_page"] = False
 
 # HRP
 from scipy.cluster.hierarchy import linkage, leaves_list
@@ -51,6 +49,9 @@ if "show_peach_page" not in st.session_state:
 if "show_luigi_page" not in st.session_state:
     st.session_state["show_luigi_page"] = False
 
+if "show_bowser_page" not in st.session_state:
+    st.session_state["show_bowser_page"] = False
+    
 # ========== CSS : FOND D'ÉCRAN ==========
 st.markdown("""
     <style>
@@ -202,7 +203,7 @@ def card_with_button(img_path, title, subtitle, desc, btn_label, key):
 
 
 # ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
-if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
+if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"] or st.session_state["show_bowser_page"):
 
 
 
@@ -1239,7 +1240,9 @@ if st.session_state["show_bowser_page"]:
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-
+    if st.button("⬅️ Retour au dashboard principal", key="close_bowser"):
+        st.session_state["show_bowser_page"] = False
+        st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CONFIGURATION STREAMLIT
