@@ -254,9 +254,11 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
             "Modélisation des options.",
             "🔍 Module Bowser",
             "open_bowser"
-        )
+        ):
+            st.session_state["show_bowser_page"] = True
+            st.rerun()
 
-
+    
     st.markdown("<br>", unsafe_allow_html=True)
 
     # ===== LIGNE 3 : LUIGI SEUL PARFAITEMENT CENTRÉ =====
