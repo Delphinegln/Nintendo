@@ -32,24 +32,33 @@ warnings.filterwarnings("ignore")
 #CARTE---------------
 st.markdown("""
 <style>
-.card-container {
-    background: rgba(255, 255, 255, 0.7); /* fond blanc semi-transparent */
-    backdrop-filter: blur(8px); /* effet flou */
-    border-radius: 15px;
-    padding: 25px;
-    margin: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    width: 260px; /* taille fixe de chaque carte pour bien délimiter */
-    display: inline-block; /* permet d’aligner les cartes en ligne sans espace vertical */
-    vertical-align: top;
+.cards-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    justify-content: center;
+    margin-top: 25px;
+    margin-bottom: 30px;
 }
-.cards-row {
-    text-align: center; /* centre les cartes horizontalement */
-    margin-top: 20px;
+.card-glass {
+    background: rgba(255,255,255,0.7);
+    border-radius: 18px;
+    padding: 24px 22px 22px 22px;
+    box-shadow: 0 4px 24px rgba(50, 50, 93, 0.11), 0 1.5px 2.5px rgba(0,0,0,0.07);
+    backdrop-filter: blur(8px);
+    width: 240px;
+    min-width: 220px;
+    max-width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s;
 }
-.card-container button {
-    margin-top: 10px;
-}
+.card-glass:hover { box-shadow: 0 6px 30px rgba(0,0,0,0.18);}
+.card-glass img { margin-bottom: 18px; border-radius: 12px; }
+.card-glass h3 { margin-bottom: 8px; font-size: 1.18em;}
+.card-glass .sous-titre { opacity: 0.7; font-size:1em; margin-bottom: 8px;}
+.card-glass .desc { font-size: 1em; opacity:0.88; margin-bottom: 15px; text-align:center;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -183,28 +192,63 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     col1, col2 = st.columns(2)
     
-st.markdown('<div class="cards-row">', unsafe_allow_html=True)
+st.markdown('<div class="cards-flex">', unsafe_allow_html=True)
 
-def create_card(personnage, img_name, title, subtitle, description, button_key=None):
-    st.markdown(f'<div class="card-container">', unsafe_allow_html=True)
-    st.image(str(IMG / img_name), width=70)
-    st.markdown(f"### {title}")
-    st.markdown(f"**{subtitle}**")
-    st.markdown(f"{description}")
-    if button_key:
-        if st.button(f"🔍 Ouvrir le module {personnage}", key=button_key):
-            st.session_state[f"show_{personnage.lower()}_page"] = True
-            st.experimental_rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
-
-create_card("Daisy", "Daisy.png", "Financial Forecasting", "Daisy fait fleurir vos profits ! 🌼💰", "Module de prévision des tendances financières.", "open_daisy")
-create_card("Peach", "Peach.png", "Portfolio Optimization", "Peach your assets! 🍑💼", "Optimisation du portefeuille.", "open_peach")
-create_card("Birdo", "Birdo.png", "Algorithmic Trading", "Vos trades, pondus et gérés par Birdo 🥚📈", "Stratégies automatisées et backtesting.")
-create_card("Bowser", "Bowser.png", "Option Pricing", "Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼", "Modélisation et valorisation des options.")
-create_card("Luigi", "Luigi.png", "Risk management", "Ne laissez pas vos risques vous hanter : Luigi est là 👻💸", "Analyse des risques financiers.", "open_luigi")
+st.markdown(
+    f'''
+    <div class="card-glass">
+        <img src="{str(IMG / "Daisy.png")}" width="70">
+        <h3>Financial Forecasting</h3>
+        <div class="sous-titre">Daisy fait fleurir vos profits ! 🌼💰</div>
+        <div class="desc">Module de prévision des tendances financières.</div>
+        {st.button("🔍 Ouvrir le module Daisy", key="open_daisy")}
+    </div>
+    ''', unsafe_allow_html=True
+)
+st.markdown(
+    f'''
+    <div class="card-glass">
+        <img src="{str(IMG / "Peach.png")}" width="70">
+        <h3>Portfolio Optimization</h3>
+        <div class="sous-titre">Peach your assets! 🍑💼</div>
+        <div class="desc">Optimisation du portefeuille.</div>
+        {st.button("🔍 Ouvrir le module Peach", key="open_peach")}
+    </div>
+    ''', unsafe_allow_html=True
+)
+st.markdown(
+    f'''
+    <div class="card-glass">
+        <img src="{str(IMG / "Birdo.png")}" width="70">
+        <h3>Algorithmic Trading</h3>
+        <div class="sous-titre">Vos trades, pondus et gérés par Birdo 🥚📈</div>
+        <div class="desc">Stratégies automatisées et backtesting.</div>
+    </div>
+    ''', unsafe_allow_html=True
+)
+st.markdown(
+    f'''
+    <div class="card-glass">
+        <img src="{str(IMG / "Bowser.png")}" width="70">
+        <h3>Option Pricing</h3>
+        <div class="sous-titre">Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼</div>
+        <div class="desc">Modélisation et valorisation des options.</div>
+    </div>
+    ''', unsafe_allow_html=True
+)
+st.markdown(
+    f'''
+    <div class="card-glass">
+        <img src="{str(IMG / "Luigi.png")}" width="70">
+        <h3>Risk management</h3>
+        <div class="sous-titre">Ne laissez pas vos risques vous hanter : Luigi est là 👻💸</div>
+        <div class="desc">Analyse des risques financiers.</div>
+        {st.button("🔍 Ouvrir le module Luigi", key="open_luigi")}
+    </div>
+    ''', unsafe_allow_html=True
+)
 
 st.markdown('</div>', unsafe_allow_html=True)
-
 
 # ====================== PAGE DAISY FULL WIDTH ======================================================================================================
 if st.session_state["show_daisy_page"]:
