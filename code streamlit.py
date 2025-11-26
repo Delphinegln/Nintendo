@@ -1349,9 +1349,9 @@ strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5)
 maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1)
 maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1)
     
-    if maturity_min > maturity_max:
-      st.error("La maturité min doit être inférieure à max")
-       maturity_min = maturity_max
+if maturity_min > maturity_max:
+    st.error("La maturité min doit être inférieure à max")
+     maturity_min = maturity_max
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DÉFINITION DES PROFILS
