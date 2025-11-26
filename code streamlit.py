@@ -33,19 +33,26 @@ warnings.filterwarnings("ignore")
 st.markdown("""
 <style>
 .card-container {
-    background: rgba(255, 255, 255, 0.6); /* Fond blanc semi-transparent */
-    backdrop-filter: blur(10px); /* Flou d'arrière-plan */
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    margin: 10px 8px 10px 8px; /* Espacement horizontal léger, vertical réduit */
+    background: rgba(255, 255, 255, 0.7); /* fond blanc semi-transparent */
+    backdrop-filter: blur(8px); /* effet flou */
+    border-radius: 15px;
+    padding: 25px;
+    margin: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    width: 260px; /* taille fixe de chaque carte pour bien délimiter */
+    display: inline-block; /* permet d’aligner les cartes en ligne sans espace vertical */
+    vertical-align: top;
 }
-.row-cards {
-    display: flex;
-    gap: 20px; /* Espacement entre les cartes dans la ligne */
+.cards-row {
+    text-align: center; /* centre les cartes horizontalement */
+    margin-top: 20px;
+}
+.card-container button {
+    margin-top: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
 st.set_page_config(
@@ -176,51 +183,25 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     col1, col2 = st.columns(2)
     
-st.markdown('<div class="row-cards">', unsafe_allow_html=True)
+st.markdown('<div class="cards-row">', unsafe_allow_html=True)
 
-st.markdown('<div class="card-container">', unsafe_allow_html=True)
-st.image(str(IMG / "Daisy.png"), width=70)
-st.markdown("### Financial Forecasting")
-st.markdown("Daisy fait fleurir vos profits ! 🌼💰")
-st.markdown("Module de prévision des tendances financières.")
-if st.button("🔍 Ouvrir le module Daisy", key="open_daisy"):
-    st.session_state["show_daisy_page"] = True
-    st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
+def create_card(personnage, img_name, title, subtitle, description, button_key=None):
+    st.markdown(f'<div class="card-container">', unsafe_allow_html=True)
+    st.image(str(IMG / img_name), width=70)
+    st.markdown(f"### {title}")
+    st.markdown(f"**{subtitle}**")
+    st.markdown(f"{description}")
+    if button_key:
+        if st.button(f"🔍 Ouvrir le module {personnage}", key=button_key):
+            st.session_state[f"show_{personnage.lower()}_page"] = True
+            st.experimental_rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown('<div class="card-container">', unsafe_allow_html=True)
-st.image(str(IMG / "Peach.png"), width=70)
-st.markdown("### Portfolio Optimization")
-st.markdown("Peach your assets! 🍑💼")
-st.markdown("Optimisation du portefeuille.")
-if st.button("🔍 Ouvrir le module Peach", key="open_peach"):
-    st.session_state["show_peach_page"] = True
-    st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="card-container">', unsafe_allow_html=True)
-st.image(str(IMG / "Birdo.png"), width=70)
-st.markdown("### Algorithmic Trading")
-st.markdown("Vos trades, pondus et gérés par Birdo 🥚📈")
-st.markdown("Stratégies automatisées et backtesting.")
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="card-container">', unsafe_allow_html=True)
-st.image(str(IMG / "Bowser.png"), width=70)
-st.markdown("### Option Pricing")
-st.markdown("Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼")
-st.markdown("Modélisation et valorisation des options.")
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown('<div class="card-container">', unsafe_allow_html=True)
-st.image(str(IMG / "Luigi.png"), width=70)
-st.markdown("### Risk management")
-st.markdown("Ne laissez pas vos risques vous hanter : Luigi est là 👻💸")
-st.markdown("Analyse des risques financiers.")
-if st.button("🔍 Ouvrir le module Luigi", key="open_luigi"):
-    st.session_state["show_luigi_page"] = True
-    st.rerun()
-st.markdown('</div>', unsafe_allow_html=True)
+create_card("Daisy", "Daisy.png", "Financial Forecasting", "Daisy fait fleurir vos profits ! 🌼💰", "Module de prévision des tendances financières.", "open_daisy")
+create_card("Peach", "Peach.png", "Portfolio Optimization", "Peach your assets! 🍑💼", "Optimisation du portefeuille.", "open_peach")
+create_card("Birdo", "Birdo.png", "Algorithmic Trading", "Vos trades, pondus et gérés par Birdo 🥚📈", "Stratégies automatisées et backtesting.")
+create_card("Bowser", "Bowser.png", "Option Pricing", "Ne vous brûlez pas seul : Bowser hedge vos positions 🐢💼", "Modélisation et valorisation des options.")
+create_card("Luigi", "Luigi.png", "Risk management", "Ne laissez pas vos risques vous hanter : Luigi est là 👻💸", "Analyse des risques financiers.", "open_luigi")
 
 st.markdown('</div>', unsafe_allow_html=True)
 
