@@ -1323,7 +1323,7 @@ profils_dict = {
         5: 'VOLATILITÉ'
     }
     
-    profil_key = st.radio(
+profil_key = st.radio(
         "Sélectionnez votre profil:",
         options=list(profils_dict.keys()),
         format_func=lambda x: profils_dict[x],
