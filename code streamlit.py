@@ -177,6 +177,25 @@ st.markdown("""
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
+def card_with_button(img_path, title, subtitle, desc, btn_label, key):
+
+    with st.container():
+        st.markdown('<div class="card-glass">', unsafe_allow_html=True)
+
+        # ✅ IMAGE STREAMLIT (FIABLE)
+        st.image(str(img_path), width=70)
+
+        st.markdown(f"### {title}")
+        st.markdown(f"*{subtitle}*")
+        st.markdown(desc)
+
+        clicked = st.button(btn_label, key=key)
+
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    return clicked
+
+
 # ========== GRID LAYOUT : CARTES AVEC DISPOSITION 2+2+1 ==========
 if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page"] or st.session_state["show_luigi_page"]):
 
@@ -201,7 +220,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     with col2:
         if card_with_button(
-            str(IMG / "Daisy.png"),
+            IMG / "Daisy.png",
             "Financial Forecasting",
             "Daisy fait fleurir vos profits 🌼💰",
             "Prévision des tendances financières.",
@@ -213,7 +232,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     with col4:
         if card_with_button(
-            str(IMG / "Peach.png"),
+            IMG / "Peach.png",
             "Portfolio Optimization",
             "Peach your assets 🍑💼",
             "Optimisation du portefeuille.",
@@ -231,7 +250,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     with col2:
         card_with_button(
-            str(IMG / "Birdo.png"),
+            IMG / "Birdo.png",
             "Algorithmic Trading",
             "Birdo gère tes trades 🥚📈",
             "Stratégies automatisées & backtesting.",
@@ -241,7 +260,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     with col4:
         card_with_button(
-            str(IMG / "Bowser.png"),
+            IMG / "Bowser.png",
             "Option Pricing",
             "Bowser hedge vos positions 🐢🔥",
             "Modélisation des options.",
@@ -257,7 +276,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
     with col2:
         if card_with_button(
-            str(IMG / "Luigi.png"),
+            IMG / "Luigi.png",
             "Risk Management",
             "Luigi protège vos investissements 👻💸",
             "Analyse avancée des risques financiers.",
