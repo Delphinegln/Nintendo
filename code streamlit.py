@@ -1351,7 +1351,7 @@ maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1)
     
 if maturity_min > maturity_max:
     st.error("La maturité min doit être inférieure à max")
-     maturity_min = maturity_max
+    maturity_min = maturity_max
 
 # ═══════════════════════════════════════════════════════════════════════════
 # DÉFINITION DES PROFILS
