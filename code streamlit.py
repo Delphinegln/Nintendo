@@ -179,20 +179,22 @@ st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>S
 
 def card_with_button(img_path, title, subtitle, desc, btn_label, key):
 
-    with st.container():
-        st.markdown('<div class="card-glass">', unsafe_allow_html=True)
+    # ✅ Conversion de l’image en base64 pour l’intégrer en HTML
+    with open(img_path, "rb") as f:
+        data = base64.b64encode(f.read()).decode()
 
-        # ✅ IMAGE STREAMLIT (FIABLE)
-        st.image(str(img_path), width=70)
+    img_html = f"""
+    <div class="card-glass">
+        <img src="data:image/png;base64,{data}" width="70">
+        <h3>{title}</h3>
+        <div class="sous-titre">{subtitle}</div>
+        <div class="desc">{desc}</div>
+    </div>
+    """
 
-        st.markdown(f"### {title}")
-        st.markdown(f"*{subtitle}*")
-        st.markdown(desc)
+    st.markdown(img_html, unsafe_allow_html=True)
 
-        clicked = st.button(btn_label, key=key)
-
-        st.markdown('</div>', unsafe_allow_html=True)
-
+    clicked = st.button(btn_label, key=key)
     return clicked
 
 
