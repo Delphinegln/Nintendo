@@ -1583,9 +1583,6 @@ if st.session_state["show_bowser_page"]:
         
         maturities = list(range(maturity_min, maturity_max + 1))
         
-        # Pour garder le calcul rapide : limiter le nombre de maturités
-        if len(maturities) > 6:
-            maturities = maturities[:6]
             
         T_values = [m/12 for m in maturities]
         
