@@ -1307,7 +1307,7 @@ if st.session_state["show_bowser_page"]:
     
     with colB:
         r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
-        n_simulations = st.selectbox("Simulations Monte Carlo", [5000, 10000, 15000], index=1)
+        n_simulations = st.selectbox("Simulations Monte Carlo", [3000, 5000, 8000], index=1)
     
     with colC:
         strikes_min = st.slider("Strike min (%)", 80, 100, 90, step=5)
@@ -1344,7 +1344,7 @@ if st.session_state["show_bowser_page"]:
     
     r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5,
     key="bowser_taux_sans_risque") / 100
-    n_simulations = st.selectbox("Simulations Monte Carlo", [5000, 10000, 15000], index=1, key="bowser_simulations")
+    n_simulations = st.selectbox("Simulations Monte Carlo", [3000, 5000, 8000], index=1, key="bowser_simulations")
     
     # Paramètres de strikes et maturités
     st.subheader("3️⃣ Paramet Évaluation")
@@ -1523,7 +1523,7 @@ if st.session_state["show_bowser_page"]:
         return option_tree[0, 0]
     
     # Monte Carlo
-    def asian_option_monte_carlo(S, K, T, r, sigma, n_simulations=10000, n_steps=252, option_type='call'):
+    def asian_option_monte_carlo(S, K, T, r, sigma, n_simulations=30000, n_steps=64, option_type='call'):
         dt = T / n_steps
         discount_factor = np.exp(-r * T)
         payoffs = []
