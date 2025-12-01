@@ -1278,9 +1278,7 @@ if st.session_state["show_bowser_page"]:
     - ✅ Options Exotiques - Asiatiques (Monte Carlo)
     - ✅ Greeks pour gestion du risque
     """)
-    
-
-    
+ 
     
     # Sélection du profil d'investisseur
     st.subheader("1️⃣ Profil d'Investisseur")
