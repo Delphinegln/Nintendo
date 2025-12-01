@@ -1424,10 +1424,14 @@ if st.session_state["show_bowser_page"]:
     with st.spinner("📥 Téléchargement des données Nintendo..."):
         data = download_data(ticker, start_date, end_date)
     
-    if data is not None:
-        S0 = data.iloc[-1]
-        returns = np.log(data / data.shift(1))
-        volatility_hist = returns.std() * np.sqrt(252)
+    if data is None or len(data) == 0:
+        st.error("❌ Aucune donnée de clôture disponible pour NTDOY sur la période sélectionnée.")
+        st.stop()
+    
+    # Ici, on est sûr d'avoir des données
+    S0 = float(data.iloc[-1])
+    returns = np.log(data / data.shift(1)).dropna()
+    volatility_hist = returns.std() * np.sqrt(252)
     
     # Affichage des métriques
     col1, col2, col3, col4 = st.columns(4)
@@ -1439,7 +1443,7 @@ if st.session_state["show_bowser_page"]:
         st.metric("📅 Jours de trading", len(data))
     with col4:
         st.metric("💹 Taux sans risque", f"{r*100:.2f}%")
-    
+        
     st.markdown("---")
     
     # ═══════════════════════════════════════════════════════════════════════════
