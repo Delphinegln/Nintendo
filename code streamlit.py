@@ -14,6 +14,7 @@ from typing import List
 import scipy.stats as stats
 import base64
 from pathlib import Path
+from scipy.stats import norm
 
 IMG = Path.cwd() / "images"
 
