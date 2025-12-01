@@ -15,7 +15,7 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 from scipy.stats import norm
-from plotly.subplots import make_subplots
+
 
 IMG = Path.cwd() / "images"
 
@@ -1854,7 +1854,7 @@ if st.session_state["show_bowser_page"]:
                 if len(df_comp) > 0:
                     if 'call' in option_types_focus and 'Call Delta' in df_comp.columns:
                         st.markdown("#### Greeks - Calls")
-                        
+                        from plotly.subplots import make_subplots
                         fig_greeks = make_subplots(
                             rows=2, cols=2,
                             subplot_titles=('Delta', 'Gamma', 'Vega', 'Theta')
