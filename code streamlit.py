@@ -1286,7 +1286,7 @@ if st.session_state["show_bowser_page"]:
     param_container = st.container()
     
     with param_container:
-    colA, colB, colC = st.columns(3)
+        colA, colB, colC = st.columns(3)
     
     with colA:
         profils_dict = {
