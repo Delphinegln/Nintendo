@@ -1355,8 +1355,8 @@ if st.session_state["show_bowser_page"]:
     maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1, key="bowser_maturity_max")
     
     if maturity_min > maturity_max:
-    st.error("La maturité min doit être inférieure à max")
-    maturity_min = maturity_max
+        st.error("La maturité min doit être inférieure à max")
+        maturity_min = maturity_max
     
     # ═══════════════════════════════════════════════════════════════════════════
     # DÉFINITION DES PROFILS
@@ -1422,7 +1422,7 @@ if st.session_state["show_bowser_page"]:
     
     # Affichage du statut de chargement
     with st.spinner("📥 Téléchargement des données Nintendo..."):
-    data = download_data(ticker, start_date, end_date)
+        data = download_data(ticker, start_date, end_date)
     
     if data is not None:
     S0 = data.iloc[-1]
