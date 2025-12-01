@@ -1413,7 +1413,7 @@ if st.session_state["show_bowser_page"]:
     
     @st.cache_data
     def download_data(ticker, start, end):
-    try:
+        try:
         data = yf.download(ticker, start=start, end=end, progress=False)
         return data['Close']
     except:
