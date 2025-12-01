@@ -1431,7 +1431,7 @@ if st.session_state["show_bowser_page"]:
     # Ici, on est sûr d'avoir des données
     S0 = float(data.iloc[-1])
     returns = np.log(data / data.shift(1)).dropna()
-    volatility_hist = returns.std() * np.sqrt(252)
+    volatility_hist = float(returns.std() * np.sqrt(252))
     
     # Affichage des métriques
     col1, col2, col3, col4 = st.columns(4)
