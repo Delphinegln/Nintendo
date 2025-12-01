@@ -1249,8 +1249,8 @@ if st.session_state["show_bowser_page"]:
 # CONFIGURATION STREAMLIT
 # ═══════════════════════════════════════════════════════════════════════════
 
-st.markdown("""
-<style>
+    st.markdown("""
+    <style>
     .main {
         padding: 20px;
     }
@@ -1259,35 +1259,35 @@ st.markdown("""
         padding: 10px;
         border-radius: 5px;
     }
-</style>
-""", unsafe_allow_html=True)
-
-# ═══════════════════════════════════════════════════════════════════════════
-# TITRE PRINCIPAL
-# ═══════════════════════════════════════════════════════════════════════════
-
-st.title("💰 Conseil en Pricing d'Options - NINTENDO (NTDOY)")
-st.markdown("---")
-st.markdown("""
-**Types d'options évalués:**
-- ✅ Options Européennes (Black-Scholes-Merton)
-- ✅ Options Américaines (Binomial Tree)
-- ✅ Options Bermudéennes (Binomial Tree modifié)
-- ✅ Options Exotiques - Asiatiques (Monte Carlo)
-- ✅ Greeks pour gestion du risque
-""")
-
-# ═══════════════════════════════════════════════════════════════════════════
-# BARRE LATÉRALE - PARAMÈTRES
-# ═══════════════════════════════════════════════════════════════════════════
-
-st.markdown("## ⚙️ Paramètres de configuration Bowser")
-
-param_container = st.container()
-
-with param_container:
+    </style>
+    """, unsafe_allow_html=True)
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TITRE PRINCIPAL
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    st.title("💰 Conseil en Pricing d'Options - NINTENDO (NTDOY)")
+    st.markdown("---")
+    st.markdown("""
+    **Types d'options évalués:**
+    - ✅ Options Européennes (Black-Scholes-Merton)
+    - ✅ Options Américaines (Binomial Tree)
+    - ✅ Options Bermudéennes (Binomial Tree modifié)
+    - ✅ Options Exotiques - Asiatiques (Monte Carlo)
+    - ✅ Greeks pour gestion du risque
+    """)
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # BARRE LATÉRALE - PARAMÈTRES
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    st.markdown("## ⚙️ Paramètres de configuration Bowser")
+    
+    param_container = st.container()
+    
+    with param_container:
     colA, colB, colC = st.columns(3)
-
+    
     with colA:
         profils_dict = {
             1: 'COUVERTURE (HEDGING)',
@@ -1296,30 +1296,30 @@ with param_container:
             4: 'GÉNÉRATION DE REVENUS',
             5: 'VOLATILITÉ'
         }
-
+    
         profil_key = st.radio(
             "Profil investisseur",
             options=list(profils_dict.keys()),
             format_func=lambda x: profils_dict[x],
             index=1
         )
-
+    
     with colB:
         r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
         n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1)
-
+    
     with colC:
         strikes_min = st.slider("Strike min (%)", 80, 100, 90, step=5)
         strikes_max = st.slider("Strike max (%)", 100, 130, 110, step=5)
         maturity_min = st.slider("Maturité min (mois)", 1, 12, 3)
         maturity_max = st.slider("Maturité max (mois)", 1, 12, 12)
-
-st.markdown("---")  # séparation visuelle propre avant les résultats
-
+    
+    st.markdown("---")  # séparation visuelle propre avant les résultats
+    
     
     # Sélection du profil d'investisseur
-st.subheader("1️⃣ Profil d'Investisseur")
-profils_dict = {
+    st.subheader("1️⃣ Profil d'Investisseur")
+    profils_dict = {
         1: 'COUVERTURE (HEDGING)',
         2: 'SPÉCULATION HAUSSIÈRE',
         3: 'SPÉCULATION BAISSIÈRE',
@@ -1327,7 +1327,7 @@ profils_dict = {
         5: 'VOLATILITÉ'
     }
     
-profil_key = st.radio(
+    profil_key = st.radio(
         "Sélectionnez votre profil:",
         options=list(profils_dict.keys()),
         format_func=lambda x: profils_dict[x],
@@ -1335,34 +1335,34 @@ profil_key = st.radio(
     )
     
     # Paramètres de données
-st.subheader("2️⃣ Paramètres de Données")
+    st.subheader("2️⃣ Paramètres de Données")
     
-ticker = "NTDOY"
-start_date = "2015-09-01"
-end_date = "2025-09-30"
+    ticker = "NTDOY"
+    start_date = "2015-09-01"
+    end_date = "2025-09-30"
     
-r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5,
-key="bowser_taux_sans_risque") / 100
-n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1, key="bowser_simulations")
+    r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5,
+    key="bowser_taux_sans_risque") / 100
+    n_simulations = st.selectbox("Simulations Monte Carlo", [10000, 30000, 50000], index=1, key="bowser_simulations")
     
- # Paramètres de strikes et maturités
-st.subheader("3️⃣ Paramet Évaluation")
+    # Paramètres de strikes et maturités
+    st.subheader("3️⃣ Paramet Évaluation")
     
-strikes_min = st.slider("Strike minimum (% du prix)", 80, 100, 90, step=5, key="bowser_strikes_min")
-strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5, key="bowser_strikes_max")
+    strikes_min = st.slider("Strike minimum (% du prix)", 80, 100, 90, step=5, key="bowser_strikes_min")
+    strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5, key="bowser_strikes_max")
     
-maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1, key="bowser_maturity_min")
-maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1, key="bowser_maturity_max")
+    maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1, key="bowser_maturity_min")
+    maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1, key="bowser_maturity_max")
     
-if maturity_min > maturity_max:
+    if maturity_min > maturity_max:
     st.error("La maturité min doit être inférieure à max")
     maturity_min = maturity_max
-
-# ═══════════════════════════════════════════════════════════════════════════
-# DÉFINITION DES PROFILS
-# ═══════════════════════════════════════════════════════════════════════════
-
-profils_investisseur = {
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DÉFINITION DES PROFILS
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    profils_investisseur = {
     1: {
         'nom': 'COUVERTURE (HEDGING)',
         'strategie_principale': 'Achat de Puts pour protection',
@@ -1403,28 +1403,28 @@ profils_investisseur = {
         'delta_target': 'Neutre (proche de 0)',
         'description': 'Profiter des mouvements de prix importants sans direction précise'
     }
-}
-
-profil = profils_investisseur[profil_key]
-
-# ═══════════════════════════════════════════════════════════════════════════
-# TÉLÉCHARGEMENT DES DONNÉES
-# ═══════════════════════════════════════════════════════════════════════════
-
-@st.cache_data
-def download_data(ticker, start, end):
+    }
+    
+    profil = profils_investisseur[profil_key]
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # TÉLÉCHARGEMENT DES DONNÉES
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    @st.cache_data
+    def download_data(ticker, start, end):
     try:
         data = yf.download(ticker, start=start, end=end, progress=False)
         return data['Close']
     except:
         st.error(f"Erreur lors du téléchargement de {ticker}")
         return None
-
-# Affichage du statut de chargement
-with st.spinner("📥 Téléchargement des données Nintendo..."):
+    
+    # Affichage du statut de chargement
+    with st.spinner("📥 Téléchargement des données Nintendo..."):
     data = download_data(ticker, start_date, end_date)
-
-if data is not None:
+    
+    if data is not None:
     S0 = data.iloc[-1]
     returns = np.log(data / data.shift(1))
     volatility_hist = returns.std() * np.sqrt(252)
@@ -1454,7 +1454,7 @@ if data is not None:
         d2 = d1 - sigma * np.sqrt(T)
         call_price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
         return call_price
-
+    
     def black_scholes_put(S, K, T, r, sigma):
         if T <= 0:
             return max(K - S, 0)
@@ -1462,7 +1462,7 @@ if data is not None:
         d2 = d1 - sigma * np.sqrt(T)
         put_price = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
         return put_price
-
+    
     def bs_greeks(S, K, T, r, sigma, option_type='call'):
         if T <= 0:
             return {'delta': 0, 'gamma': 0, 'vega': 0, 'theta': 0, 'rho': 0}
@@ -1483,7 +1483,7 @@ if data is not None:
         vega = S * norm.pdf(d1) * np.sqrt(T) / 100
         
         return {'delta': delta, 'gamma': gamma, 'vega': vega, 'theta': theta, 'rho': rho}
-
+    
     # Binomial Tree
     def binomial_tree_american(S, K, T, r, sigma, N=100, option_type='call'):
         dt = T / N
@@ -1516,7 +1516,7 @@ if data is not None:
                 option_tree[i, j] = max(continuation, exercise)
         
         return option_tree[0, 0]
-
+    
     # Monte Carlo
     def asian_option_monte_carlo(S, K, T, r, sigma, n_simulations=30000, n_steps=252, option_type='call'):
         dt = T / n_steps
@@ -1543,7 +1543,7 @@ if data is not None:
         std_error = discount_factor * np.std(payoffs) / np.sqrt(n_simulations)
         
         return option_price, std_error
-
+    
     # ═══════════════════════════════════════════════════════════════════════════
     # CALCUL DES RÉSULTATS
     # ═══════════════════════════════════════════════════════════════════════════
