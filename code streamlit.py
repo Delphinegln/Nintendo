@@ -1414,11 +1414,11 @@ if st.session_state["show_bowser_page"]:
     @st.cache_data
     def download_data(ticker, start, end):
         try:
-        data = yf.download(ticker, start=start, end=end, progress=False)
-        return data['Close']
-    except:
-        st.error(f"Erreur lors du téléchargement de {ticker}")
-        return None
+            data = yf.download(ticker, start=start, end=end, progress=False)
+            return data['Close']
+        except:
+            st.error(f"Erreur lors du téléchargement de {ticker}")
+            return None
     
     # Affichage du statut de chargement
     with st.spinner("📥 Téléchargement des données Nintendo..."):
