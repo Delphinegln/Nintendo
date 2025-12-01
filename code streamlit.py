@@ -15,6 +15,7 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 from scipy.stats import norm
+from plotly.subplots import make_subplots
 
 IMG = Path.cwd() / "images"
 
