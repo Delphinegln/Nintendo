@@ -1425,9 +1425,9 @@ if st.session_state["show_bowser_page"]:
         data = download_data(ticker, start_date, end_date)
     
     if data is not None:
-    S0 = data.iloc[-1]
-    returns = np.log(data / data.shift(1))
-    volatility_hist = returns.std() * np.sqrt(252)
+        S0 = data.iloc[-1]
+        returns = np.log(data / data.shift(1))
+        volatility_hist = returns.std() * np.sqrt(252)
     
     # Affichage des métriques
     col1, col2, col3, col4 = st.columns(4)
