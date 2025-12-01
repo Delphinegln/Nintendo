@@ -1570,10 +1570,15 @@ if st.session_state["show_bowser_page"]:
         option_types_focus = ['call', 'put']
     
     # Génération des strikes et maturités
-    strikes_pct = np.linspace(strikes_min/100, strikes_max/100, 5)
+    strikes_pct = np.linspace(strikes_min/100, strikes_max/100, 3)
     K_values = [S0 * mult for mult in strikes_pct]
     
     maturities = list(range(maturity_min, maturity_max + 1))
+    
+    # Pour garder le calcul rapide : limiter le nombre de maturités
+    if len(maturities) > 6:
+        maturities = maturities[:6]
+        
     T_values = [m/12 for m in maturities]
     
     st.markdown("---")
