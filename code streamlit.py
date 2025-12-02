@@ -2439,14 +2439,15 @@ if st.session_state["show_birdo_page"]:
         lags = profil['n_lags_regression']  
         cols = [f'lag_{lag}' for lag in range(1, lags + 1)]
 
-        # K-Means
-        data_ml = data_regression.copy()
-        data_ml['volatility_5'] = data_regression['returns'].rolling(5).std()
-        data_ml['volatility_20'] = data_regression['returns'].rolling(20).std()
-        data_ml['momentum_5'] = data_regression['returns'].rolling(5).mean()
-        data_ml['momentum_20'] = data_regression['returns'].rolling(20).mean()
-        data_ml.dropna(inplace=True)
-        
+    for lag in range(1, lags + 1):
+        data_regression[f'lag_{lag}'] = data_regression['returns'].shift(lag)
+    data_regression.dropna(inplace=True)
+    data_regression['direction'] = np.sign(data_regression['returns']).astype(int)
+    
+    # FEATURES SIMPLES (garanties)
+    data_ml = data_regression[cols[:2] + ['returns']].copy()  # lag_1, lag_2, returns
+    features = cols[:2] 
+    
         features = cols + ['volatility_5', 'volatility_20', 'momentum_5', 'momentum_20']
         scaler = StandardScaler()
         scaled_features = scaler.fit_transform(data_ml[features])
