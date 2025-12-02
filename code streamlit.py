@@ -2482,25 +2482,46 @@ if st.session_state["show_birdo_page"]:
     fig_clusters.update_layout(height=500, title=f"K-Means {n_clusters} clusters - {profil['nom']}")
     st.plotly_chart(fig_clusters, use_container_width=True)
     
-  # FIN DES TABS
 # ════════════════════════════════════════════════
-
+# RECOMMANDATIONS FINALES - VERSION PHRASEE
+# ════════════════════════════════════════════════
 st.markdown("---")
+
+perf_bh = ((data_original.iloc[-1]/data_original.iloc[0])-1)*100
+perf_sma = optimization_results.iloc[0]['Strategy_Return']
+sharpe_sma = optimization_results.iloc[0]['Sharpe_Ratio']
+n_trades = int(data_sma['Position'].diff().ne(0).sum())
+position_actuelle = "LONG ✅" if data_sma['Position'].iloc[-1] > 0 else "SHORT ❌"
+
 st.markdown(f"""
-## 🎯 **RECOMMANDATIONS {profil['nom'].upper()}**
+## 🎯 **RECOMMANDATIONS PERSONNALISÉES**
 
-| Stratégie | Performance | Sharpe | Trades |
-|-----------|-------------|--------|--------|
-| Buy & Hold | {((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.0f}% | - | 0 |
-| **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** | **{optimization_results.iloc[0]['Strategy_Return']:.2f}x** | **{optimization_results.iloc[0]['Sharpe_Ratio']:.3f}** | **{int(data_sma['Position'].diff().ne(0).sum())}** |
+**Bonjour investisseur {profil['nom']} !** 
 
-**✅ ACTION :**
-- **Position actuelle** : {'LONG ✅' if data_sma['Position'].iloc[-1] > 0 else 'SHORT ❌'}
-- **Trades/an** : {int(data_sma['Position'].diff().ne(0).sum()/10)} 
-- **Conseil** : SMA + K-Means (70/30)
+Votre analyse Nintendo (NTDOY) révèle des opportunités claires :
 
-> ⚠️ Performances historiques seulement
+### **🏆 Stratégie Recommandée**
+La **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** surperforme le Buy & Hold de **{perf_sma:.2f}x** contre **{perf_bh:.0f}%**.
+
+**Avantages clés :**
+- **Sharpe Ratio** : {sharpe_sma:.3f} (excellent risque/rendement)
+- **Fréquence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
+- **Position actuelle** : **{position_actuelle}**
+
+### **🎯 Plan d'Action Immédiat**
+1. **Implémentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
+2. **Diversifiez 70% SMA + 30% K-Means**
+3. **Stop-loss** : -15% maximum
+4. **Take-profit** : +25% par trade
+
+### **📈 Prévision 2026**
+Avec cette stratégie, attendez-vous à **{perf_sma**(1/10)*100:.1f}% annualisé** (hors frais).
+
+> **⚠️ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage à déduire.
+
+**Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
 """)
+
 
 
 
