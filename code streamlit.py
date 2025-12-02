@@ -2482,18 +2482,26 @@ if st.session_state["show_birdo_page"]:
     fig_clusters.update_layout(height=500, title=f"K-Means {n_clusters} clusters - {profil['nom']}")
     st.plotly_chart(fig_clusters, use_container_width=True)
     
-    # Footer avec recommandations
-    st.markdown("---")
-    st.markdown(f"""
-    ## 🎯 **Recommandations finales**
-    **Pour votre profil {profil['nom']} :**
-    - ✅ **Stratégie SMA optimale** : Vérifiez onglet 📊 SMA
-    - 🔄 **Fréquence trading** : Voir onglet ⚙️ Backtesting
-    - ⚖️ **Sharpe Ratio** : Optimisation SMA
-    - 💡 **Diversification** : SMA + K-Means
-    
-    > *⚠️ Les performances passées ne préjugent pas des performances futures. Considérer les frais de transaction.*
-    """)
+  # FIN DES TABS
+# ════════════════════════════════════════════════
+
+st.markdown("---")
+st.markdown(f"""
+## 🎯 **RECOMMANDATIONS {profil['nom'].upper()}**
+
+| Stratégie | Performance | Sharpe | Trades |
+|-----------|-------------|--------|--------|
+| Buy & Hold | {((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.0f}% | - | 0 |
+| **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** | **{optimization_results.iloc[0]['Strategy_Return']:.2f}x** | **{optimization_results.iloc[0]['Sharpe_Ratio']:.3f}** | **{int(data_sma['Position'].diff().ne(0).sum())}** |
+
+**✅ ACTION :**
+- **Position actuelle** : {'LONG ✅' if data_sma['Position'].iloc[-1] > 0 else 'SHORT ❌'}
+- **Trades/an** : {int(data_sma['Position'].diff().ne(0).sum()/10)} 
+- **Conseil** : SMA + K-Means (70/30)
+
+> ⚠️ Performances historiques seulement
+""")
+
 
 
 # ========== SIDEBAR ==========
