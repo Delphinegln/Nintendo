@@ -2392,9 +2392,8 @@ if st.session_state["show_birdo_page"]:
         st.header("📈 Stratégie Régression OLS")
         
         # Régression
-        data_regression = data_original.copy()
+        data_regression = pd.DataFrame({'Close': data_original}).copy()
         data_regression['returns'] = np.log(data_regression['Close'] / data_regression['Close'].shift(1))
-        lags = profil['n_lags_regression']
         
         cols = [f'lag_{lag}' for lag in range(1, lags + 1)]
         for lag in range(1, lags + 1):
@@ -2434,7 +2433,7 @@ if st.session_state["show_birdo_page"]:
         st.header("🤖 K-Means Clustering (Machine Learning)")
         
         # K-Means
-        data_ml = data_regression[cols + ['returns', 'direction']].copy()
+        data_ml = data_regression.copy()
         data_ml['volatility_5'] = data_regression['returns'].rolling(5).std()
         data_ml['volatility_20'] = data_regression['returns'].rolling(20).std()
         data_ml['momentum_5'] = data_regression['returns'].rolling(5).mean()
