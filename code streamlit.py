@@ -2484,17 +2484,16 @@ if st.session_state["show_birdo_page"]:
     
     # Footer avec recommandations
     st.markdown("---")
-    st.markdown("""
+    st.markdown(f"""
     ## 🎯 **Recommandations finales**
-    
     **Pour votre profil {profil['nom']} :**
-    - ✅ **Stratégie SMA optimale** : SMA {SMA_SHORT_OPT}/{SMA_LONG_OPT} (robuste et simple)
-    - 🔄 **Fréquence de trading** : {data_sma['Position'].diff().ne(0).sum()} signaux
-    - ⚖️ **Meilleur Sharpe Ratio** trouvé dans l'optimisation
-    - 💡 **Diversification** : Combiner SMA + K-Means pour réduire le risque
+    - ✅ **Stratégie SMA optimale** : Vérifiez onglet 📊 SMA
+    - 🔄 **Fréquence trading** : Voir onglet ⚙️ Backtesting
+    - ⚖️ **Sharpe Ratio** : Optimisation SMA
+    - 💡 **Diversification** : SMA + K-Means
     
     > *⚠️ Les performances passées ne préjugent pas des performances futures. Considérer les frais de transaction.*
-    """.format(profil=profil['nom'], SMA_SHORT_OPT=SMA_SHORT_OPT, SMA_LONG_OPT=SMA_LONG_OPT))
+    """)
 
 
 # ========== SIDEBAR ==========
