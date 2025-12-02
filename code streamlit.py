@@ -2477,9 +2477,9 @@ if st.session_state["show_birdo_page"]:
     # 2️⃣ ENSUITE data_ml avec direction
     data_ml = data_regression[cols[:2] + ['returns', 'direction']].copy()  # ← MAINTENANT OK
     features = cols[:2] 
-        col1, col2 = st.columns(2)
-        col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
-        col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
+    col1, col2 = st.columns(2)
+    col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
+    col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
     
     # Graphiques clusters
     fig_clusters = make_subplots(rows=1, cols=2, subplot_titles=('Clusters (Lag1 vs Lag2)', 'Performance'))
