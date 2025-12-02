@@ -15,7 +15,7 @@ import scipy.stats as stats
 import base64
 from pathlib import Path
 from scipy.stats import norm
-from plotly.subplots import make_subplots
+
 
 IMG = Path.cwd() / "images"
 
@@ -1278,7 +1278,46 @@ if st.session_state["show_bowser_page"]:
     - ✅ Options Exotiques - Asiatiques (Monte Carlo)
     - ✅ Greeks pour gestion du risque
     """)
- 
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # BARRE LATÉRALE - PARAMÈTRES
+    # ═══════════════════════════════════════════════════════════════════════════
+    
+    st.markdown("## ⚙️ Paramètres de configuration Bowser")
+    
+    param_container = st.container()
+    
+    with param_container:
+        colA, colB, colC = st.columns(3)
+    
+    with colA:
+        profils_dict = {
+            1: 'COUVERTURE (HEDGING)',
+            2: 'SPÉCULATION HAUSSIÈRE',
+            3: 'SPÉCULATION BAISSIÈRE',
+            4: 'GÉNÉRATION DE REVENUS',
+            5: 'VOLATILITÉ'
+        }
+    
+        profil_key = st.radio(
+            "Profil investisseur",
+            options=list(profils_dict.keys()),
+            format_func=lambda x: profils_dict[x],
+            index=1
+        )
+    
+    with colB:
+        r = st.slider("Taux sans risque (%)", 1.0, 10.0, 4.0, step=0.5) / 100
+        n_simulations = st.selectbox("Simulations Monte Carlo", [3000, 5000, 8000], index=1)
+    
+    with colC:
+        strikes_min = st.slider("Strike min (%)", 80, 100, 90, step=5)
+        strikes_max = st.slider("Strike max (%)", 100, 130, 110, step=5)
+        maturity_min = st.slider("Maturité min (mois)", 1, 12, 3)
+        maturity_max = st.slider("Maturité max (mois)", 1, 12, 12)
+    
+    st.markdown("---")  # séparation visuelle propre avant les résultats
+    
     
     # Sélection du profil d'investisseur
     st.subheader("1️⃣ Profil d'Investisseur")
@@ -1815,7 +1854,7 @@ if st.session_state["show_bowser_page"]:
                 if len(df_comp) > 0:
                     if 'call' in option_types_focus and 'Call Delta' in df_comp.columns:
                         st.markdown("#### Greeks - Calls")
-
+                        from plotly.subplots import make_subplots
                         fig_greeks = make_subplots(
                             rows=2, cols=2,
                             subplot_titles=('Delta', 'Gamma', 'Vega', 'Theta')
