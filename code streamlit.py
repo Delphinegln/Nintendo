@@ -2251,29 +2251,29 @@ if st.session_state["show_birdo_page"]:
     # CHARGEMENT DES DONNÉES
     # =========================
     
-    @st.cache_data
-    def load_nintendo_data():
-        try:
-            ticker = "NTDOY"
-            data = yf.download(ticker, start="2015-09-01", end="2025-09-30", progress=False)['Close']
-            data.name = 'Close'
-            return data.dropna()
-        except:
-            st.error("❌ Erreur chargement données Nintendo")
-            return pd.Series(dtype=float)
+    # CHARGEMENT SÉCURISÉ SANS CACHE (pour debug)
+    st.markdown("### 📥 Chargement des données...")
     
-    data_original = load_nintendo_data()
-    
-    # Metrics SÉCURISÉS
-    if len(data_original) > 1:
-        col1, col2, col3, col4 = st.columns(4)
-        col1.metric("📈 Prix initial", f"${data_original.iloc[0]:.2f}")
-        col2.metric("💰 Prix actuel", f"${data_original.iloc[-1]:.2f}")
-        col3.metric("⏱️ Période", f"{len(data_original)} jours")
-        col4.metric("📊 Performance", f"{((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.1f}%")
-    else:
-        st.warning("⚠️ Données indisponibles")
-    
+    try:
+        ticker = "NTDOY"
+        data = yf.download(ticker, start="2015-09-01", end="2025-09-30", progress=False)
+        data_original = data['Close'].dropna()
+        
+        st.success(f"✅ {len(data_original)} jours chargés")
+        
+        if len(data_original) > 1:
+            col1, col2, col3, col4 = st.columns(4)
+            col1.metric("📈 Prix initial", f"${data_original.iloc[0]:.2f}")
+            col2.metric("💰 Prix actuel", f"${data_original.iloc[-1]:.2f}")
+            col3.metric("⏱️ Période", f"{len(data_original)} jours")
+            col4.metric("📊 Performance", f"{((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.1f}%")
+        else:
+            st.error("❌ Données vides")
+            
+    except Exception as e:
+        st.error(f"❌ Erreur yfinance: {e}")
+        data_original = pd.Series(dtype=float)
+        
     # =========================
     # ONGLET(S) D’ANALYSE
     # =========================
