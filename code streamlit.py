@@ -2394,6 +2394,7 @@ if st.session_state["show_birdo_page"]:
         # Régression
         data_regression = pd.DataFrame({'Close': data_original}).copy()
         data_regression['returns'] = np.log(data_regression['Close'] / data_regression['Close'].shift(1))
+        lags = profil['n_lags_regression']
         
         cols = [f'lag_{lag}' for lag in range(1, lags + 1)]
         for lag in range(1, lags + 1):
@@ -2431,7 +2432,13 @@ if st.session_state["show_birdo_page"]:
     
     with tab4:
         st.header("🤖 K-Means Clustering (Machine Learning)")
-        
+
+        # Tab4 - data_regression déjà créée dans tab3, mais faut la recréer
+        data_regression = pd.DataFrame({'Close': data_original}).copy()
+        data_regression['returns'] = np.log(data_regression['Close'] / data_regression['Close'].shift(1))
+        lags = profil['n_lags_regression']  
+        cols = [f'lag_{lag}' for lag in range(1, lags + 1)]
+
         # K-Means
         data_ml = data_regression.copy()
         data_ml['volatility_5'] = data_regression['returns'].rolling(5).std()
