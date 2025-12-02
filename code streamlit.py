@@ -2448,7 +2448,7 @@ if st.session_state["show_birdo_page"]:
     data_ml = data_regression[cols[:2] + ['returns']].copy()  # lag_1, lag_2, returns
     features = cols[:2] 
     
-    features = cols + ['volatility_5', 'volatility_20', 'momentum_5', 'momentum_20']
+
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(data_ml[features])
     
