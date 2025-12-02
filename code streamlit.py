@@ -2448,39 +2448,39 @@ if st.session_state["show_birdo_page"]:
     data_ml = data_regression[cols[:2] + ['returns']].copy()  # lag_1, lag_2, returns
     features = cols[:2] 
     
-        features = cols + ['volatility_5', 'volatility_20', 'momentum_5', 'momentum_20']
-        scaler = StandardScaler()
-        scaled_features = scaler.fit_transform(data_ml[features])
-        
-        n_clusters = profil['n_clusters_kmeans']
-        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
-        data_ml['cluster'] = kmeans.fit_predict(scaled_features)
-        
-        cluster_returns = data_ml.groupby('cluster')['returns'].mean()
-        cluster_to_position = {cluster: (1 if ret > 0 else -1) for cluster, ret in cluster_returns.items()}
-        
-        data_ml['pos_cluster'] = data_ml['cluster'].map(cluster_to_position)
-        data_ml['strat_cluster'] = data_ml['pos_cluster'] * data_ml['returns']
-        perf_cluster = np.exp(data_ml[['returns', 'strat_cluster']].sum())
-        
-        col1, col2 = st.columns(2)
-        col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
-        col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
-        
-        # Graphiques clusters
-        fig_clusters = make_subplots(rows=1, cols=2, subplot_titles=('Clusters (Lag1 vs Lag2)', 'Performance'))
-        
-        for cluster in range(n_clusters):
-            cluster_data = data_ml[data_ml['cluster'] == cluster]
-            fig_clusters.add_trace(go.Scatter(x=cluster_data['lag_1'], y=cluster_data['lag_2'], 
-                                            mode='markers', name=f'Cluster {cluster}'), row=1, col=1)
-        
-        cumulative_cluster = data_ml[['returns', 'strat_cluster']].cumsum().apply(np.exp)
-        fig_clusters.add_trace(go.Scatter(x=cumulative_cluster.index, y=cumulative_cluster['returns'], name='Buy & Hold'), row=1, col=2)
-        fig_clusters.add_trace(go.Scatter(x=cumulative_cluster.index, y=cumulative_cluster['strat_cluster'], name='K-Means'), row=1, col=2)
-        
-        fig_clusters.update_layout(height=500, title=f"K-Means {n_clusters} clusters - {profil['nom']}")
-        st.plotly_chart(fig_clusters, use_container_width=True)
+    features = cols + ['volatility_5', 'volatility_20', 'momentum_5', 'momentum_20']
+    scaler = StandardScaler()
+    scaled_features = scaler.fit_transform(data_ml[features])
+    
+    n_clusters = profil['n_clusters_kmeans']
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
+    data_ml['cluster'] = kmeans.fit_predict(scaled_features)
+    
+    cluster_returns = data_ml.groupby('cluster')['returns'].mean()
+    cluster_to_position = {cluster: (1 if ret > 0 else -1) for cluster, ret in cluster_returns.items()}
+    
+    data_ml['pos_cluster'] = data_ml['cluster'].map(cluster_to_position)
+    data_ml['strat_cluster'] = data_ml['pos_cluster'] * data_ml['returns']
+    perf_cluster = np.exp(data_ml[['returns', 'strat_cluster']].sum())
+    
+    col1, col2 = st.columns(2)
+    col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
+    col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
+    
+    # Graphiques clusters
+    fig_clusters = make_subplots(rows=1, cols=2, subplot_titles=('Clusters (Lag1 vs Lag2)', 'Performance'))
+    
+    for cluster in range(n_clusters):
+        cluster_data = data_ml[data_ml['cluster'] == cluster]
+        fig_clusters.add_trace(go.Scatter(x=cluster_data['lag_1'], y=cluster_data['lag_2'], 
+                                        mode='markers', name=f'Cluster {cluster}'), row=1, col=1)
+    
+    cumulative_cluster = data_ml[['returns', 'strat_cluster']].cumsum().apply(np.exp)
+    fig_clusters.add_trace(go.Scatter(x=cumulative_cluster.index, y=cumulative_cluster['returns'], name='Buy & Hold'), row=1, col=2)
+    fig_clusters.add_trace(go.Scatter(x=cumulative_cluster.index, y=cumulative_cluster['strat_cluster'], name='K-Means'), row=1, col=2)
+    
+    fig_clusters.update_layout(height=500, title=f"K-Means {n_clusters} clusters - {profil['nom']}")
+    st.plotly_chart(fig_clusters, use_container_width=True)
     
     # Footer avec recommandations
     st.markdown("---")
