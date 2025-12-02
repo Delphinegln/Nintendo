@@ -2296,13 +2296,13 @@ if st.session_state["show_birdo_page"]:
         st.header("🔍 Optimisation des Paramètres SMA")
         
         # Optimisation
-        @st.cache_data
+        
         def optimize_sma(profil):
             optimization_results = pd.DataFrame()
             for SMA1, SMA2 in product(profil['sma_short_range'], profil['sma_long_range']):
                 if SMA1 >= SMA2: continue
                 
-                temp_data = data_original.copy()
+                temp_data = pd.DataFrame({'Close': data_original}).copy()
                 temp_data['SMA_Short'] = temp_data['Close'].rolling(SMA1).mean()
                 temp_data['SMA_Long'] = temp_data['Close'].rolling(SMA2).mean()
                 temp_data.dropna(inplace=True)
@@ -2351,7 +2351,7 @@ if st.session_state["show_birdo_page"]:
         best_params = optimization_results.iloc[0]
         SMA_SHORT_OPT, SMA_LONG_OPT = int(best_params['SMA_Short']), int(best_params['SMA_Long'])
         
-        data_sma = data_original.copy()
+        data_sma = pd.DataFrame({'Close': data_original}).copy()
         data_sma['SMA_Short'] = data_sma['Close'].rolling(SMA_SHORT_OPT).mean()
         data_sma['SMA_Long'] = data_sma['Close'].rolling(SMA_LONG_OPT).mean()
         data_sma.dropna(inplace=True)
