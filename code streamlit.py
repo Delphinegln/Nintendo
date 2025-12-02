@@ -2147,6 +2147,7 @@ if st.session_state["show_bowser_page"]:
 
 
 # ====================== PAGE BIRDO FULL WIDTH ===========================================================================================================================================================================
+warnings.filterwarnings('ignore')
 if st.session_state["show_birdo_page"]:
 
     # Titre principal
@@ -2252,21 +2253,26 @@ if st.session_state["show_birdo_page"]:
     
     @st.cache_data
     def load_nintendo_data():
-        ticker = "NTDOY"
-        start_date = "2015-09-01"
-        end_date = "2025-09-30"
-        data = yf.download(ticker, start=start_date, end=end_date, progress=False)['Close']
-        data.name = 'Close'
-        return data
+        try:
+            ticker = "NTDOY"
+            data = yf.download(ticker, start="2015-09-01", end="2025-09-30", progress=False)['Close']
+            data.name = 'Close'
+            return data.dropna()
+        except:
+            st.error("❌ Erreur chargement données Nintendo")
+            return pd.Series(dtype=float)
     
-    st.markdown("---")
     data_original = load_nintendo_data()
     
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("📈 Prix initial", f"${data_original.iloc[0]:.2f}")
-    col2.metric("💰 Prix actuel", f"${data_original.iloc[-1]:.2f}")
-    col3.metric("⏱️ Période", f"{len(data_original)} jours")
-    col4.metric("📊 Performance", f"{((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.1f}%")
+    # Metrics SÉCURISÉS
+    if len(data_original) > 1:
+        col1, col2, col3, col4 = st.columns(4)
+        col1.metric("📈 Prix initial", f"${data_original.iloc[0]:.2f}")
+        col2.metric("💰 Prix actuel", f"${data_original.iloc[-1]:.2f}")
+        col3.metric("⏱️ Période", f"{len(data_original)} jours")
+        col4.metric("📊 Performance", f"{((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.1f}%")
+    else:
+        st.warning("⚠️ Données indisponibles")
     
     # =========================
     # ONGLET(S) D’ANALYSE
