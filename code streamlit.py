@@ -2462,10 +2462,24 @@ if st.session_state["show_birdo_page"]:
     data_ml['pos_cluster'] = data_ml['cluster'].map(cluster_to_position)
     data_ml['strat_cluster'] = data_ml['pos_cluster'] * data_ml['returns']
     perf_cluster = np.exp(data_ml[['returns', 'strat_cluster']].sum())
+
+        # 1️⃣ D'abord TOUT data_regression
+    data_regression = pd.DataFrame({'Close': data_original}).copy()
+    data_regression['returns'] = np.log(data_regression['Close'] / data_regression['Close'].shift(1))
+    lags = profil['n_lags_regression']  
+    cols = [f'lag_{lag}' for lag in range(1, lags + 1)]
+
+    for lag in range(1, lags + 1):
+        data_regression[f'lag_{lag}'] = data_regression['returns'].shift(lag)
+    data_regression.dropna(inplace=True)
+    data_regression['direction'] = np.sign(data_regression['returns']).astype(int)  # ← ICI !
     
-    col1, col2 = st.columns(2)
-    col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
-    col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
+    # 2️⃣ ENSUITE data_ml avec direction
+    data_ml = data_regression[cols[:2] + ['returns', 'direction']].copy()  # ← MAINTENANT OK
+    features = cols[:2] 
+        col1, col2 = st.columns(2)
+        col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
+        col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
     
     # Graphiques clusters
     fig_clusters = make_subplots(rows=1, cols=2, subplot_titles=('Clusters (Lag1 vs Lag2)', 'Performance'))
