@@ -2250,14 +2250,19 @@ if st.session_state["show_birdo_page"]:
     # =========================
     # CHARGEMENT DES DONNÉES
     # =========================
-    
-    # CHARGEMENT SÉCURISÉ SANS CACHE (pour debug)
+        
+    # CHARGEMENT SÉCURISÉ
     st.markdown("### 📥 Chargement des données...")
     
     try:
         ticker = "NTDOY"
         data = yf.download(ticker, start="2015-09-01", end="2025-09-30", progress=False)
-        data_original = data['Close'].dropna()
+        
+        # CORRECTION : prend la première colonne Close (multi-index)
+        if isinstance(data['Close'], pd.DataFrame):
+            data_original = data['Close'].iloc[:, 0].dropna()
+        else:
+            data_original = data['Close'].dropna()
         
         st.success(f"✅ {len(data_original)} jours chargés")
         
