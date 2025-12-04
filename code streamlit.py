@@ -188,17 +188,20 @@ st.markdown("""
 
 st.markdown("""
 <style>
-.param-box {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+
+/* Cible uniquement le container des paramètres */
+div[data-testid="stVerticalBlock"]:has(div.param-wrapper) {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-radius: 18px;
     padding: 25px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
     font-size: 1.05em;
-    max-width: 600px;
+    max-width: 700px;
     margin: auto;
 }
+
 </style>
 """, unsafe_allow_html=True)
 # ========== HEADER ==========
@@ -902,17 +905,28 @@ if st.session_state["show_peach_page"]:
 
     # ------------ SIDEBAR LOCALE ------------
 
-    st.markdown('<div class="param-box">', unsafe_allow_html=True)
-    st.subheader("⚙️ Paramètres")
-    
-    target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
-    horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
-    nintendo_weight = st.slider("🎮 Poids de Nintendo (%)", 
-                                int(cons.min_center_weight*100),
-                                int(cons.max_center_weight*100),
-                                30) / 100
+with st.container():
+    st.markdown('<div class="param-wrapper"></div>', unsafe_allow_html=True)
 
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.subheader("⚙️ Paramètres")
+
+    target_return = st.slider(
+        "🎯 Rendement annuel cible (%)", 
+        0.0, 30.0, 6.0
+    ) / 100
+
+    horizon_years = st.slider(
+        "⏳ Horizon d'investissement (années)", 
+        1, 20, 3
+    )
+
+    nintendo_weight = st.slider(
+        "🎮 Poids de Nintendo (%)",
+        int(cons.min_center_weight * 100),
+        int(cons.max_center_weight * 100),
+        30
+    ) / 100
+    
     if st.button("🚀 Lancer l’optimisation"):
     
         
