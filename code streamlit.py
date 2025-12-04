@@ -886,11 +886,8 @@ if st.session_state["show_peach_page"]:
     st.success("Données prêtes ✔️")
 
     # ------------ SIDEBAR LOCALE ------------
-    
-    st.markdown("""
-    <div class="intro-box" style="font-size: 1.05em;">
-        <h3 style="margin-top: 0; margin-bottom: 20px;">⚙️ Paramètres</h3>
-    """, unsafe_allow_html=True)
+
+    st.subheader("⚙️ Paramètres")
     
     target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
     horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
@@ -898,59 +895,59 @@ if st.session_state["show_peach_page"]:
                                 int(cons.min_center_weight*100),
                                 int(cons.max_center_weight*100),
                                 30) / 100
+
     
-    st.markdown("""
-    </div>
-    """, unsafe_allow_html=True)
-
-    try:
-        weights_m4 = optimize_mv_centered(
-            MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
-        )
-
-        ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
-
-        hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
-        hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
-            hrp_weights_full, RETURNS
-        )
-
-        st.success("Optimisation terminée ✔️")
-        st.write("### Résultats à analyser…")
+    if st.button("🚀 Lancer l’optimisation"):
+    
         
-        # === AFFICHAGE DES RÉSULTATS ===
-
-        st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
-
-        colA, colB = st.columns(2)
-
-        with colA:
-            st.markdown("### Poids optimisés (M4)")
-            st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
-
-        with colB:
-            st.markdown("### Indicateurs de performance (M4)")
-            st.write(f"**Rendement annuel :** {ann_ret:.2%}")
-            st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
-            st.write(f"**Sharpe ratio :** {sharpe:.2f}")
-            st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
-
-        # --- HRP ---
-        st.markdown("---")
-        st.markdown("## 🧩 Allocation HRP (benchmark)")
-
-        colC, colD = st.columns(2)
-
-        with colC:
-            st.markdown("### Poids HRP")
-            st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
-
-        with colD:
-            st.markdown("### Indicateurs HRP")
-            st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
-            st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
-            st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
-            st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
+        try:
+            weights_m4 = optimize_mv_centered(
+                MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
+            )
+    
+            ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
+    
+            hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
+            hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
+                hrp_weights_full, RETURNS
+            )
+    
+            st.success("Optimisation terminée ✔️")
+            st.write("### Résultats à analyser…")
+            
+            # === AFFICHAGE DES RÉSULTATS ===
+    
+            st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
+    
+            colA, colB = st.columns(2)
+    
+            with colA:
+                st.markdown("### Poids optimisés (M4)")
+                st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
+    
+            with colB:
+                st.markdown("### Indicateurs de performance (M4)")
+                st.write(f"**Rendement annuel :** {ann_ret:.2%}")
+                st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
+                st.write(f"**Sharpe ratio :** {sharpe:.2f}")
+                st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
+    
+            # --- HRP ---
+            st.markdown("---")
+            st.markdown("## 🧩 Allocation HRP (benchmark)")
+    
+            colC, colD = st.columns(2)
+    
+            with colC:
+                st.markdown("### Poids HRP")
+                st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
+    
+            with colD:
+                st.markdown("### Indicateurs HRP")
+                st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
+                st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
+                st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
+                st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
 
             # --- Graphique comparatif ---
             st.markdown("---")
