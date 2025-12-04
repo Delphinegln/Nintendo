@@ -887,8 +887,10 @@ if st.session_state["show_peach_page"]:
 
     # ------------ SIDEBAR LOCALE ------------
     
-
-    st.subheader("⚙️ Paramètres")
+    st.markdown("""
+    <div class="intro-box" style="font-size: 1.05em;">
+        <h3 style="margin-top: 0; margin-bottom: 20px;">⚙️ Paramètres</h3>
+    """, unsafe_allow_html=True)
     
     target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
     horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
@@ -896,9 +898,10 @@ if st.session_state["show_peach_page"]:
                                 int(cons.min_center_weight*100),
                                 int(cons.max_center_weight*100),
                                 30) / 100
-
     
-    if st.button("🚀 Lancer l’optimisation"):
+    st.markdown("""
+    </div>
+    """, unsafe_allow_html=True)
 
         try:
             weights_m4 = optimize_mv_centered(
