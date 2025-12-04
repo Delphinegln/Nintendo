@@ -186,15 +186,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-.transparent-box {
-    background-color: rgba(255, 255, 255, 0.0);  /* fond totalement transparent */
-    padding: 15px;
-    border-radius: 10px;
-}
-</style>
-""", unsafe_allow_html=True)
+
 
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
@@ -1059,20 +1051,13 @@ if st.session_state["show_luigi_page"]:
     alpha = 0.05  # Niveau de confiance 95%
     
     # Afficher les informations de base
-
-    st.markdown("""
-    <div class="transparent-box">
-    """, unsafe_allow_html=True)
     
     st.markdown("### 📊 Informations du portefeuille")
     col_info1, col_info2, col_info3 = st.columns(3)
     col_info1.metric("Prix actuel", f"${last_price:.2f}")
     col_info2.metric("Nombre d'actions", f"{shares:,}")
     col_info3.metric("Valeur du portefeuille", f"${portfolio_value:,.2f}")
-    
-    st.markdown("""
-    </div>
-    """, unsafe_allow_html=True)
+
     
     st.markdown("---")
         
