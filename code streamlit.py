@@ -927,94 +927,94 @@ with col_params:
      st.markdown('</div>', unsafe_allow_html=True)
  
         
-            try:
-                weights_m4 = optimize_mv_centered(
-                    MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
-                )
+    try:
+        weights_m4 = optimize_mv_centered(
+            MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
+        )
+
+        ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
+
+        hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
+        hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
+            hrp_weights_full, RETURNS
+        )
+
+        st.success("Optimisation terminée ✔️")
+        st.write("### Résultats à analyser…")
         
-                ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
+        # === AFFICHAGE DES RÉSULTATS ===
+
+        st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
+
+        colA, colB = st.columns(2)
+
+        with colA:
+            st.markdown("### Poids optimisés (M4)")
+            st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
+
+        with colB:
+            st.markdown("### Indicateurs de performance (M4)")
+            st.write(f"**Rendement annuel :** {ann_ret:.2%}")
+            st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
+            st.write(f"**Sharpe ratio :** {sharpe:.2f}")
+            st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
+
+        # --- HRP ---
+        st.markdown("---")
+        st.markdown("## 🧩 Allocation HRP (benchmark)")
+
+        colC, colD = st.columns(2)
+
+        with colC:
+            st.markdown("### Poids HRP")
+            st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
+
+        with colD:
+            st.markdown("### Indicateurs HRP")
+            st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
+            st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
+            st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
+            st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
+
+        # --- Graphique comparatif ---
+        st.markdown("---")
+        st.markdown("## 📈 Comparaison : Portefeuille Optimisé vs HRP")
+
+        fig, ax = plt.subplots(figsize=(10,5))
+        ax.plot(growth_port, label="Portefeuille Optimisé (M4)")
+        ax.plot(hrp_growth, label="HRP", linestyle="dashed")
+        ax.set_title("Croissance cumulée du portefeuille")
+        ax.set_xlabel("Date")
+        ax.set_ylabel("Croissance")
+        ax.legend()
+        st.pyplot(fig)
+
+        # --- Analyse textuelle (style intro-box) ---
+        st.markdown("""
+        <div class="intro-box">
+            <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
+                L’optimisation centrée sur <strong>Nintendo</strong> montre une allocation 
+                construite autour d’un compromis rendement/risque supérieur au benchmark HRP. 
+                Le portefeuille optimisé affiche un <strong>Sharpe ratio plus élevé</strong>, 
+                indiquant une meilleure efficacité du risque. Bien que la pondération de 
+                Nintendo soit imposée par votre choix initial, l’optimiseur redistribue le 
+                reste du capital vers les titres ayant le meilleur couple rendement/variance.
+                <br><br>
+                Le benchmark <strong>HRP</strong>, basé sur la hiérarchie des corrélations, 
+                fournit une allocation plus équilibrée mais moins agressive. Cela se traduit par 
+                une volatilité plus faible mais un rendement inférieur. 
+                <br><br>
+                Au final, l’allocation optimisée présente un profil de croissance cumulée 
+                supérieur, ce qui en fait une approche adaptée pour un investisseur recherchant 
+                une <strong>allocation centrée sur Nintendo tout en maximisant la performance ajustée du risque</strong>.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
         
-                hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
-                hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
-                    hrp_weights_full, RETURNS
-                )
-        
-                st.success("Optimisation terminée ✔️")
-                st.write("### Résultats à analyser…")
-                
-                # === AFFICHAGE DES RÉSULTATS ===
-        
-                st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
-        
-                colA, colB = st.columns(2)
-        
-                with colA:
-                    st.markdown("### Poids optimisés (M4)")
-                    st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
-        
-                with colB:
-                    st.markdown("### Indicateurs de performance (M4)")
-                    st.write(f"**Rendement annuel :** {ann_ret:.2%}")
-                    st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
-                    st.write(f"**Sharpe ratio :** {sharpe:.2f}")
-                    st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
-        
-                # --- HRP ---
-                st.markdown("---")
-                st.markdown("## 🧩 Allocation HRP (benchmark)")
-        
-                colC, colD = st.columns(2)
-        
-                with colC:
-                    st.markdown("### Poids HRP")
-                    st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
-        
-                with colD:
-                    st.markdown("### Indicateurs HRP")
-                    st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
-                    st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
-                    st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
-                    st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
-    
-                # --- Graphique comparatif ---
-                st.markdown("---")
-                st.markdown("## 📈 Comparaison : Portefeuille Optimisé vs HRP")
-    
-                fig, ax = plt.subplots(figsize=(10,5))
-                ax.plot(growth_port, label="Portefeuille Optimisé (M4)")
-                ax.plot(hrp_growth, label="HRP", linestyle="dashed")
-                ax.set_title("Croissance cumulée du portefeuille")
-                ax.set_xlabel("Date")
-                ax.set_ylabel("Croissance")
-                ax.legend()
-                st.pyplot(fig)
-    
-                # --- Analyse textuelle (style intro-box) ---
-                st.markdown("""
-                <div class="intro-box">
-                    <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
-                        L’optimisation centrée sur <strong>Nintendo</strong> montre une allocation 
-                        construite autour d’un compromis rendement/risque supérieur au benchmark HRP. 
-                        Le portefeuille optimisé affiche un <strong>Sharpe ratio plus élevé</strong>, 
-                        indiquant une meilleure efficacité du risque. Bien que la pondération de 
-                        Nintendo soit imposée par votre choix initial, l’optimiseur redistribue le 
-                        reste du capital vers les titres ayant le meilleur couple rendement/variance.
-                        <br><br>
-                        Le benchmark <strong>HRP</strong>, basé sur la hiérarchie des corrélations, 
-                        fournit une allocation plus équilibrée mais moins agressive. Cela se traduit par 
-                        une volatilité plus faible mais un rendement inférieur. 
-                        <br><br>
-                        Au final, l’allocation optimisée présente un profil de croissance cumulée 
-                        supérieur, ce qui en fait une approche adaptée pour un investisseur recherchant 
-                        une <strong>allocation centrée sur Nintendo tout en maximisant la performance ajustée du risque</strong>.
-                    </p>
-                </div>
-                """, unsafe_allow_html=True)
-    
-                
-    
-            except Exception as e:
-                st.error(f"Erreur : {e}")
+
+    except Exception as e:
+        st.error(f"Erreur : {e}")
 
 # ====================== PAGE LUIGI FULL WIDTH ======================================================================================================
 if st.session_state["show_luigi_page"]:
