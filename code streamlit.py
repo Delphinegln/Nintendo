@@ -2494,9 +2494,7 @@ if st.session_state["show_birdo_page"]:
 # RECOMMANDATIONS FINALES - VERSION PHRASEE
 # ════════════════════════════════════════════════
     st.markdown("---")
-    
-    perf_bh = ((data_original.iloc[-1]/data_original.iloc[0])-1)*100
-    perf_sma = optimization_results.iloc[0]['Strategy_Return']
+
     sharpe_sma = optimization_results.iloc[0]['Sharpe_Ratio']
     n_trades = int(data_sma['Position'].diff().ne(0).sum())
     position_actuelle = "LONG ✅" if data_sma['Position'].iloc[-1] > 0 else "SHORT ❌"
