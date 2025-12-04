@@ -186,6 +186,21 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+.param-box {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    font-size: 1.05em;
+    max-width: 600px;
+    margin: auto;
+}
+</style>
+""", unsafe_allow_html=True)
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
@@ -887,6 +902,7 @@ if st.session_state["show_peach_page"]:
 
     # ------------ SIDEBAR LOCALE ------------
 
+    st.markdown('<div class="param-box">', unsafe_allow_html=True)
     st.subheader("⚙️ Paramètres")
     
     target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
@@ -896,7 +912,7 @@ if st.session_state["show_peach_page"]:
                                 int(cons.max_center_weight*100),
                                 30) / 100
 
-    
+    st.markdown('</div>', unsafe_allow_html=True)
     if st.button("🚀 Lancer l’optimisation"):
     
         
