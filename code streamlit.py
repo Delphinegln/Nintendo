@@ -61,7 +61,7 @@ if "show_bowser_page" not in st.session_state:
 if "show_birdo_page" not in st.session_state:
     st.session_state["show_birdo_page"] = False
     
-# ========== CSS : FOND D'Ã‰CRAN ==========
+# ========== CSS : FOND D'ÉCRAN ==========
 st.markdown("""
     <style>
     .stApp {
@@ -74,7 +74,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# ========== CSS : CURSEUR Ã‰TOILE ==========
+# ========== CSS : CURSEUR ÉTOILE ==========
 st.markdown("""
     <style>
     * {
@@ -188,11 +188,11 @@ st.markdown("""
 
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>SÃ©lectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
 def card_with_button(img_path, title, subtitle, desc, btn_label, key):
 
-    # âœ… Conversion de lâ€™image en base64 pour lâ€™intÃ©grer en HTML
+    # ✅ Conversion de l’image en base64 pour l’intégrer en HTML
     with open(img_path, "rb") as f:
         data = base64.b64encode(f.read()).decode()
 
@@ -217,16 +217,16 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
 
 
-    # ===== LIGNE 1 : DAISY + PEACH (CENTRÃ‰ES EN HAUT) =====
+    # ===== LIGNE 1 : DAISY + PEACH (CENTRÉES EN HAUT) =====
     col1, col2, col3, col4, col5 = st.columns([1, 2, 0.5, 2, 1])
 
     with col2:
         if card_with_button(
             IMG / "Daisy.png",
             "Financial Forecasting",
-            "Daisy fait fleurir vos profits ðŸŒ¼ðŸ’°",
-            "PrÃ©vision des tendances financiÃ¨res.",
-            "ðŸ” Ouvrir le module Daisy",
+            "Daisy fait fleurir vos profits 🌼💰",
+            "Prévision des tendances financières.",
+            "🔍 Ouvrir le module Daisy",
             "open_daisy"
         ):
             st.session_state["show_daisy_page"] = True
@@ -236,9 +236,9 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
         if card_with_button(
             IMG / "Peach.png",
             "Portfolio Optimization",
-            "Peach your assets ðŸ‘ðŸ’¼",
+            "Peach your assets 🍑💼",
             "Optimisation du portefeuille.",
-            "ðŸ” Ouvrir le module Peach",
+            "🔍 Ouvrir le module Peach",
             "open_peach"
         ):
             st.session_state["show_peach_page"] = True
@@ -254,9 +254,9 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
        if card_with_button(
             IMG / "Birdo.png",
             "Algorithmic Trading",
-            "Birdo gÃ¨re tes trades ðŸ¥šðŸ“ˆ",
-            "StratÃ©gies automatisÃ©es & backtesting.",
-            "ðŸ” Module Birdo",
+            "Birdo gère tes trades 🥚📈",
+            "Stratégies automatisées & backtesting.",
+            "🔍 Module Birdo",
             "open_birdo"
         ):
             st.session_state["show_birdo_page"] = True
@@ -269,9 +269,9 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
         if card_with_button(
             IMG / "Bowser.png",
             "Option Pricing",
-            "Bowser hedge vos positions ðŸ¢ðŸ”¥",
-            "ModÃ©lisation des options.",
-            "ðŸ” Module Bowser",
+            "Bowser hedge vos positions 🐢🔥",
+            "Modélisation des options.",
+            "🔍 Module Bowser",
             "open_bowser"
         ):
             st.session_state["show_bowser_page"] = True
@@ -279,16 +279,16 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ===== LIGNE 3 : LUIGI SEUL PARFAITEMENT CENTRÃ‰ =====
+    # ===== LIGNE 3 : LUIGI SEUL PARFAITEMENT CENTRÉ =====
     col1, col2, col3 = st.columns([1.5, 2, 1.5])
 
     with col2:
         if card_with_button(
             IMG / "Luigi.png",
             "Risk Management",
-            "Luigi protÃ¨ge vos investissements ðŸ‘»ðŸ’¸",
-            "Analyse avancÃ©e des risques financiers.",
-            "ðŸ” Ouvrir le module Luigi",
+            "Luigi protège vos investissements 👻💸",
+            "Analyse avancée des risques financiers.",
+            "🔍 Ouvrir le module Luigi",
             "open_luigi"
         ):
             st.session_state["show_luigi_page"] = True
@@ -299,20 +299,20 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("---")
     st.markdown(
-        "<h2 style='text-align:center; margin-top:10px;'>ðŸŒ¼ Daisy â€“ Nintendo Financial Forecasting</h2>",
+        "<h2 style='text-align:center; margin-top:10px;'>🌼 Daisy – Nintendo Financial Forecasting</h2>",
         unsafe_allow_html=True
     )
     st.markdown(
-        "<p style='text-align:center; opacity:0.85;'>Vue analyste complÃ¨te : Ã©tats financiers, performance boursiÃ¨re, simulations Monte Carlo et scÃ©narios.</p>",
+        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
         unsafe_allow_html=True
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("â¬…ï¸ Retour au dashboard principal", key="close_daisy"):
+    if st.button("⬅️ Retour au dashboard principal", key="close_daisy"):
         st.session_state["show_daisy_page"] = False
         st.rerun()
 
-    # ---------- PARAMÃˆTRES GÃ‰NÃ‰RAUX ----------
+    # ---------- PARAMÈTRES GÉNÉRAUX ----------
     start = "2015-09-30"
     end = "2025-09-30"
 
@@ -328,9 +328,9 @@ if st.session_state["show_daisy_page"]:
     st.markdown("""
     <div class="intro-box">
         <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
-            Nous avons analysÃ© le titre <strong>Nintendo Co., Ltd.</strong> sur une pÃ©riode de <strong>10 ans</strong>, 
+            Nous avons analysé le titre <strong>Nintendo Co., Ltd.</strong> sur une période de <strong>10 ans</strong>, 
             du <strong>30 septembre 2015</strong> au <strong>30 septembre 2025</strong>. Cette analyse comparative 
-            inclut Ã©galement les performances de <strong>Sony Group Corporation</strong>, <strong>Microsoft Corporation</strong>, 
+            inclut également les performances de <strong>Sony Group Corporation</strong>, <strong>Microsoft Corporation</strong>, 
             <strong>Electronic Arts Inc.</strong> et <strong>Tencent Holdings Corporation</strong>, permettant une 
             vision holistique du secteur du gaming et du divertissement interactif.
         </p>
@@ -339,15 +339,15 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 1 : Ã‰TATS FINANCIERS (PLEINE LARGEUR) ----------
-    st.markdown("### ðŸ“Š Ã‰tats financiers â€“ Nintendo")
+    # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS (PLEINE LARGEUR) ----------
+    st.markdown("### 📊 États financiers – Nintendo")
     
     ntd = yf.Ticker("NTDOY")
     balance_sheet = ntd.balance_sheet
     income_stmt = ntd.income_stmt
     cashflow_stmt = ntd.cashflow
 
-    tab1, tab2, tab3 = st.tabs(["ðŸ“˜ Bilan", "ðŸ“— Compte de rÃ©sultat", "ðŸ“™ Flux de trÃ©sorerie"])
+    tab1, tab2, tab3 = st.tabs(["📘 Bilan", "📗 Compte de résultat", "📙 Flux de trésorerie"])
     
     with tab1:
         st.dataframe(balance_sheet, use_container_width=True, height=500)
@@ -362,8 +362,8 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÃˆRE (PLEINE LARGEUR) ----------
-    st.markdown("### ðŸ“ˆ Performance boursiÃ¨re comparÃ©e")
+    # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÈRE (PLEINE LARGEUR) ----------
+    st.markdown("### 📈 Performance boursière comparée")
 
     tickers = list(companies.keys())
     prices = yf.download(tickers, start=start, end=end, progress=False)["Close"]
@@ -391,7 +391,7 @@ if st.session_state["show_daisy_page"]:
 
     fig_prices.update_layout(
         title={
-            'text': "Performance normalisÃ©e (Base 100)",
+            'text': "Performance normalisée (Base 100)",
             'font': {'size': 20, 'family': 'Arial, sans-serif'}
         },
         xaxis_title="Date",
@@ -419,16 +419,16 @@ if st.session_state["show_daisy_page"]:
     st.markdown("""
 <div class="intro-box">
     <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
-        La performance boursiÃ¨re comparÃ©e met en lumiÃ¨re la soliditÃ© du titre <strong>Nintendo</strong> 
-        au cours des dix derniÃ¨res annÃ©es. Le titre suit globalement une trajectoire ascendante tout en 
-        affichant une volatilitÃ© maÃ®trisÃ©e. <strong>Microsoft</strong> reste lâ€™acteur le plus performant 
+        La performance boursière comparée met en lumière la solidité du titre <strong>Nintendo</strong> 
+        au cours des dix dernières années. Le titre suit globalement une trajectoire ascendante tout en 
+        affichant une volatilité maîtrisée. <strong>Microsoft</strong> reste l’acteur le plus performant 
         du panel, soutenu par une diversification forte et une croissance structurelle du cloud. 
-        <strong>Tencent</strong> prÃ©sente une Ã©volution dynamique mais irrÃ©guliÃ¨re, affectÃ©e par 
-        les rÃ©gulations chinoises rÃ©centes.  
+        <strong>Tencent</strong> présente une évolution dynamique mais irrégulière, affectée par 
+        les régulations chinoises récentes.  
         <br><br>
-        Dans ce contexte, Nintendo occupe une position intermÃ©diaire : une croissance rÃ©guliÃ¨re, 
-        peu de drawdowns sÃ©vÃ¨res et une capacitÃ© de rÃ©silience Ã©levÃ©e. Cela confirme la robustesse 
-        du modÃ¨le Ã©conomique basÃ© sur les franchises propriÃ©taires et un pipeline de produits trÃ¨s stable.
+        Dans ce contexte, Nintendo occupe une position intermédiaire : une croissance régulière, 
+        peu de drawdowns sévères et une capacité de résilience élevée. Cela confirme la robustesse 
+        du modèle économique basé sur les franchises propriétaires et un pipeline de produits très stable.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -437,8 +437,8 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 3 : MONTE CARLO (PLEINE LARGEUR) ----------
-    st.markdown("### ðŸŽ² Simulation Monte Carlo â€“ NTDOY")
-    st.markdown("*Projection Ã  5 ans basÃ©e sur 500 trajectoires simulÃ©es*")
+    st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
+    st.markdown("*Projection à 5 ans basée sur 500 trajectoires simulées*")
 
     returns = prices["NTDOY"].pct_change().dropna()
     r = returns.mean()
@@ -508,7 +508,7 @@ if st.session_state["show_daisy_page"]:
             'font': {'size': 20}
         },
         xaxis_title="Pas de temps",
-        yaxis_title="Prix simulÃ© (USD)",
+        yaxis_title="Prix simulé (USD)",
         height=600,
         margin=dict(l=70, r=40, t=80, b=60),
         plot_bgcolor='white',
@@ -530,17 +530,17 @@ if st.session_state["show_daisy_page"]:
     st.markdown("""
 <div class="intro-box">
     <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
-        La simulation Monte Carlo rÃ©alisÃ©e sur 500 trajectoires projette un prix futur de 
-        <strong>Nintendo</strong> sur un horizon de 5 ans. Le scÃ©nario central indique une tendance 
-        haussiÃ¨re progressive, cohÃ©rente avec le rendement annuel moyen observÃ© historiquement.  
+        La simulation Monte Carlo réalisée sur 500 trajectoires projette un prix futur de 
+        <strong>Nintendo</strong> sur un horizon de 5 ans. Le scénario central indique une tendance 
+        haussière progressive, cohérente avec le rendement annuel moyen observé historiquement.  
         <br><br>
-        L'Ã©cart croissant entre les percentiles <strong>10</strong> et <strong>90</strong> illustre 
-        une incertitude naturelle mais contenue : le modÃ¨le suggÃ¨re que la probabilitÃ© dâ€™un effondrement 
-        significatif est trÃ¨s faible, tandis que les scÃ©narios optimistes restent plausibles, surtout en cas 
-        de lancement de nouvelles consoles ou dâ€™expansion transversale de lâ€™univers Nintendo (licensing, cinÃ©ma, mobile).  
+        L'écart croissant entre les percentiles <strong>10</strong> et <strong>90</strong> illustre 
+        une incertitude naturelle mais contenue : le modèle suggère que la probabilité d’un effondrement 
+        significatif est très faible, tandis que les scénarios optimistes restent plausibles, surtout en cas 
+        de lancement de nouvelles consoles ou d’expansion transversale de l’univers Nintendo (licensing, cinéma, mobile).  
         <br><br>
-        Globalement, la distribution simulÃ©e soutient une thÃ¨se dâ€™investissement de long terme avec 
-        un profil rendement/risque Ã©quilibrÃ©.
+        Globalement, la distribution simulée soutient une thèse d’investissement de long terme avec 
+        un profil rendement/risque équilibré.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -549,8 +549,8 @@ if st.session_state["show_daisy_page"]:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # ---------- GRAPHIQUE 4 : PROJECTION REVENUS (PLEINE LARGEUR) ----------
-    st.markdown("### ðŸ”® Projection de revenus")
-    st.markdown("*ScÃ©nario de croissance simulÃ©e 2025-2030*")
+    st.markdown("### 🔮 Projection de revenus")
+    st.markdown("*Scénario de croissance simulée 2025-2030*")
 
     metric = "Total Revenue"
     years = np.arange(2025, 2031)
@@ -558,14 +558,14 @@ if st.session_state["show_daisy_page"]:
     growth = np.linspace(1.00, 1.25, len(years))
 
     forecast = pd.DataFrame({
-        "AnnÃ©e": years,
-        "PrÃ©vision (JPY)": base_value * growth
+        "Année": years,
+        "Prévision (JPY)": base_value * growth
     })
 
-    forecast["PrÃ©vision (Milliards JPY)"] = (forecast["PrÃ©vision (JPY)"] / 1e9).round(2)
+    forecast["Prévision (Milliards JPY)"] = (forecast["Prévision (JPY)"] / 1e9).round(2)
     
     st.dataframe(
-        forecast[["AnnÃ©e", "PrÃ©vision (Milliards JPY)"]], 
+        forecast[["Année", "Prévision (Milliards JPY)"]], 
         use_container_width=True,
         hide_index=True,
         height=250
@@ -577,12 +577,12 @@ if st.session_state["show_daisy_page"]:
     
     fig_fc.add_trace(
         go.Scatter(
-            x=forecast["AnnÃ©e"],
-            y=forecast["PrÃ©vision (JPY)"],
+            x=forecast["Année"],
+            y=forecast["Prévision (JPY)"],
             mode="lines+markers",
             line=dict(width=5, color="#FF7F0E"),
             marker=dict(size=14, color="#FF7F0E", line=dict(width=3, color='white')),
-            name="Revenus simulÃ©s",
+            name="Revenus simulés",
             fill='tozeroy',
             fillcolor='rgba(255, 127, 14, 0.2)'
         )
@@ -593,7 +593,7 @@ if st.session_state["show_daisy_page"]:
             'text': "Projection Total Revenue",
             'font': {'size': 20}
         },
-        xaxis_title="AnnÃ©e",
+        xaxis_title="Année",
         yaxis_title="Revenus (JPY)",
         height=600,
         margin=dict(l=70, r=40, t=80, b=60),
@@ -609,17 +609,17 @@ if st.session_state["show_daisy_page"]:
     st.markdown("""
 <div class="intro-box">
     <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
-        Les projections de revenus sur la pÃ©riode <strong>2025â€“2030</strong> sâ€™appuient sur une 
-        croissance progressive comprise entre 0 % et 25 %. Ce rythme est cohÃ©rent avec les cycles produits 
-        observÃ©s chez Nintendo, caractÃ©risÃ©s par des phases de montÃ©e en puissance lors du lancement dâ€™une 
-        nouvelle console suivies dâ€™une stabilisation.  
+        Les projections de revenus sur la période <strong>2025–2030</strong> s’appuient sur une 
+        croissance progressive comprise entre 0 % et 25 %. Ce rythme est cohérent avec les cycles produits 
+        observés chez Nintendo, caractérisés par des phases de montée en puissance lors du lancement d’une 
+        nouvelle console suivies d’une stabilisation.  
         <br><br>
-        Les rÃ©sultats montrent une Ã©volution prÃ©visible et rÃ©guliÃ¨re, renforcÃ©e par la rÃ©currence des ventes 
-        logicielles et la force des franchises historiques. En milliards de JPY, la croissance projetÃ©e 
-        traduit lâ€™ancrage durable de Nintendo comme lâ€™un des acteurs les plus rentables du secteur.  
+        Les résultats montrent une évolution prévisible et régulière, renforcée par la récurrence des ventes 
+        logicielles et la force des franchises historiques. En milliards de JPY, la croissance projetée 
+        traduit l’ancrage durable de Nintendo comme l’un des acteurs les plus rentables du secteur.  
         <br><br>
-        Cette trajectoire suggÃ¨re un risque faible de contraction durable du chiffre dâ€™affaires, ce qui 
-        constitue un signal positif pour les investisseurs Ã  horizon moyen terme.
+        Cette trajectoire suggère un risque faible de contraction durable du chiffre d’affaires, ce qui 
+        constitue un signal positif pour les investisseurs à horizon moyen terme.
     </p>
 </div>
 """, unsafe_allow_html=True)
@@ -627,23 +627,23 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 5 : SCÃ‰NARIOS (PLEINE LARGEUR) ----------
-    st.markdown("### ðŸ§ª ScÃ©narios de rÃ©sultat opÃ©rationnel")
-    st.markdown("*Ã‰valuation sous trois hypothÃ¨ses de performance*")
+    # ---------- GRAPHIQUE 5 : SCÉNARIOS (PLEINE LARGEUR) ----------
+    st.markdown("### 🧪 Scénarios de résultat opérationnel")
+    st.markdown("*Évaluation sous trois hypothèses de performance*")
 
     scenario_factors = {"Pessimiste": 0.85, "Central": 1.00, "Optimiste": 1.15}
     metric = "Operating Income"
     base_value = income_stmt.loc["Operating Income"].mean()
 
     df_scen = pd.DataFrame({
-        "ScÃ©nario": list(scenario_factors.keys()),
+        "Scénario": list(scenario_factors.keys()),
         "Valeur (JPY)": [base_value * f for f in scenario_factors.values()]
     })
     
     df_scen["Valeur (Milliards JPY)"] = (df_scen["Valeur (JPY)"] / 1e9).round(2)
 
     st.dataframe(
-        df_scen[["ScÃ©nario", "Valeur (Milliards JPY)"]], 
+        df_scen[["Scénario", "Valeur (Milliards JPY)"]], 
         use_container_width=True,
         hide_index=True,
         height=200
@@ -654,7 +654,7 @@ if st.session_state["show_daisy_page"]:
     fig_scen = go.Figure()
     
     fig_scen.add_bar(
-        x=df_scen["ScÃ©nario"],
+        x=df_scen["Scénario"],
         y=df_scen["Valeur (JPY)"],
         marker_color=["#E15759", "#4E79A7", "#59A14F"],
         text=df_scen["Valeur (Milliards JPY)"],
@@ -665,10 +665,10 @@ if st.session_state["show_daisy_page"]:
     
     fig_scen.update_layout(
         title={
-            'text': "Operating Income par scÃ©nario",
+            'text': "Operating Income par scénario",
             'font': {'size': 20}
         },
-        yaxis_title="Revenus opÃ©rationnels (JPY)",
+        yaxis_title="Revenus opérationnels (JPY)",
         height=600,
         margin=dict(l=70, r=40, t=80, b=60),
         plot_bgcolor='white',
@@ -683,49 +683,49 @@ if st.session_state["show_daisy_page"]:
     st.markdown("""
 <div class="intro-box">
     <p style='text-align: justify; font-size: 1.08em; line-height: 1.8;'>
-        Lâ€™analyse par scÃ©narios permet de mesurer la sensibilitÃ© du <strong>rÃ©sultat opÃ©rationnel</strong> 
-        aux variations de performance. Le scÃ©nario pessimiste (-15 %) illustre une marge de sÃ©curitÃ© 
-        relativement Ã©levÃ©e : mÃªme en cas de contexte dÃ©favorable, Nintendo maintient un niveau de rentabilitÃ© 
+        L’analyse par scénarios permet de mesurer la sensibilité du <strong>résultat opérationnel</strong> 
+        aux variations de performance. Le scénario pessimiste (-15 %) illustre une marge de sécurité 
+        relativement élevée : même en cas de contexte défavorable, Nintendo maintient un niveau de rentabilité 
         important.  
         <br><br>
-        Le scÃ©nario central correspond Ã  la trajectoire historique, marquÃ©e par une efficacitÃ© opÃ©rationnelle 
-        constante et une politique de coÃ»ts maÃ®trisÃ©e. Le scÃ©nario optimiste (+15 %) reflÃ¨te lâ€™impact potentiel 
-        dâ€™un nouveau cycle matÃ©riel ou dâ€™un Ã©largissement du revenu rÃ©current (licences, partenariats, contenus).  
+        Le scénario central correspond à la trajectoire historique, marquée par une efficacité opérationnelle 
+        constante et une politique de coûts maîtrisée. Le scénario optimiste (+15 %) reflète l’impact potentiel 
+        d’un nouveau cycle matériel ou d’un élargissement du revenu récurrent (licences, partenariats, contenus).  
         <br><br>
-        Cette distribution par scÃ©narios souligne une asymÃ©trie favorable : le potentiel haussier est significatif, 
-        tandis que la baisse potentielle reste limitÃ©e. Cela renforce la thÃ¨se dâ€™un actif dÃ©fensif avec un levier 
-        de croissance crÃ©dible.
+        Cette distribution par scénarios souligne une asymétrie favorable : le potentiel haussier est significatif, 
+        tandis que la baisse potentielle reste limitée. Cela renforce la thèse d’un actif défensif avec un levier 
+        de croissance crédible.
     </p>
 </div>
 """, unsafe_allow_html=True)
     
-    st.info("**HypothÃ¨ses de scÃ©narios :** Pessimiste (-15%), Central (baseline), Optimiste (+15%)")
+    st.info("**Hypothèses de scénarios :** Pessimiste (-15%), Central (baseline), Optimiste (+15%)")
     
     st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<br><br>", unsafe_allow_html=True)
-    st.caption("Module Daisy : outil de support Ã  la dÃ©cision pour les investisseurs Nintendo.")
+    st.caption("Module Daisy : outil de support à la décision pour les investisseurs Nintendo.")
 
 # ====================== PAGE PEACH FULL WIDTH ===========================================================================================================
 if st.session_state["show_peach_page"]:
 
     st.markdown("---")
     st.markdown(
-        "<h2 style='text-align:center; margin-top:10px;'>ðŸ‘ Peach â€“ Portfolio Optimization</h2>",
+        "<h2 style='text-align:center; margin-top:10px;'>🍑 Peach – Portfolio Optimization</h2>",
         unsafe_allow_html=True
     )
     st.markdown("""
     <div class="intro-box">
         <p style='text-align: justify; font-size: 1.05em; line-height: 1.7;'>
-        Ce module permet dâ€™optimiser un portefeuille centrÃ© sur <strong>Nintendo</strong> 
-        en comparant lâ€™approche <strong>M4 (Mean-Variance)</strong> et
+        Ce module permet d’optimiser un portefeuille centré sur <strong>Nintendo</strong> 
+        en comparant l’approche <strong>M4 (Mean-Variance)</strong> et
         <strong>HRP (Hierarchical Risk Parity)</strong>.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("â¬…ï¸ Retour au dashboard principal", key="close_peach"):
+    if st.button("⬅️ Retour au dashboard principal", key="close_peach"):
         st.session_state["show_peach_page"] = False
         st.rerun()
 
@@ -870,7 +870,7 @@ if st.session_state["show_peach_page"]:
 
 
     # ----------------- CHARGEMENT -----------------
-    with st.spinner("ðŸ“¡ TÃ©lÃ©chargement des donnÃ©es..."):
+    with st.spinner("📡 Téléchargement des données..."):
         UNIVERSE = [NINTENDO] + DEFAULT_PEERS
         PRICES = download_prices(UNIVERSE, START, END)
         RETURNS = pct_returns(PRICES)
@@ -883,19 +883,27 @@ if st.session_state["show_peach_page"]:
 
         HRP_WEIGHTS = build_hrp_weights(RETURNS)
 
-    st.success("DonnÃ©es prÃªtes âœ”ï¸")
+    st.success("Données prêtes ✔️")
 
     # ------------ SIDEBAR LOCALE ------------
-    st.subheader("âš™ï¸ ParamÃ¨tres")
+    
+    st.markdown("""
+    <div class="intro-box" style="font-size: 1.05em;">
+    """, unsafe_allow_html=True)
 
-    target_return = st.slider("ðŸŽ¯ Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
-    horizon_years = st.slider("â³ Horizon d'investissement (annÃ©es)", 1, 20, 3)
-    nintendo_weight = st.slider("ðŸŽ® Poids de Nintendo (%)", 
+    st.subheader("⚙️ Paramètres")
+
+    target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
+    horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
+    nintendo_weight = st.slider("🎮 Poids de Nintendo (%)", 
                                 int(cons.min_center_weight*100),
                                 int(cons.max_center_weight*100),
                                 30) / 100
-
-    if st.button("ðŸš€ Lancer lâ€™optimisation"):
+    st.markdown("""
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("🚀 Lancer l’optimisation"):
 
         try:
             weights_m4 = optimize_mv_centered(
@@ -909,29 +917,29 @@ if st.session_state["show_peach_page"]:
                 hrp_weights_full, RETURNS
             )
 
-            st.success("Optimisation terminÃ©e âœ”ï¸")
-            st.write("### RÃ©sultats Ã  analyserâ€¦")
+            st.success("Optimisation terminée ✔️")
+            st.write("### Résultats à analyser…")
             
-            # === AFFICHAGE DES RÃ‰SULTATS ===
+            # === AFFICHAGE DES RÉSULTATS ===
 
-            st.markdown("## ðŸ“Š RÃ©sultats du portefeuille optimisÃ© (MÃ©thode M4)")
+            st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
 
             colA, colB = st.columns(2)
 
             with colA:
-                st.markdown("### Poids optimisÃ©s (M4)")
+                st.markdown("### Poids optimisés (M4)")
                 st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
 
             with colB:
                 st.markdown("### Indicateurs de performance (M4)")
                 st.write(f"**Rendement annuel :** {ann_ret:.2%}")
-                st.write(f"**VolatilitÃ© annuelle :** {ann_vol:.2%}")
+                st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
                 st.write(f"**Sharpe ratio :** {sharpe:.2f}")
                 st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
 
             # --- HRP ---
             st.markdown("---")
-            st.markdown("## ðŸ§© Allocation HRP (benchmark)")
+            st.markdown("## 🧩 Allocation HRP (benchmark)")
 
             colC, colD = st.columns(2)
 
@@ -942,18 +950,18 @@ if st.session_state["show_peach_page"]:
             with colD:
                 st.markdown("### Indicateurs HRP")
                 st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
-                st.write(f"**VolatilitÃ© annuelle :** {hrp_vol:.2%}")
+                st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
                 st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
                 st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
 
             # --- Graphique comparatif ---
             st.markdown("---")
-            st.markdown("## ðŸ“ˆ Comparaison : Portefeuille OptimisÃ© vs HRP")
+            st.markdown("## 📈 Comparaison : Portefeuille Optimisé vs HRP")
 
             fig, ax = plt.subplots(figsize=(10,5))
-            ax.plot(growth_port, label="Portefeuille OptimisÃ© (M4)")
+            ax.plot(growth_port, label="Portefeuille Optimisé (M4)")
             ax.plot(hrp_growth, label="HRP", linestyle="dashed")
-            ax.set_title("Croissance cumulÃ©e du portefeuille")
+            ax.set_title("Croissance cumulée du portefeuille")
             ax.set_xlabel("Date")
             ax.set_ylabel("Croissance")
             ax.legend()
@@ -963,20 +971,20 @@ if st.session_state["show_peach_page"]:
             st.markdown("""
             <div class="intro-box">
                 <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
-                    Lâ€™optimisation centrÃ©e sur <strong>Nintendo</strong> montre une allocation 
-                    construite autour dâ€™un compromis rendement/risque supÃ©rieur au benchmark HRP. 
-                    Le portefeuille optimisÃ© affiche un <strong>Sharpe ratio plus Ã©levÃ©</strong>, 
-                    indiquant une meilleure efficacitÃ© du risque. Bien que la pondÃ©ration de 
-                    Nintendo soit imposÃ©e par votre choix initial, lâ€™optimiseur redistribue le 
+                    L’optimisation centrée sur <strong>Nintendo</strong> montre une allocation 
+                    construite autour d’un compromis rendement/risque supérieur au benchmark HRP. 
+                    Le portefeuille optimisé affiche un <strong>Sharpe ratio plus élevé</strong>, 
+                    indiquant une meilleure efficacité du risque. Bien que la pondération de 
+                    Nintendo soit imposée par votre choix initial, l’optimiseur redistribue le 
                     reste du capital vers les titres ayant le meilleur couple rendement/variance.
                     <br><br>
-                    Le benchmark <strong>HRP</strong>, basÃ© sur la hiÃ©rarchie des corrÃ©lations, 
-                    fournit une allocation plus Ã©quilibrÃ©e mais moins agressive. Cela se traduit par 
-                    une volatilitÃ© plus faible mais un rendement infÃ©rieur. 
+                    Le benchmark <strong>HRP</strong>, basé sur la hiérarchie des corrélations, 
+                    fournit une allocation plus équilibrée mais moins agressive. Cela se traduit par 
+                    une volatilité plus faible mais un rendement inférieur. 
                     <br><br>
-                    Au final, lâ€™allocation optimisÃ©e prÃ©sente un profil de croissance cumulÃ©e 
-                    supÃ©rieur, ce qui en fait une approche adaptÃ©e pour un investisseur recherchant 
-                    une <strong>allocation centrÃ©e sur Nintendo tout en maximisant la performance ajustÃ©e du risque</strong>.
+                    Au final, l’allocation optimisée présente un profil de croissance cumulée 
+                    supérieur, ce qui en fait une approche adaptée pour un investisseur recherchant 
+                    une <strong>allocation centrée sur Nintendo tout en maximisant la performance ajustée du risque</strong>.
                 </p>
             </div>
             """, unsafe_allow_html=True)
@@ -991,25 +999,25 @@ if st.session_state["show_luigi_page"]:
 
     st.markdown("---")
     st.markdown(
-        "<h2 style='text-align:center; margin-top:10px;'>ðŸ‘» Luigi â€“ Risk Management & Modeling </h2>",
+        "<h2 style='text-align:center; margin-top:10px;'>👻 Luigi – Risk Management & Modeling </h2>",
         unsafe_allow_html=True
     )
     st.markdown(
-        "<p style='text-align:center; opacity:0.85;'>Vue analyste complÃ¨te : Ã©tats financiers, performance boursiÃ¨re, simulations Monte Carlo et scÃ©narios.</p>",
+        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
         unsafe_allow_html=True
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("â¬…ï¸ Retour au dashboard principal", key="close_luigi"):
+    if st.button("⬅️ Retour au dashboard principal", key="close_luigi"):
         st.session_state["show_luigi_page"] = False
         st.rerun()
 
-    with st.spinner("ðŸ“Š Chargement des donnÃ©es Nintendo pour l'analyse de risque..."):
+    with st.spinner("📊 Chargement des données Nintendo pour l'analyse de risque..."):
         try:
-            # TÃ©lÃ©charger les donnÃ©es
+            # Télécharger les données
             nintendo_data = yf.download("NTDOY", start="2015-09-30", end="2025-09-30", progress=False)
             
-            # âœ… CORRECTION : GÃ©rer la structure MultiIndex ou simple
+            # ✅ CORRECTION : Gérer la structure MultiIndex ou simple
             if isinstance(nintendo_data.columns, pd.MultiIndex):
                 # Si MultiIndex, extraire la colonne Close
                 data = pd.DataFrame({'Close': nintendo_data['Close']['NTDOY']})
@@ -1025,19 +1033,19 @@ if st.session_state["show_luigi_page"]:
             data['returns'] = np.log(data['Close'] / data['Close'].shift(1))
             data = data.dropna()
             
-            # VÃ©rifier que nous avons des donnÃ©es
+            # Vérifier que nous avons des données
             if len(data) == 0:
-                st.error("âŒ Aucune donnÃ©e disponible pour Nintendo")
+                st.error("❌ Aucune donnée disponible pour Nintendo")
                 st.stop()
             
-            st.success("âœ… DonnÃ©es chargÃ©es avec succÃ¨s")
+            st.success("✅ Données chargées avec succès")
             
         except Exception as e:
-            st.error(f"âŒ Erreur lors du chargement des donnÃ©es : {str(e)}")
+            st.error(f"❌ Erreur lors du chargement des données : {str(e)}")
             st.exception(e)
             st.stop()
     
-    # ParamÃ¨tres de base
+    # Paramètres de base
     last_price = data['Close'].iloc[-1]
     shares = 1000
     portfolio_value = last_price * shares
@@ -1046,7 +1054,7 @@ if st.session_state["show_luigi_page"]:
     alpha = 0.05  # Niveau de confiance 95%
     
     # Afficher les informations de base
-    st.markdown("### ðŸ“Š Informations du portefeuille")
+    st.markdown("### 📊 Informations du portefeuille")
     col_info1, col_info2, col_info3 = st.columns(3)
     col_info1.metric("Prix actuel", f"${last_price:.2f}")
     col_info2.metric("Nombre d'actions", f"{shares:,}")
@@ -1054,15 +1062,15 @@ if st.session_state["show_luigi_page"]:
     
     st.markdown("---")
     
-    # ==================== 1. Value-at-Risk (Approche ParamÃ©trique) ====================
-    st.markdown("### 1ï¸âƒ£ Value-at-Risk (Approche ParamÃ©trique)")
+    # ==================== 1. Value-at-Risk (Approche Paramétrique) ====================
+    st.markdown("### 1️⃣ Value-at-Risk (Approche Paramétrique)")
     
     z = stats.norm.ppf(1 - alpha)
     VaR = mu - z * sigma
     VaR_portfolio = portfolio_value * VaR
     
     col1, col2 = st.columns(2)
-    col1.metric("VaR ParamÃ©trique (5%)", f"{VaR*100:.2f}%")
+    col1.metric("VaR Paramétrique (5%)", f"{VaR*100:.2f}%")
     col2.metric("Perte potentielle", f"${abs(VaR_portfolio):,.0f}")
     
     # Simulation pour visualisation
@@ -1074,7 +1082,7 @@ if st.session_state["show_luigi_page"]:
         x=sim_returns,
         nbinsx=50,
         opacity=0.7,
-        name="Rendements simulÃ©s"
+        name="Rendements simulés"
     ))
     fig.add_vline(
         x=VaR,
@@ -1085,9 +1093,9 @@ if st.session_state["show_luigi_page"]:
         annotation_position="top"
     )
     fig.update_layout(
-        title="Distribution simulÃ©e - VaR ParamÃ©trique",
+        title="Distribution simulée - VaR Paramétrique",
         xaxis_title="Rendement",
-        yaxis_title="FrÃ©quence",
+        yaxis_title="Fréquence",
         paper_bgcolor="white",
         plot_bgcolor="white",
         height=500
@@ -1097,7 +1105,7 @@ if st.session_state["show_luigi_page"]:
     st.markdown("---")
     
     # ==================== 2. Value-at-Risk (Approche Historique) ====================
-    st.markdown("### 2ï¸âƒ£ Value-at-Risk (Approche Historique)")
+    st.markdown("### 2️⃣ Value-at-Risk (Approche Historique)")
     
     VaR_hist = data['returns'].quantile(alpha)
     VaR_hist_portfolio = VaR_hist * portfolio_value
@@ -1124,7 +1132,7 @@ if st.session_state["show_luigi_page"]:
     fig2.update_layout(
         title="Distribution des rendements - VaR Historique",
         xaxis_title="Rendement",
-        yaxis_title="DensitÃ©",
+        yaxis_title="Densité",
         paper_bgcolor="white",
         plot_bgcolor="white",
         height=500
@@ -1134,7 +1142,7 @@ if st.session_state["show_luigi_page"]:
     st.markdown("---")
     
     # ==================== 3. Backtesting du VaR ====================
-    st.markdown("### 3ï¸âƒ£ Backtesting du VaR (1%)")
+    st.markdown("### 3️⃣ Backtesting du VaR (1%)")
     
     alpha_bt = 0.01
     z_bt = stats.norm.ppf(1 - alpha_bt)
@@ -1146,17 +1154,17 @@ if st.session_state["show_luigi_page"]:
     
     col1, col2 = st.columns(2)
     col1.metric("Nombre de violations", len(violations))
-    col2.metric("Taux de violation observÃ©", f"{ratio*100:.2f}% (thÃ©orique: 1%)")
+    col2.metric("Taux de violation observé", f"{ratio*100:.2f}% (théorique: 1%)")
     
     if abs(ratio - 0.01) < 0.005:
-        st.success("âœ… Le modÃ¨le VaR est bien calibrÃ©")
+        st.success("✅ Le modèle VaR est bien calibré")
     else:
-        st.warning("âš ï¸ Le modÃ¨le VaR pourrait nÃ©cessiter un ajustement")
+        st.warning("⚠️ Le modèle VaR pourrait nécessiter un ajustement")
     
     st.markdown("---")
     
     # ==================== 4. Expected Shortfall (CVaR) ====================
-    st.markdown("### 4ï¸âƒ£ Expected Shortfall (CVaR)")
+    st.markdown("### 4️⃣ Expected Shortfall (CVaR)")
     
     # Parametric ES
     ES_param = mu - (stats.norm.pdf(z) / (1 - alpha)) * sigma
@@ -1168,20 +1176,20 @@ if st.session_state["show_luigi_page"]:
     ES_hist_portfolio = ES_hist * portfolio_value
     
     col1, col2 = st.columns(2)
-    col1.metric("Expected Shortfall ParamÃ©trique", f"{ES_param*100:.2f}%")
+    col1.metric("Expected Shortfall Paramétrique", f"{ES_param*100:.2f}%")
     col1.metric("Perte attendue", f"${abs(ES_param_portfolio):,.0f}")
     col2.metric("Expected Shortfall Historique", f"{ES_hist*100:.2f}%")
     col2.metric("Perte attendue", f"${abs(ES_hist_portfolio):,.0f}")
     
     st.info("""
-    **ðŸ’¡ Expected Shortfall (ES)** : Mesure la perte moyenne au-delÃ  du seuil VaR.
+    **💡 Expected Shortfall (ES)** : Mesure la perte moyenne au-delà du seuil VaR.
     C'est une mesure plus conservatrice que la VaR car elle prend en compte la queue de distribution.
     """)
     
     st.markdown("---")
     
     # ==================== 5. Credit Risk Modeling ====================
-    st.markdown("### 5ï¸âƒ£ Credit Risk Modeling (Simulation de dÃ©faut)")
+    st.markdown("### 5️⃣ Credit Risk Modeling (Simulation de défaut)")
     
     S0 = last_price
     T = 1
@@ -1189,7 +1197,7 @@ if st.session_state["show_luigi_page"]:
     ST = S0 * np.exp((mu - 0.5 * sigma**2) * T + sigma * np.sqrt(T) * np.random.standard_normal(I))
     
     L = 0.5  # Loss Given Default (50%)
-    p = 0.01  # ProbabilitÃ© de dÃ©faut (1%)
+    p = 0.01  # Probabilité de défaut (1%)
     D = np.random.poisson(p * T, I)
     D = np.where(D >= 1, 1, D)
     
@@ -1199,16 +1207,16 @@ if st.session_state["show_luigi_page"]:
     S0_adj = S0 - Credit_VaR
     
     col1, col2, col3 = st.columns(3)
-    col1.metric("Prix ajustÃ© au risque de crÃ©dit", f"${S0_adj:.2f}")
-    col2.metric("Credit VaR estimÃ©", f"${Credit_VaR:.4f}")
-    col3.metric("Ã‰vÃ©nements de dÃ©faut simulÃ©s", np.count_nonzero(L * D * ST))
+    col1.metric("Prix ajusté au risque de crédit", f"${S0_adj:.2f}")
+    col2.metric("Credit VaR estimé", f"${Credit_VaR:.4f}")
+    col3.metric("Événements de défaut simulés", np.count_nonzero(L * D * ST))
     
     fig3 = go.Figure()
     fig3.add_trace(go.Histogram(x=L * D * ST, nbinsx=50, opacity=0.7))
     fig3.update_layout(
-        title="Distribution des pertes liÃ©es au risque de crÃ©dit",
+        title="Distribution des pertes liées au risque de crédit",
         xaxis_title="Perte",
-        yaxis_title="FrÃ©quence",
+        yaxis_title="Fréquence",
         paper_bgcolor="white",
         plot_bgcolor="white",
         height=500
@@ -1217,14 +1225,14 @@ if st.session_state["show_luigi_page"]:
     
     st.markdown("---")
     
-    # ==================== RÃ©capitulatif ====================
-    st.markdown("### ðŸ“‹ RÃ©capitulatif des risques")
+    # ==================== Récapitulatif ====================
+    st.markdown("### 📋 Récapitulatif des risques")
     
     summary_df = pd.DataFrame({
         "Mesure de risque": [
-            "VaR ParamÃ©trique (5%)",
+            "VaR Paramétrique (5%)",
             "VaR Historique (5%)",
-            "Expected Shortfall ParamÃ©trique",
+            "Expected Shortfall Paramétrique",
             "Expected Shortfall Historique",
             "Credit VaR"
         ],
@@ -1239,29 +1247,29 @@ if st.session_state["show_luigi_page"]:
     
     st.dataframe(summary_df, use_container_width=True, hide_index=True)
     
-    st.caption("ðŸŽ® Module Luigi - Analyse complÃ¨te des risques financiers pour Nintendo")
+    st.caption("🎮 Module Luigi - Analyse complète des risques financiers pour Nintendo")
 
 # ====================== PAGE BOWSER FULL WIDTH ======================================================================================================
 if st.session_state["show_bowser_page"]:
 
     st.markdown("---")
     st.markdown(
-        "<h2 style='text-align:center; margin-top:10px;'>ðŸ‘» Bowser â€“ Option Pricing </h2>",
+        "<h2 style='text-align:center; margin-top:10px;'>👻 Bowser – Option Pricing </h2>",
         unsafe_allow_html=True
     )
     st.markdown(
-        "<p style='text-align:center; opacity:0.85;'>Vue analyste complÃ¨te : Ã©tats financiers, performance boursiÃ¨re, simulations Monte Carlo et scÃ©narios.</p>",
+        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
         unsafe_allow_html=True
     )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("â¬…ï¸ Retour au dashboard principal", key="close_bowser"):
+    if st.button("⬅️ Retour au dashboard principal", key="close_bowser"):
         st.session_state["show_bowser_page"] = False
         st.rerun()
 
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ═══════════════════════════════════════════════════════════════════════════
 # CONFIGURATION STREAMLIT
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ═══════════════════════════════════════════════════════════════════════════
 
     st.markdown("""
     <style>
@@ -1276,41 +1284,41 @@ if st.session_state["show_bowser_page"]:
     </style>
     """, unsafe_allow_html=True)
     
-    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ═══════════════════════════════════════════════════════════════════════════
     # TITRE PRINCIPAL
-    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ═══════════════════════════════════════════════════════════════════════════
     
-    st.title("ðŸ’° Conseil en Pricing d'Options - NINTENDO (NTDOY)")
+    st.title("💰 Conseil en Pricing d'Options - NINTENDO (NTDOY)")
     st.markdown("---")
     st.markdown("""
-    **Types d'options Ã©valuÃ©s:**
-    - âœ… Options EuropÃ©ennes (Black-Scholes-Merton)
-    - âœ… Options AmÃ©ricaines (Binomial Tree)
-    - âœ… Options BermudÃ©ennes (Binomial Tree modifiÃ©)
-    - âœ… Options Exotiques - Asiatiques (Monte Carlo)
-    - âœ… Greeks pour gestion du risque
+    **Types d'options évalués:**
+    - ✅ Options Européennes (Black-Scholes-Merton)
+    - ✅ Options Américaines (Binomial Tree)
+    - ✅ Options Bermudéennes (Binomial Tree modifié)
+    - ✅ Options Exotiques - Asiatiques (Monte Carlo)
+    - ✅ Greeks pour gestion du risque
     """)
  
     
-    # SÃ©lection du profil d'investisseur
-    st.subheader("1ï¸âƒ£ Profil d'Investisseur")
+    # Sélection du profil d'investisseur
+    st.subheader("1️⃣ Profil d'Investisseur")
     profils_dict = {
         1: 'COUVERTURE (HEDGING)',
-        2: 'SPÃ‰CULATION HAUSSIÃˆRE',
-        3: 'SPÃ‰CULATION BAISSIÃˆRE',
-        4: 'GÃ‰NÃ‰RATION DE REVENUS',
-        5: 'VOLATILITÃ‰'
+        2: 'SPÉCULATION HAUSSIÈRE',
+        3: 'SPÉCULATION BAISSIÈRE',
+        4: 'GÉNÉRATION DE REVENUS',
+        5: 'VOLATILITÉ'
     }
     
     profil_key = st.radio(
-        "SÃ©lectionnez votre profil:",
+        "Sélectionnez votre profil:",
         options=list(profils_dict.keys()),
         format_func=lambda x: profils_dict[x],
         index=1
     )
     
-    # ParamÃ¨tres de donnÃ©es
-    st.subheader("2ï¸âƒ£ ParamÃ¨tres de DonnÃ©es")
+    # Paramètres de données
+    st.subheader("2️⃣ Paramètres de Données")
     
     ticker = "NTDOY"
     start_date = "2015-09-01"
@@ -1320,79 +1328,79 @@ if st.session_state["show_bowser_page"]:
     key="bowser_taux_sans_risque") / 100
     n_simulations = st.selectbox("Simulations Monte Carlo", [3000, 5000, 8000], index=1, key="bowser_simulations")
     
-    # ParamÃ¨tres de strikes et maturitÃ©s
-    st.subheader("3ï¸âƒ£ Paramet Ã‰valuation")
+    # Paramètres de strikes et maturités
+    st.subheader("3️⃣ Paramet Évaluation")
     
     strikes_min = st.slider("Strike minimum (% du prix)", 80, 100, 90, step=5, key="bowser_strikes_min")
     strikes_max = st.slider("Strike maximum (% du prix)", 100, 130, 110, step=5, key="bowser_strikes_max")
     
-    maturity_min = st.slider("MaturitÃ© min (mois)", 1, 12, 3, step=1, key="bowser_maturity_min")
-    maturity_max = st.slider("MaturitÃ© max (mois)", 1, 12, 12, step=1, key="bowser_maturity_max")
+    maturity_min = st.slider("Maturité min (mois)", 1, 12, 3, step=1, key="bowser_maturity_min")
+    maturity_max = st.slider("Maturité max (mois)", 1, 12, 12, step=1, key="bowser_maturity_max")
     
     if maturity_min > maturity_max:
-        st.error("La maturitÃ© min doit Ãªtre infÃ©rieure Ã  max")
+        st.error("La maturité min doit être inférieure à max")
         maturity_min = maturity_max
 
         st.markdown("---")
 
     # Bouton pour lancer la simulation
-    lancer_simulation = st.button("ðŸš€ Lancer la simulation d'options")
+    lancer_simulation = st.button("🚀 Lancer la simulation d'options")
 
     if lancer_simulation:
 
     
-    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-    # DÃ‰FINITION DES PROFILS
-    # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    # ═══════════════════════════════════════════════════════════════════════════
+    # DÉFINITION DES PROFILS
+    # ═══════════════════════════════════════════════════════════════════════════
     
         profils_investisseur = {
         1: {
             'nom': 'COUVERTURE (HEDGING)',
             'strategie_principale': 'Achat de Puts pour protection',
-            'options_recommandees': ['Put EuropÃ©en', 'Put AmÃ©ricain'],
-            'horizon_typique': 'Court Ã  Moyen terme (3-6 mois)',
-            'delta_target': 'NÃ©gatif (protection)',
+            'options_recommandees': ['Put Européen', 'Put Américain'],
+            'horizon_typique': 'Court à Moyen terme (3-6 mois)',
+            'delta_target': 'Négatif (protection)',
             'description': 'Minimiser les pertes en cas de baisse du sous-jacent'
         },
         2: {
-            'nom': 'SPÃ‰CULATION HAUSSIÃˆRE',
+            'nom': 'SPÉCULATION HAUSSIÈRE',
             'strategie_principale': 'Achat de Calls',
-            'options_recommandees': ['Call EuropÃ©en', 'Call AmÃ©ricain', 'Call Asiatique'],
+            'options_recommandees': ['Call Européen', 'Call Américain', 'Call Asiatique'],
             'horizon_typique': 'Moyen terme (6-12 mois)',
-            'delta_target': 'Positif Ã©levÃ© (>0.5)',
-            'description': 'Profiter d\'une hausse anticipÃ©e avec effet de levier'
+            'delta_target': 'Positif élevé (>0.5)',
+            'description': 'Profiter d\'une hausse anticipée avec effet de levier'
         },
         3: {
-            'nom': 'SPÃ‰CULATION BAISSIÃˆRE',
+            'nom': 'SPÉCULATION BAISSIÈRE',
             'strategie_principale': 'Achat de Puts',
-            'options_recommandees': ['Put EuropÃ©en', 'Put AmÃ©ricain'],
-            'horizon_typique': 'Court Ã  Moyen terme (3-9 mois)',
-            'delta_target': 'NÃ©gatif (<-0.3)',
-            'description': 'Profiter d\'une baisse anticipÃ©e'
+            'options_recommandees': ['Put Européen', 'Put Américain'],
+            'horizon_typique': 'Court à Moyen terme (3-9 mois)',
+            'delta_target': 'Négatif (<-0.3)',
+            'description': 'Profiter d\'une baisse anticipée'
         },
         4: {
-            'nom': 'GÃ‰NÃ‰RATION DE REVENUS',
+            'nom': 'GÉNÉRATION DE REVENUS',
             'strategie_principale': 'Vente de Calls couverts (Covered Calls)',
-            'options_recommandees': ['Call EuropÃ©en OTM', 'Call BermudÃ©en'],
-            'horizon_typique': 'Court terme rÃ©pÃ©tÃ© (1-3 mois)',
-            'delta_target': 'LÃ©gÃ¨rement positif (0.3-0.5)',
-            'description': 'Collecter des primes en vendant des calls sur actions dÃ©tenues'
+            'options_recommandees': ['Call Européen OTM', 'Call Bermudéen'],
+            'horizon_typique': 'Court terme répété (1-3 mois)',
+            'delta_target': 'Légèrement positif (0.3-0.5)',
+            'description': 'Collecter des primes en vendant des calls sur actions détenues'
         },
         5: {
-            'nom': 'VOLATILITÃ‰',
+            'nom': 'VOLATILITÉ',
             'strategie_principale': 'Straddle/Strangle',
-            'options_recommandees': ['Call & Put EuropÃ©ens', 'Options Exotiques'],
+            'options_recommandees': ['Call & Put Européens', 'Options Exotiques'],
             'horizon_typique': 'Court terme (1-3 mois)',
             'delta_target': 'Neutre (proche de 0)',
-            'description': 'Profiter des mouvements de prix importants sans direction prÃ©cise'
+            'description': 'Profiter des mouvements de prix importants sans direction précise'
         }
         }
         
         profil = profils_investisseur[profil_key]
         
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        # TÃ‰LÃ‰CHARGEMENT DES DONNÃ‰ES
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
+        # TÉLÉCHARGEMENT DES DONNÉES
+        # ═══════════════════════════════════════════════════════════════════════════
         
         @st.cache_data
         def download_data(ticker, start, end):
@@ -1400,38 +1408,38 @@ if st.session_state["show_bowser_page"]:
                 data = yf.download(ticker, start=start, end=end, progress=False)
                 return data['Close']
             except:
-                st.error(f"Erreur lors du tÃ©lÃ©chargement de {ticker}")
+                st.error(f"Erreur lors du téléchargement de {ticker}")
                 return None
         
         # Affichage du statut de chargement
-        with st.spinner("ðŸ“¥ TÃ©lÃ©chargement des donnÃ©es Nintendo..."):
+        with st.spinner("📥 Téléchargement des données Nintendo..."):
             data = download_data(ticker, start_date, end_date)
         
         if data is None or len(data) == 0:
-            st.error("âŒ Aucune donnÃ©e de clÃ´ture disponible pour NTDOY sur la pÃ©riode sÃ©lectionnÃ©e.")
+            st.error("❌ Aucune donnée de clôture disponible pour NTDOY sur la période sélectionnée.")
             st.stop()
         
-        # Ici, on est sÃ»r d'avoir des donnÃ©es
+        # Ici, on est sûr d'avoir des données
         S0 = float(data.iloc[-1])
         returns = np.log(data / data.shift(1)).dropna()
         volatility_hist = float(returns.std() * np.sqrt(252))
         
-        # Affichage des mÃ©triques
+        # Affichage des métriques
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.metric("ðŸ’µ Prix actuel", f"${S0:.2f}")
+            st.metric("💵 Prix actuel", f"${S0:.2f}")
         with col2:
-            st.metric("ðŸ“Š VolatilitÃ© historique", f"{volatility_hist*100:.2f}%")
+            st.metric("📊 Volatilité historique", f"{volatility_hist*100:.2f}%")
         with col3:
-            st.metric("ðŸ“… Jours de trading", len(data))
+            st.metric("📅 Jours de trading", len(data))
         with col4:
-            st.metric("ðŸ’¹ Taux sans risque", f"{r*100:.2f}%")
+            st.metric("💹 Taux sans risque", f"{r*100:.2f}%")
             
         st.markdown("---")
         
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        # MODÃˆLES DE PRICING
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
+        # MODÈLES DE PRICING
+        # ═══════════════════════════════════════════════════════════════════════════
         
         # Black-Scholes
         def black_scholes_call(S, K, T, r, sigma):
@@ -1531,15 +1539,15 @@ if st.session_state["show_bowser_page"]:
             
             return option_price, std_error
         
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-        # CALCUL DES RÃ‰SULTATS
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
+        # CALCUL DES RÉSULTATS
+        # ═══════════════════════════════════════════════════════════════════════════
         
-        st.subheader(f"ðŸ“Š Profil: {profil['nom']}")
-        st.write(f"**StratÃ©gie:** {profil['strategie_principale']}")
+        st.subheader(f"📊 Profil: {profil['nom']}")
+        st.write(f"**Stratégie:** {profil['strategie_principale']}")
         st.write(f"**Description:** {profil['description']}")
         
-        # ParamÃ¨tres selon le profil
+        # Paramètres selon le profil
         if profil_key == 1:  # COUVERTURE
             option_types_focus = ['put']
         elif profil_key == 2:  # HAUSSIER
@@ -1548,10 +1556,10 @@ if st.session_state["show_bowser_page"]:
             option_types_focus = ['put']
         elif profil_key == 4:  # REVENUS
             option_types_focus = ['call']
-        else:  # VOLATILITÃ‰
+        else:  # VOLATILITÉ
             option_types_focus = ['call', 'put']
         
-        # GÃ©nÃ©ration des strikes et maturitÃ©s
+        # Génération des strikes et maturités
         strikes_pct = np.linspace(strikes_min/100, strikes_max/100, 3)
         K_values = [S0 * mult for mult in strikes_pct]
         
@@ -1561,17 +1569,17 @@ if st.session_state["show_bowser_page"]:
         T_values = [m/12 for m in maturities]
         
         st.markdown("---")
-        st.subheader("âš™ï¸ Configuration de l'Ã©valuation")
+        st.subheader("⚙️ Configuration de l'évaluation")
         col1, col2 = st.columns(2)
         with col1:
-            st.info(f"âœ… Strikes Ã©valuÃ©s: {len(K_values)}")
-            st.info(f"âœ… MaturitÃ©s Ã©valuÃ©es: {len(T_values)}")
+            st.info(f"✅ Strikes évalués: {len(K_values)}")
+            st.info(f"✅ Maturités évaluées: {len(T_values)}")
         with col2:
-            st.info(f"âœ… VolatilitÃ©: {volatility_hist*100:.2f}%")
-            st.info(f"âœ… Taux sans risque: {r*100:.2f}%")
+            st.info(f"✅ Volatilité: {volatility_hist*100:.2f}%")
+            st.info(f"✅ Taux sans risque: {r*100:.2f}%")
         
         # Calcul des options
-        with st.spinner("â³ Calcul des options en cours..."):
+        with st.spinner("⏳ Calcul des options en cours..."):
             results_all = []
             
             for K in K_values:
@@ -1588,18 +1596,18 @@ if st.session_state["show_bowser_page"]:
                     
                     result = {
                         'Strike': K,
-                        'MaturitÃ© (mois)': T_months,
-                        'MaturitÃ© (annÃ©es)': T,
+                        'Maturité (mois)': T_months,
+                        'Maturité (années)': T,
                         'Moneyness': moneyness,
                         'Status': status
                     }
                     
                     if 'call' in option_types_focus:
                         call_euro = black_scholes_call(S0, K, T, r, volatility_hist)
-                        result['Call EuropÃ©en'] = call_euro
+                        result['Call Européen'] = call_euro
                         
                         call_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='call')
-                        result['Call AmÃ©ricain'] = call_american
+                        result['Call Américain'] = call_american
                         
                         call_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='call')
                         result['Call Asiatique'] = call_asian
@@ -1612,10 +1620,10 @@ if st.session_state["show_bowser_page"]:
                     
                     if 'put' in option_types_focus:
                         put_euro = black_scholes_put(S0, K, T, r, volatility_hist)
-                        result['Put EuropÃ©en'] = put_euro
+                        result['Put Européen'] = put_euro
                         
                         put_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='put')
-                        result['Put AmÃ©ricain'] = put_american
+                        result['Put Américain'] = put_american
                         
                         put_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='put')
                         result['Put Asiatique'] = put_asian
@@ -1630,37 +1638,37 @@ if st.session_state["show_bowser_page"]:
             
             df_results = pd.DataFrame(results_all)
         
-        st.success(f"âœ… {len(df_results)} configurations d'options Ã©valuÃ©es")
+        st.success(f"✅ {len(df_results)} configurations d'options évaluées")
         
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
         # ONGLETS INTERACTIFS
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
         
         tab1, tab2, tab3, tab4, tab5 = st.tabs(
-            ["ðŸ“Š RÃ©sultats", "ðŸ“ˆ Visualisations", "ðŸŽ¯ Recommandations", "ðŸ“‰ P&L", "ðŸ“‹ Tableau"]
+            ["📊 Résultats", "📈 Visualisations", "🎯 Recommandations", "📉 P&L", "📋 Tableau"]
         )
         
-        # TAB 1: RÃ‰SULTATS
+        # TAB 1: RÉSULTATS
         with tab1:
-            st.subheader("RÃ©sultats des Ã‰valuations")
+            st.subheader("Résultats des Évaluations")
             
             # Filtrage optionnel
             col1, col2, col3 = st.columns(3)
             with col1:
                 selected_status = st.multiselect("Filtrer par Status", ['ITM', 'ATM', 'OTM'], default=['ITM', 'ATM', 'OTM'])
             with col2:
-                selected_maturity = st.multiselect("Filtrer par MaturitÃ©", sorted(df_results['MaturitÃ© (mois)'].unique()), 
-                                                  default=sorted(df_results['MaturitÃ© (mois)'].unique()))
+                selected_maturity = st.multiselect("Filtrer par Maturité", sorted(df_results['Maturité (mois)'].unique()), 
+                                                  default=sorted(df_results['Maturité (mois)'].unique()))
             with col3:
-                precision = st.slider("DÃ©cimales", 2, 4, 2)
+                precision = st.slider("Décimales", 2, 4, 2)
             
             # Filtrage
             df_filtered = df_results[
                 (df_results['Status'].isin(selected_status)) &
-                (df_results['MaturitÃ© (mois)'].isin(selected_maturity))
+                (df_results['Maturité (mois)'].isin(selected_maturity))
             ]
             
-            # Arrondir les colonnes numÃ©riques
+            # Arrondir les colonnes numériques
             numeric_cols = df_filtered.select_dtypes(include=[np.number]).columns
             df_display = df_filtered.copy()
             for col in numeric_cols:
@@ -1671,7 +1679,7 @@ if st.session_state["show_bowser_page"]:
             # Export
             csv = df_display.to_csv(index=False)
             st.download_button(
-                label="ðŸ“¥ TÃ©lÃ©charger CSV",
+                label="📥 Télécharger CSV",
                 data=csv,
                 file_name="nintendo_options.csv",
                 mime="text/csv"
@@ -1686,17 +1694,17 @@ if st.session_state["show_bowser_page"]:
             # 3D Surface
             with sub_tab1:
                 if 'call' in option_types_focus:
-                    st.markdown("#### Surface 3D - Call EuropÃ©en")
+                    st.markdown("#### Surface 3D - Call Européen")
                     
                     strikes_unique = sorted(df_results['Strike'].unique())
-                    maturities_unique = sorted(df_results['MaturitÃ© (annÃ©es)'].unique())
+                    maturities_unique = sorted(df_results['Maturité (années)'].unique())
                     
                     Z_call = []
                     for T in maturities_unique:
                         row = []
                         for K in strikes_unique:
                             val = df_results[(df_results['Strike'] == K) & 
-                                            (df_results['MaturitÃ© (annÃ©es)'] == T)]['Call EuropÃ©en'].values
+                                            (df_results['Maturité (années)'] == T)]['Call Européen'].values
                             row.append(val[0] if len(val) > 0 else 0)
                         Z_call.append(row)
                     
@@ -1708,10 +1716,10 @@ if st.session_state["show_bowser_page"]:
                     )])
                     
                     fig_3d_call.update_layout(
-                        title='Prix Call EuropÃ©en - Surface 3D',
+                        title='Prix Call Européen - Surface 3D',
                         scene=dict(
                             xaxis_title='Strike ($)',
-                            yaxis_title='MaturitÃ© (annÃ©es)',
+                            yaxis_title='Maturité (années)',
                             zaxis_title='Prix ($)'
                         ),
                         height=600
@@ -1720,14 +1728,14 @@ if st.session_state["show_bowser_page"]:
                     st.plotly_chart(fig_3d_call, use_container_width=True)
                 
                 if 'put' in option_types_focus:
-                    st.markdown("#### Surface 3D - Put EuropÃ©en")
+                    st.markdown("#### Surface 3D - Put Européen")
                     
                     Z_put = []
                     for T in maturities_unique:
                         row = []
                         for K in strikes_unique:
                             val = df_results[(df_results['Strike'] == K) & 
-                                            (df_results['MaturitÃ© (annÃ©es)'] == T)]['Put EuropÃ©en'].values
+                                            (df_results['Maturité (années)'] == T)]['Put Européen'].values
                             row.append(val[0] if len(val) > 0 else 0)
                         Z_put.append(row)
                     
@@ -1739,10 +1747,10 @@ if st.session_state["show_bowser_page"]:
                     )])
                     
                     fig_3d_put.update_layout(
-                        title='Prix Put EuropÃ©en - Surface 3D',
+                        title='Prix Put Européen - Surface 3D',
                         scene=dict(
                             xaxis_title='Strike ($)',
-                            yaxis_title='MaturitÃ© (annÃ©es)',
+                            yaxis_title='Maturité (années)',
                             zaxis_title='Prix ($)'
                         ),
                         height=600
@@ -1754,26 +1762,26 @@ if st.session_state["show_bowser_page"]:
             with sub_tab2:
                 target_maturity = 6
                 closest_maturity = min(maturities, key=lambda x: abs(x - target_maturity))
-                df_comp = df_results[df_results['MaturitÃ© (mois)'] == closest_maturity].copy()
+                df_comp = df_results[df_results['Maturité (mois)'] == closest_maturity].copy()
                 
                 if 'call' in option_types_focus and len(df_comp) > 0:
-                    st.markdown(f"#### Comparaison des Calls (MaturitÃ©: {closest_maturity} mois)")
+                    st.markdown(f"#### Comparaison des Calls (Maturité: {closest_maturity} mois)")
                     
                     fig_comp_call = go.Figure()
                     
                     fig_comp_call.add_trace(go.Scatter(
                         x=df_comp['Strike'],
-                        y=df_comp['Call EuropÃ©en'],
-                        name='Call EuropÃ©en',
+                        y=df_comp['Call Européen'],
+                        name='Call Européen',
                         mode='lines+markers',
                         line=dict(color='blue', width=3)
                     ))
                     
-                    if 'Call AmÃ©ricain' in df_comp.columns:
+                    if 'Call Américain' in df_comp.columns:
                         fig_comp_call.add_trace(go.Scatter(
                             x=df_comp['Strike'],
-                            y=df_comp['Call AmÃ©ricain'],
-                            name='Call AmÃ©ricain',
+                            y=df_comp['Call Américain'],
+                            name='Call Américain',
                             mode='lines+markers',
                             line=dict(color='green', width=3)
                         ))
@@ -1790,23 +1798,23 @@ if st.session_state["show_bowser_page"]:
                     st.plotly_chart(fig_comp_call, use_container_width=True)
                 
                 if 'put' in option_types_focus and len(df_comp) > 0:
-                    st.markdown(f"#### Comparaison des Puts (MaturitÃ©: {closest_maturity} mois)")
+                    st.markdown(f"#### Comparaison des Puts (Maturité: {closest_maturity} mois)")
                     
                     fig_comp_put = go.Figure()
                     
                     fig_comp_put.add_trace(go.Scatter(
                         x=df_comp['Strike'],
-                        y=df_comp['Put EuropÃ©en'],
-                        name='Put EuropÃ©en',
+                        y=df_comp['Put Européen'],
+                        name='Put Européen',
                         mode='lines+markers',
                         line=dict(color='blue', width=3)
                     ))
                     
-                    if 'Put AmÃ©ricain' in df_comp.columns:
+                    if 'Put Américain' in df_comp.columns:
                         fig_comp_put.add_trace(go.Scatter(
                             x=df_comp['Strike'],
-                            y=df_comp['Put AmÃ©ricain'],
-                            name='Put AmÃ©ricain',
+                            y=df_comp['Put Américain'],
+                            name='Put Américain',
                             mode='lines+markers',
                             line=dict(color='green', width=3)
                         ))
@@ -1859,24 +1867,24 @@ if st.session_state["show_bowser_page"]:
         
         # TAB 3: RECOMMANDATIONS
         with tab3:
-            st.subheader(f"ðŸŽ¯ Recommandations pour {profil['nom']}")
+            st.subheader(f"🎯 Recommandations pour {profil['nom']}")
             
             if profil_key == 1:  # COUVERTURE
                 st.markdown("""
-                ### StratÃ©gie de Couverture (Hedging)
+                ### Stratégie de Couverture (Hedging)
                 
-                Vous dÃ©tenez des actions Nintendo et voulez vous protÃ©ger contre une baisse.
+                Vous détenez des actions Nintendo et voulez vous protéger contre une baisse.
                 
-                **Options recommandÃ©es:** Protective Puts
+                **Options recommandées:** Protective Puts
                 """)
                 
-                best_hedge = df_results[df_results['Status'] == 'ATM'].nsmallest(3, 'MaturitÃ© (mois)')
+                best_hedge = df_results[df_results['Status'] == 'ATM'].nsmallest(3, 'Maturité (mois)')
                 
                 for i, (_, row) in enumerate(best_hedge.iterrows(), 1):
-                    with st.expander(f"Option {i}: Put ${row['Strike']:.2f} ({int(row['MaturitÃ© (mois)'])} mois)"):
+                    with st.expander(f"Option {i}: Put ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
                         col1, col2, col3, col4 = st.columns(4)
                         with col1:
-                            st.metric("Prix", f"${row['Put EuropÃ©en']:.2f}")
+                            st.metric("Prix", f"${row['Put Européen']:.2f}")
                         with col2:
                             st.metric("Delta", f"{row['Put Delta']:.3f}")
                         with col3:
@@ -1886,24 +1894,24 @@ if st.session_state["show_bowser_page"]:
             
             elif profil_key == 2:  # HAUSSIER
                 st.markdown("""
-                ### SpÃ©culation HaussiÃ¨re
+                ### Spéculation Haussière
                 
                 Vous anticipez une hausse - Achetez des Calls pour profiter de l'effet de levier.
                 
-                **Options recommandÃ©es:** Long Calls
+                **Options recommandées:** Long Calls
                 """)
                 
-                best_calls = df_results[df_results['Status'].isin(['ATM', 'OTM'])].nsmallest(3, 'Call EuropÃ©en')
+                best_calls = df_results[df_results['Status'].isin(['ATM', 'OTM'])].nsmallest(3, 'Call Européen')
                 
                 for i, (_, row) in enumerate(best_calls.iterrows(), 1):
-                    leverage = S0 / row['Call EuropÃ©en'] if row['Call EuropÃ©en'] > 0 else 0
-                    breakeven = row['Strike'] + row['Call EuropÃ©en']
+                    leverage = S0 / row['Call Européen'] if row['Call Européen'] > 0 else 0
+                    breakeven = row['Strike'] + row['Call Européen']
                     required_move = ((breakeven / S0) - 1) * 100
                     
-                    with st.expander(f"Option {i}: Call ${row['Strike']:.2f} ({int(row['MaturitÃ© (mois)'])} mois)"):
+                    with st.expander(f"Option {i}: Call ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
                         col1, col2, col3, col4 = st.columns(4)
                         with col1:
-                            st.metric("Prix", f"${row['Call EuropÃ©en']:.2f}")
+                            st.metric("Prix", f"${row['Call Européen']:.2f}")
                         with col2:
                             st.metric("Levier", f"{leverage:.1f}x")
                         with col3:
@@ -1913,24 +1921,24 @@ if st.session_state["show_bowser_page"]:
             
             elif profil_key == 3:  # BAISSIER
                 st.markdown("""
-                ### SpÃ©culation BaissiÃ¨re
+                ### Spéculation Baissière
                 
                 Vous anticipez une baisse - Achetez des Puts pour profiter du mouvement baissier.
                 
-                **Options recommandÃ©es:** Long Puts
+                **Options recommandées:** Long Puts
                 """)
                 
-                best_puts = df_results[df_results['Status'].isin(['ATM', 'OTM'])].nsmallest(3, 'Put EuropÃ©en')
+                best_puts = df_results[df_results['Status'].isin(['ATM', 'OTM'])].nsmallest(3, 'Put Européen')
                 
                 for i, (_, row) in enumerate(best_puts.iterrows(), 1):
-                    leverage = S0 / row['Put EuropÃ©en'] if row['Put EuropÃ©en'] > 0 else 0
-                    breakeven = row['Strike'] - row['Put EuropÃ©en']
+                    leverage = S0 / row['Put Européen'] if row['Put Européen'] > 0 else 0
+                    breakeven = row['Strike'] - row['Put Européen']
                     required_move = ((S0 / breakeven) - 1) * 100
                     
-                    with st.expander(f"Option {i}: Put ${row['Strike']:.2f} ({int(row['MaturitÃ© (mois)'])} mois)"):
+                    with st.expander(f"Option {i}: Put ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
                         col1, col2, col3, col4 = st.columns(4)
                         with col1:
-                            st.metric("Prix", f"${row['Put EuropÃ©en']:.2f}")
+                            st.metric("Prix", f"${row['Put Européen']:.2f}")
                         with col2:
                             st.metric("Levier", f"{leverage:.1f}x")
                         with col3:
@@ -1940,54 +1948,54 @@ if st.session_state["show_bowser_page"]:
             
             elif profil_key == 4:  # REVENUS
                 st.markdown("""
-                ### GÃ©nÃ©ration de Revenus (Covered Calls)
+                ### Génération de Revenus (Covered Calls)
                 
-                Vous dÃ©tenez des actions et voulez gÃ©nÃ©rer des revenus rÃ©guliers en vendant des Calls.
+                Vous détenez des actions et voulez générer des revenus réguliers en vendant des Calls.
                 
-                **Options recommandÃ©es:** Covered Calls OTM
+                **Options recommandées:** Covered Calls OTM
                 """)
                 
                 covered_calls = df_results[
                     (df_results['Status'].isin(['ATM', 'OTM'])) &
-                    (df_results['MaturitÃ© (mois)'] <= 3)
-                ].sort_values('MaturitÃ© (mois)').head(3)
+                    (df_results['Maturité (mois)'] <= 3)
+                ].sort_values('Maturité (mois)').head(3)
                 
                 for i, (_, row) in enumerate(covered_calls.iterrows(), 1):
-                    annualized = (row['Call EuropÃ©en'] / S0) * (12 / row['MaturitÃ© (mois)']) * 100
+                    annualized = (row['Call Européen'] / S0) * (12 / row['Maturité (mois)']) * 100
                     
-                    with st.expander(f"Option {i}: Vendre Call ${row['Strike']:.2f} ({int(row['MaturitÃ© (mois)'])} mois)"):
+                    with st.expander(f"Option {i}: Vendre Call ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
                         col1, col2, col3, col4 = st.columns(4)
                         with col1:
-                            st.metric("Prime reÃ§ue", f"${row['Call EuropÃ©en']:.2f}")
+                            st.metric("Prime reçue", f"${row['Call Européen']:.2f}")
                         with col2:
-                            st.metric("AnnualisÃ©", f"{annualized:.2f}%")
+                            st.metric("Annualisé", f"{annualized:.2f}%")
                         with col3:
                             st.metric("Strike au-dessus", f"{((row['Strike']/S0)-1)*100:.1f}%")
                         with col4:
                             st.metric("Delta", f"{row['Call Delta']:.3f}")
             
-            else:  # VOLATILITÃ‰
+            else:  # VOLATILITÉ
                 st.markdown("""
-                ### StratÃ©gie sur VolatilitÃ© (Straddle)
+                ### Stratégie sur Volatilité (Straddle)
                 
                 Vous anticipez un mouvement important - Achetez un Call + Put ATM.
                 
-                **Options recommandÃ©es:** Long Straddle
+                **Options recommandées:** Long Straddle
                 """)
                 
                 straddles = df_results[df_results['Status'] == 'ATM'].copy()
-                straddles['Straddle Cost'] = straddles['Call EuropÃ©en'] + straddles['Put EuropÃ©en']
-                straddles = straddles.nsmallest(3, 'MaturitÃ© (mois)')
+                straddles['Straddle Cost'] = straddles['Call Européen'] + straddles['Put Européen']
+                straddles = straddles.nsmallest(3, 'Maturité (mois)')
                 
                 for i, (_, row) in enumerate(straddles.iterrows(), 1):
                     move_required = (row['Straddle Cost'] / S0) * 100
                     
-                    with st.expander(f"Option {i}: Straddle ${row['Strike']:.2f} ({int(row['MaturitÃ© (mois)'])} mois)"):
+                    with st.expander(f"Option {i}: Straddle ${row['Strike']:.2f} ({int(row['Maturité (mois)'])} mois)"):
                         col1, col2, col3, col4 = st.columns(4)
                         with col1:
-                            st.metric("CoÃ»t total", f"${row['Straddle Cost']:.2f}")
+                            st.metric("Coût total", f"${row['Straddle Cost']:.2f}")
                         with col2:
-                            st.metric("Mouvement requis", f"Â±{move_required:.1f}%")
+                            st.metric("Mouvement requis", f"±{move_required:.1f}%")
                         with col3:
                             st.metric("Call Vega", f"{row['Call Vega']:.3f}")
                         with col4:
@@ -1995,20 +2003,20 @@ if st.session_state["show_bowser_page"]:
         
         # TAB 4: P&L
         with tab4:
-            st.subheader("ðŸ“‰ Analyse Profit & Loss")
+            st.subheader("📉 Analyse Profit & Loss")
             
-            # SÃ©lection d'une option
+            # Sélection d'une option
             option_selected = st.selectbox(
-                "SÃ©lectionnez une option pour analyser",
+                "Sélectionnez une option pour analyser",
                 options=range(len(df_results)),
-                format_func=lambda x: f"{df_results.iloc[x]['Status']} - ${df_results.iloc[x]['Strike']:.2f} ({int(df_results.iloc[x]['MaturitÃ© (mois)'])} mois)"
+                format_func=lambda x: f"{df_results.iloc[x]['Status']} - ${df_results.iloc[x]['Strike']:.2f} ({int(df_results.iloc[x]['Maturité (mois)'])} mois)"
             )
             
             selected_option = df_results.iloc[option_selected]
             
             if 'call' in option_types_focus:
                 K_call = selected_option['Strike']
-                premium_call = selected_option['Call EuropÃ©en']
+                premium_call = selected_option['Call Européen']
                 
                 price_range = np.linspace(S0 * 0.7, S0 * 1.3, 100)
                 payoff_call = np.maximum(price_range - K_call, 0) - premium_call
@@ -2030,7 +2038,7 @@ if st.session_state["show_bowser_page"]:
                 
                 fig_pl_call.update_layout(
                     title=f'Long Call: Strike ${K_call:.2f}, Prime ${premium_call:.2f}',
-                    xaxis_title='Prix Ã  maturitÃ© ($)',
+                    xaxis_title='Prix à maturité ($)',
                     yaxis_title='Profit / Perte ($)',
                     height=500
                 )
@@ -2041,13 +2049,13 @@ if st.session_state["show_bowser_page"]:
                 with col1:
                     st.metric("Max loss", f"-${premium_call:.2f}")
                 with col2:
-                    st.metric("Max gain", "IllimitÃ©")
+                    st.metric("Max gain", "Illimité")
                 with col3:
                     st.metric("Point mort", f"${breakeven_call:.2f}")
             
             if 'put' in option_types_focus:
                 K_put = selected_option['Strike']
-                premium_put = selected_option['Put EuropÃ©en']
+                premium_put = selected_option['Put Européen']
                 
                 price_range = np.linspace(S0 * 0.5, S0 * 1.5, 100)
                 payoff_put = np.maximum(K_put - price_range, 0) - premium_put
@@ -2069,7 +2077,7 @@ if st.session_state["show_bowser_page"]:
                 
                 fig_pl_put.update_layout(
                     title=f'Long Put: Strike ${K_put:.2f}, Prime ${premium_put:.2f}',
-                    xaxis_title='Prix Ã  maturitÃ© ($)',
+                    xaxis_title='Prix à maturité ($)',
                     yaxis_title='Profit / Perte ($)',
                     height=500
                 )
@@ -2086,16 +2094,16 @@ if st.session_state["show_bowser_page"]:
         
         # TAB 5: TABLEAU COMPLET
         with tab5:
-            st.subheader("ðŸ“Š Tableau Complet")
+            st.subheader("📊 Tableau Complet")
             
             # Options d'affichage
             col1, col2 = st.columns(2)
             with col1:
                 show_greeks = st.checkbox("Afficher les Greeks", value=True)
             with col2:
-                decimals = st.slider("DÃ©cimales", 2, 6, 2)
+                decimals = st.slider("Décimales", 2, 6, 2)
             
-            # PrÃ©paration du tableau
+            # Préparation du tableau
             df_display = df_results.copy()
             
             if not show_greeks:
@@ -2111,39 +2119,39 @@ if st.session_state["show_bowser_page"]:
             st.dataframe(df_display, use_container_width=True)
             
             # Statistiques descriptives
-            st.subheader("ðŸ“ˆ Statistiques Descriptives")
+            st.subheader("📈 Statistiques Descriptives")
             
             if 'call' in option_types_focus:
                 st.markdown("#### Calls")
-                call_stats = df_results[['Call EuropÃ©en', 'Call AmÃ©ricain', 'Call Asiatique']].describe()
+                call_stats = df_results[['Call Européen', 'Call Américain', 'Call Asiatique']].describe()
                 st.dataframe(call_stats.round(decimals))
             
             if 'put' in option_types_focus:
                 st.markdown("#### Puts")
-                put_stats = df_results[['Put EuropÃ©en', 'Put AmÃ©ricain', 'Put Asiatique']].describe()
+                put_stats = df_results[['Put Européen', 'Put Américain', 'Put Asiatique']].describe()
                 st.dataframe(put_stats.round(decimals))
         
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
         # PIED DE PAGE
-        # â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        # ═══════════════════════════════════════════════════════════════════════════
         
         st.markdown("---")
         st.markdown("""
-        ### âš ï¸ Avertissements Importants
+        ### ⚠️ Avertissements Importants
         
-        - **ModÃ¨les thÃ©oriques:** Les prix affichÃ©s sont des prix thÃ©oriques calculÃ©s avec des modÃ¨les mathÃ©matiques
-        - **HypothÃ¨ses simplificatrices:** VolatilitÃ© constante, pas de dividendes, marchÃ©s parfaits, etc.
-        - **Risque Ã©levÃ©:** Les options sont des produits complexes destinÃ©s Ã  des investisseurs avertis
-        - **Spread bid-ask:** Les prix rÃ©els incluent le spread du marchÃ©
-        - **VolatilitÃ© implicite:** La volatilitÃ© du marchÃ© peut diffÃ©rer de l'historique
-        - **Consultez un professionnel:** Avant toute dÃ©cision d'investissement
+        - **Modèles théoriques:** Les prix affichés sont des prix théoriques calculés avec des modèles mathématiques
+        - **Hypothèses simplificatrices:** Volatilité constante, pas de dividendes, marchés parfaits, etc.
+        - **Risque élevé:** Les options sont des produits complexes destinés à des investisseurs avertis
+        - **Spread bid-ask:** Les prix réels incluent le spread du marché
+        - **Volatilité implicite:** La volatilité du marché peut différer de l'historique
+        - **Consultez un professionnel:** Avant toute décision d'investissement
         
         ---
-        *Analyse rÃ©alisÃ©e le {datetime.now().strftime('%d/%m/%Y Ã  %H:%M')}*
+        *Analyse réalisée le {datetime.now().strftime('%d/%m/%Y à %H:%M')}*
         """)
 
     else:
-        st.info("ðŸ‘‰ Configure les paramÃ¨tres puis clique sur Â« ðŸš€ Lancer la simulation d'options Â» pour afficher les rÃ©sultats.")
+        st.info("👉 Configure les paramètres puis clique sur « 🚀 Lancer la simulation d'options » pour afficher les résultats.")
 
 
 # ====================== PAGE BIRDO FULL WIDTH ===========================================================================================================================================================================
@@ -2152,37 +2160,37 @@ if st.session_state["show_birdo_page"]:
 
     # Titre principal
     st.markdown("""
-    # ðŸŽ® CONSEIL EN TRADING ALGORITHMIQUE - NINTENDO (NTDOY)
-    **PÃ©riode: Septembre 2015 - Septembre 2025**
+    # 🎮 CONSEIL EN TRADING ALGORITHMIQUE - NINTENDO (NTDOY)
+    **Période: Septembre 2015 - Septembre 2025**
     
-    *StratÃ©gies optimisÃ©es selon votre profil d'investisseur*
+    *Stratégies optimisées selon votre profil d'investisseur*
     """)
 
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("â¬…ï¸ Retour au dashboard principal", key="close_birdo"):
+    if st.button("⬅️ Retour au dashboard principal", key="close_birdo"):
         st.session_state["show_birdo_page"] = False
         st.rerun()
 
 
     # =========================
-    # PARAMÃˆTRES DANS L'ONGLET
+    # PARAMÈTRES DANS L'ONGLET
     # =========================
     
-    st.markdown("### âš™ï¸ ParamÃ©trage de votre profil")
+    st.markdown("### ⚙️ Paramétrage de votre profil")
     
-    # SÃ©lecteur de profil (dans la page, plus dans la sidebar)
+    # Sélecteur de profil (dans la page, plus dans la sidebar)
     profil_label = st.selectbox(
         "Choisissez votre profil d'investisseur :",
         options=[
-            "CONSERVATEUR - Minimisation du risque, frÃ©quence faible",
-            "MODÃ‰RÃ‰ - Ã‰quilibre risque/rendement, frÃ©quence moyenne",
-            "DYNAMIQUE - Maximisation du rendement, frÃ©quence Ã©levÃ©e",
-            "PERSONNALISÃ‰ - ParamÃ¨tres manuels"
+            "CONSERVATEUR - Minimisation du risque, fréquence faible",
+            "MODÉRÉ - Équilibre risque/rendement, fréquence moyenne",
+            "DYNAMIQUE - Maximisation du rendement, fréquence élevée",
+            "PERSONNALISÉ - Paramètres manuels"
         ],
         index=1
     )
     
-    # Profils prÃ©dÃ©finis (inchangÃ©s)
+    # Profils prédéfinis (inchangés)
     profils = {
         1: {
             'nom': 'CONSERVATEUR',
@@ -2192,7 +2200,7 @@ if st.session_state["show_birdo_page"]:
             'n_clusters_kmeans': 2
         },
         2: {
-            'nom': 'MODÃ‰RÃ‰',
+            'nom': 'MODÉRÉ',
             'sma_short_range': range(30, 71, 5),
             'sma_long_range': range(150, 281, 10),
             'n_lags_regression': 7,
@@ -2207,36 +2215,36 @@ if st.session_state["show_birdo_page"]:
         }
     }
     
-    # Mapping du label vers lâ€™ID de profil
+    # Mapping du label vers l’ID de profil
     if profil_label.startswith("CONSERVATEUR"):
         profil_id = 1
-    elif profil_label.startswith("MODÃ‰RÃ‰"):
+    elif profil_label.startswith("MODÉRÉ"):
         profil_id = 2
     elif profil_label.startswith("DYNAMIQUE"):
         profil_id = 3
     else:
-        profil_id = 4  # PERSONNALISÃ‰
+        profil_id = 4  # PERSONNALISÉ
     
-    # Si profil personnalisÃ© : afficher les inputs dans le corps
+    # Si profil personnalisé : afficher les inputs dans le corps
     if profil_id == 4:
-        st.info("Mode **PERSONNALISÃ‰** activÃ© : ajustez manuellement les paramÃ¨tres ci-dessous.")
+        st.info("Mode **PERSONNALISÉ** activé : ajustez manuellement les paramètres ci-dessous.")
         col_p1, col_p2 = st.columns(2)
     
         with col_p1:
-            sma_short_deb = st.number_input("DÃ©but de la plage du SMA court", min_value=5, max_value=100, value=10)
+            sma_short_deb = st.number_input("Début de la plage du SMA court", min_value=5, max_value=100, value=10)
             sma_short_fin = st.number_input("Fin de la plage du SMA court", min_value=20, max_value=150, value=50)
             sma_short_pas = st.number_input("Pas du SMA court", min_value=1, max_value=20, value=5)
     
         with col_p2:
-            sma_long_deb = st.number_input("DÃ©but de la plage du SMA long", min_value=50, max_value=200, value=100)
+            sma_long_deb = st.number_input("Début de la plage du SMA long", min_value=50, max_value=200, value=100)
             sma_long_fin = st.number_input("Fin de la plage du SMA long", min_value=100, max_value=400, value=200)
             sma_long_pas = st.number_input("Pas du SMA long", min_value=1, max_value=50, value=10)
     
-        n_lags_regression = st.number_input("Nombre de lags pour la rÃ©gression OLS", min_value=1, max_value=20, value=5)
+        n_lags_regression = st.number_input("Nombre de lags pour la régression OLS", min_value=1, max_value=20, value=5)
         n_clusters_kmeans = st.number_input("Nombre de clusters K-Means", min_value=2, max_value=8, value=4)
     
         profil = {
-            'nom': 'PERSONNALISÃ‰',
+            'nom': 'PERSONNALISÉ',
             'sma_short_range': range(int(sma_short_deb), int(sma_short_fin) + 1, int(sma_short_pas)),
             'sma_long_range': range(int(sma_long_deb), int(sma_long_fin) + 1, int(sma_long_pas)),
             'n_lags_regression': int(n_lags_regression),
@@ -2245,55 +2253,55 @@ if st.session_state["show_birdo_page"]:
     else:
         profil = profils[profil_id]
     
-    st.success(f"âœ… Profil sÃ©lectionnÃ© : **{profil['nom']}**")
+    st.success(f"✅ Profil sélectionné : **{profil['nom']}**")
     
     # =========================
-    # CHARGEMENT DES DONNÃ‰ES
+    # CHARGEMENT DES DONNÉES
     # =========================
         
-    # CHARGEMENT SÃ‰CURISÃ‰
-    st.markdown("### ðŸ“¥ Chargement des donnÃ©es...")
+    # CHARGEMENT SÉCURISÉ
+    st.markdown("### 📥 Chargement des données...")
     
     try:
         ticker = "NTDOY"
         data = yf.download(ticker, start="2015-09-01", end="2025-09-30", progress=False)
         
-        # CORRECTION : prend la premiÃ¨re colonne Close (multi-index)
+        # CORRECTION : prend la première colonne Close (multi-index)
         if isinstance(data['Close'], pd.DataFrame):
             data_original = data['Close'].iloc[:, 0].dropna()
         else:
             data_original = data['Close'].dropna()
         
-        st.success(f"âœ… {len(data_original)} jours chargÃ©s")
+        st.success(f"✅ {len(data_original)} jours chargés")
         
         if len(data_original) > 1:
             col1, col2, col3, col4 = st.columns(4)
-            col1.metric("ðŸ“ˆ Prix initial", f"${data_original.iloc[0]:.2f}")
-            col2.metric("ðŸ’° Prix actuel", f"${data_original.iloc[-1]:.2f}")
-            col3.metric("â±ï¸ PÃ©riode", f"{len(data_original)} jours")
-            col4.metric("ðŸ“Š Performance", f"{((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.1f}%")
+            col1.metric("📈 Prix initial", f"${data_original.iloc[0]:.2f}")
+            col2.metric("💰 Prix actuel", f"${data_original.iloc[-1]:.2f}")
+            col3.metric("⏱️ Période", f"{len(data_original)} jours")
+            col4.metric("📊 Performance", f"{((data_original.iloc[-1]/data_original.iloc[0])-1)*100:.1f}%")
         else:
-            st.error("âŒ DonnÃ©es vides")
+            st.error("❌ Données vides")
             
     except Exception as e:
-        st.error(f"âŒ Erreur yfinance: {e}")
+        st.error(f"❌ Erreur yfinance: {e}")
         data_original = pd.Series(dtype=float)
         
     # =========================
-    # ONGLET(S) Dâ€™ANALYSE
+    # ONGLET(S) D’ANALYSE
     # =========================
     
     tab1, tab2, tab3, tab4 = st.tabs([
-        "ðŸ“Š SMA OptimisÃ©e",
-        "âš™ï¸ Backtesting",
-        "ðŸ“ˆ RÃ©gression OLS",
-        "ðŸ¤– K-Means ML"
+        "📊 SMA Optimisée",
+        "⚙️ Backtesting",
+        "📈 Régression OLS",
+        "🤖 K-Means ML"
     ])
 
 
 
     with tab1:
-        st.header("ðŸ” Optimisation des ParamÃ¨tres SMA")
+        st.header("🔍 Optimisation des Paramètres SMA")
         
         # Optimisation
         
@@ -2328,9 +2336,9 @@ if st.session_state["show_birdo_page"]:
         
         col1, col2 = st.columns([1, 3])
         with col1:
-            st.metric("â­ Meilleurs paramÃ¨tres", f"SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}")
-            st.metric("ðŸ“ˆ Performance", f"{optimization_results.iloc[0]['Strategy_Return']:.2f}x")
-            st.metric("âš–ï¸ Sharpe Ratio", f"{optimization_results.iloc[0]['Sharpe_Ratio']:.3f}")
+            st.metric("⭐ Meilleurs paramètres", f"SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}")
+            st.metric("📈 Performance", f"{optimization_results.iloc[0]['Strategy_Return']:.2f}x")
+            st.metric("⚖️ Sharpe Ratio", f"{optimization_results.iloc[0]['Sharpe_Ratio']:.3f}")
         
         with col2:
             st.dataframe(optimization_results.head(10)[['SMA_Short', 'SMA_Long', 'Strategy_Return', 'Sharpe_Ratio']].round(4))
@@ -2345,7 +2353,7 @@ if st.session_state["show_birdo_page"]:
         st.plotly_chart(fig_3d, use_container_width=True)
     
     with tab2:
-        st.header("âš™ï¸ Backtesting VectorisÃ©")
+        st.header("⚙️ Backtesting Vectorisé")
         
         # Application SMA optimale
         best_params = optimization_results.iloc[0]
@@ -2360,7 +2368,7 @@ if st.session_state["show_birdo_page"]:
         data_sma['Strategy'] = data_sma['Position'].shift(1) * data_sma['Returns']
         data_sma.dropna(inplace=True)
         
-        # MÃ©triques
+        # Métriques
         cumulative_returns = np.exp(data_sma[['Returns', 'Strategy']].sum())
         volatility = data_sma[['Returns', 'Strategy']].std() * np.sqrt(252)
         sharpe = (data_sma[['Returns', 'Strategy']].mean() * 252) / volatility
@@ -2389,9 +2397,9 @@ if st.session_state["show_birdo_page"]:
         st.plotly_chart(fig_backtest, use_container_width=True)
     
     with tab3:
-        st.header("ðŸ“ˆ StratÃ©gie RÃ©gression OLS")
+        st.header("📈 Stratégie Régression OLS")
         
-        # RÃ©gression
+        # Régression
         data_regression = pd.DataFrame({'Close': data_original}).copy()
         data_regression['returns'] = np.log(data_regression['Close'] / data_regression['Close'].shift(1))
         lags = profil['n_lags_regression']
@@ -2402,7 +2410,7 @@ if st.session_state["show_birdo_page"]:
         data_regression.dropna(inplace=True)
         data_regression['direction'] = np.sign(data_regression['returns']).astype(int)
         
-        # ModÃ¨les
+        # Modèles
         model_returns = LinearRegression().fit(data_regression[cols], data_regression['returns'])
         model_direction = LinearRegression().fit(data_regression[cols], data_regression['direction'])
         
@@ -2417,23 +2425,23 @@ if st.session_state["show_birdo_page"]:
         perf_regression = np.exp(data_regression[['returns', 'strat_reg_returns', 'strat_reg_direction']].sum())
         
         col1, col2, col3 = st.columns(3)
-        col1.metric("RÃ©gr. Rendements", f"{perf_regression['strat_reg_returns']:.2f}x")
-        col2.metric("RÃ©gr. Direction", f"{perf_regression['strat_reg_direction']:.2f}x")
-        col3.metric("PrÃ©cision", f"{((data_regression['direction'] == data_regression['pos_reg_returns']).mean()*100):.1f}%")
+        col1.metric("Régr. Rendements", f"{perf_regression['strat_reg_returns']:.2f}x")
+        col2.metric("Régr. Direction", f"{perf_regression['strat_reg_direction']:.2f}x")
+        col3.metric("Précision", f"{((data_regression['direction'] == data_regression['pos_reg_returns']).mean()*100):.1f}%")
         
         # Graphique performances
         cumulative_reg = data_regression[['returns', 'strat_reg_returns', 'strat_reg_direction']].cumsum().apply(np.exp)
         fig_reg = go.Figure()
         fig_reg.add_trace(go.Scatter(x=cumulative_reg.index, y=cumulative_reg['returns'], name='Buy & Hold'))
-        fig_reg.add_trace(go.Scatter(x=cumulative_reg.index, y=cumulative_reg['strat_reg_returns'], name='RÃ©gr. Rendements'))
-        fig_reg.add_trace(go.Scatter(x=cumulative_reg.index, y=cumulative_reg['strat_reg_direction'], name='RÃ©gr. Direction'))
-        fig_reg.update_layout(title=f"RÃ©gression OLS - {lags} lags ({profil['nom']})", height=500)
+        fig_reg.add_trace(go.Scatter(x=cumulative_reg.index, y=cumulative_reg['strat_reg_returns'], name='Régr. Rendements'))
+        fig_reg.add_trace(go.Scatter(x=cumulative_reg.index, y=cumulative_reg['strat_reg_direction'], name='Régr. Direction'))
+        fig_reg.update_layout(title=f"Régression OLS - {lags} lags ({profil['nom']})", height=500)
         st.plotly_chart(fig_reg, use_container_width=True)
     
     with tab4:
-        st.header("ðŸ¤– K-Means Clustering (Machine Learning)")
+        st.header("🤖 K-Means Clustering (Machine Learning)")
 
-        # Tab4 - data_regression dÃ©jÃ  crÃ©Ã©e dans tab3, mais faut la recrÃ©er
+        # Tab4 - data_regression déjà créée dans tab3, mais faut la recréer
         data_regression = pd.DataFrame({'Close': data_original}).copy()
         data_regression['returns'] = np.log(data_regression['Close'] / data_regression['Close'].shift(1))
         lags = profil['n_lags_regression']  
@@ -2445,8 +2453,8 @@ if st.session_state["show_birdo_page"]:
     data_regression['direction'] = np.sign(data_regression['returns']).astype(int)
     
   
-    # 2ï¸âƒ£ ENSUITE data_ml avec direction
-    data_ml = data_regression[cols[:2] + ['returns', 'direction']].copy()  # â† MAINTENANT OK
+    # 2️⃣ ENSUITE data_ml avec direction
+    data_ml = data_regression[cols[:2] + ['returns', 'direction']].copy()  # ← MAINTENANT OK
     features = cols[:2] 
 
     scaler = StandardScaler()
@@ -2465,7 +2473,7 @@ if st.session_state["show_birdo_page"]:
     
     col1, col2 = st.columns(2)
     col1.metric("Performance K-Means", f"{perf_cluster['strat_cluster']:.2f}x")
-    col2.metric("PrÃ©cision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
+    col2.metric("Précision", f"{((data_ml['direction'] == data_ml['pos_cluster']).mean()*100):.1f}%")
     
     # Graphiques clusters
     fig_clusters = make_subplots(rows=1, cols=2, subplot_titles=('Clusters (Lag1 vs Lag2)', 'Performance'))
@@ -2482,44 +2490,44 @@ if st.session_state["show_birdo_page"]:
     fig_clusters.update_layout(height=500, title=f"K-Means {n_clusters} clusters - {profil['nom']}")
     st.plotly_chart(fig_clusters, use_container_width=True)
     
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ════════════════════════════════════════════════
 # RECOMMANDATIONS FINALES - VERSION PHRASEE
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ════════════════════════════════════════════════
     st.markdown("---")
     
     perf_bh = ((data_original.iloc[-1]/data_original.iloc[0])-1)*100
     perf_sma = optimization_results.iloc[0]['Strategy_Return']
     sharpe_sma = optimization_results.iloc[0]['Sharpe_Ratio']
     n_trades = int(data_sma['Position'].diff().ne(0).sum())
-    position_actuelle = "LONG âœ…" if data_sma['Position'].iloc[-1] > 0 else "SHORT âŒ"
+    position_actuelle = "LONG ✅" if data_sma['Position'].iloc[-1] > 0 else "SHORT ❌"
     
     st.markdown(f"""
-    ## ðŸŽ¯ **RECOMMANDATIONS PERSONNALISÃ‰ES**
+    ## 🎯 **RECOMMANDATIONS PERSONNALISÉES**
     
     **Bonjour investisseur {profil['nom']} !** 
     
-    Votre analyse Nintendo (NTDOY) rÃ©vÃ¨le des opportunitÃ©s claires :
+    Votre analyse Nintendo (NTDOY) révèle des opportunités claires :
     
-    ### **ðŸ† StratÃ©gie RecommandÃ©e**
+    ### **🏆 Stratégie Recommandée**
     La **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** surperforme le Buy & Hold de **{perf_sma:.2f}x** contre **{perf_bh:.0f}%**.
     
-    **Avantages clÃ©s :**
+    **Avantages clés :**
     - **Sharpe Ratio** : {sharpe_sma:.3f} (excellent risque/rendement)
-    - **FrÃ©quence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
+    - **Fréquence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
     - **Position actuelle** : **{position_actuelle}**
     
-    ### **ðŸŽ¯ Plan d'Action ImmÃ©diat**
-    1. **ImplÃ©mentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
+    ### **🎯 Plan d'Action Immédiat**
+    1. **Implémentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
     2. **Diversifiez 70% SMA + 30% K-Means**
     3. **Stop-loss** : -15% maximum
     4. **Take-profit** : +25% par trade
     
-    ### **ðŸ“ˆ PrÃ©vision 2026**
-    Avec cette stratÃ©gie, attendez-vous Ã  **{perf_sma**(1/10)*100:.1f}% annualisÃ©** (hors frais).
+    ### **📈 Prévision 2026**
+    Avec cette stratégie, attendez-vous à **{perf_sma**(1/10)*100:.1f}% annualisé** (hors frais).
     
-    > **âš ï¸ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage Ã  dÃ©duire.
+    > **⚠️ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage à déduire.
     
-    **PrÃªt Ã  trader ?** Les signaux SMA sont fiables et automatisables ! ðŸŽ®
+    **Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
     """)
 
 
