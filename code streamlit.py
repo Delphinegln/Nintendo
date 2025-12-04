@@ -886,10 +886,7 @@ if st.session_state["show_peach_page"]:
     st.success("Données prêtes ✔️")
 
     # ------------ SIDEBAR LOCALE ------------
-    
-    st.markdown("""
-    <div class="intro-box" style="font-size: 1.05em;">
-    """, unsafe_allow_html=True)
+ 
 
     st.subheader("⚙️ Paramètres")
 
@@ -899,9 +896,7 @@ if st.session_state["show_peach_page"]:
                                 int(cons.min_center_weight*100),
                                 int(cons.max_center_weight*100),
                                 30) / 100
-    st.markdown("""
-    </div>
-    """, unsafe_allow_html=True)
+
     
     if st.button("🚀 Lancer l’optimisation"):
 
