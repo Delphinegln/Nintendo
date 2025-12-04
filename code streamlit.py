@@ -2493,43 +2493,37 @@ if st.session_state["show_birdo_page"]:
 # ════════════════════════════════════════════════
 # RECOMMANDATIONS FINALES - VERSION PHRASEE
 # ════════════════════════════════════════════════
-        st.markdown("---")
-        
-        perf_bh = ((data_original.iloc[-1]/data_original.iloc[0])-1)*100
-        perf_sma = optimization_results.iloc[0]['Strategy_Return']
-        sharpe_sma = optimization_results.iloc[0]['Sharpe_Ratio']
-        n_trades = int(data_sma['Position'].diff().ne(0).sum())
-        position_actuelle = "LONG ✅" if data_sma['Position'].iloc[-1] > 0 else "SHORT ❌"
-        
-        st.markdown(f"""
-        ## 🎯 **RECOMMANDATIONS PERSONNALISÉES**
-        
-        **Bonjour investisseur {profil['nom']} !** 
-        
-        Votre analyse Nintendo (NTDOY) révèle des opportunités claires :
-        
-        ### **🏆 Stratégie Recommandée**
-        La **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** surperforme le Buy & Hold de **{perf_sma:.2f}x** contre **{perf_bh:.0f}%**.
-        
-        **Avantages clés :**
-        - **Sharpe Ratio** : {sharpe_sma:.3f} (excellent risque/rendement)
-        - **Fréquence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
-        - **Position actuelle** : **{position_actuelle}**
-        
-        ### **🎯 Plan d'Action Immédiat**
-        1. **Implémentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
-        2. **Diversifiez 70% SMA + 30% K-Means**
-        3. **Stop-loss** : -15% maximum
-        4. **Take-profit** : +25% par trade
-        
-        ### **📈 Prévision 2026**
-        Avec cette stratégie, attendez-vous à **{perf_sma**(1/10)*100:.1f}% annualisé** (hors frais).
-        
-        > **⚠️ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage à déduire.
-        
-        **Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
-        """)
+
     
+    st.markdown(f"""
+    ## 🎯 **RECOMMANDATIONS PERSONNALISÉES**
+    
+    **Bonjour investisseur {profil['nom']} !** 
+    
+    Votre analyse Nintendo (NTDOY) révèle des opportunités claires :
+    
+    ### **🏆 Stratégie Recommandée**
+    La **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** surperforme le Buy & Hold de **{perf_sma:.2f}x** contre **{perf_bh:.0f}%**.
+    
+    **Avantages clés :**
+    - **Sharpe Ratio** : {sharpe_sma:.3f} (excellent risque/rendement)
+    - **Fréquence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
+    - **Position actuelle** : **{position_actuelle}**
+    
+    ### **🎯 Plan d'Action Immédiat**
+    1. **Implémentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
+    2. **Diversifiez 70% SMA + 30% K-Means**
+    3. **Stop-loss** : -15% maximum
+    4. **Take-profit** : +25% par trade
+    
+    ### **📈 Prévision 2026**
+    Avec cette stratégie, attendez-vous à **{perf_sma**(1/10)*100:.1f}% annualisé** (hors frais).
+    
+    > **⚠️ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage à déduire.
+    
+    **Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
+    """)
+
 
 
 
