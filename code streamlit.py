@@ -188,22 +188,18 @@ st.markdown("""
 
 st.markdown("""
 <style>
-
-/* Cible uniquement le container des paramètres */
-div[data-testid="stVerticalBlock"]:has(div.param-wrapper) {
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 18px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+.param-glass {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     font-size: 1.05em;
-    max-width: 700px;
-    margin: auto;
 }
-
 </style>
 """, unsafe_allow_html=True)
+
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
@@ -905,18 +901,18 @@ if st.session_state["show_peach_page"]:
 
     # ------------ SIDEBAR LOCALE ------------
 
-with st.container():
-    st.markdown('<div class="param-wrapper"></div>', unsafe_allow_html=True)
+with col_params:
+    st.markdown('<div class="param-glass">', unsafe_allow_html=True)
 
     st.subheader("⚙️ Paramètres")
 
     target_return = st.slider(
-        "🎯 Rendement annuel cible (%)", 
+        "🎯 Rendement annuel cible (%)",
         0.0, 30.0, 6.0
     ) / 100
 
     horizon_years = st.slider(
-        "⏳ Horizon d'investissement (années)", 
+        "⏳ Horizon d'investissement (années)",
         1, 20, 3
     )
 
@@ -928,7 +924,7 @@ with st.container():
     ) / 100
     
     if st.button("🚀 Lancer l’optimisation"):
-    
+     st.markdown('</div>', unsafe_allow_html=True)   
         
         try:
             weights_m4 = optimize_mv_centered(
