@@ -889,17 +889,16 @@ if st.session_state["show_peach_page"]:
     
     st.markdown("""
     <div class="intro-box" style="font-size: 1.05em;">
-    """, unsafe_allow_html=True)
 
-    st.subheader("⚙️ Paramètres")
-
-    target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
-    horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
-    nintendo_weight = st.slider("🎮 Poids de Nintendo (%)", 
-                                int(cons.min_center_weight*100),
-                                int(cons.max_center_weight*100),
-                                30) / 100
-    st.markdown("""
+        st.subheader("⚙️ Paramètres")
+    
+        target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
+        horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
+        nintendo_weight = st.slider("🎮 Poids de Nintendo (%)", 
+                                    int(cons.min_center_weight*100),
+                                    int(cons.max_center_weight*100),
+                                    30) / 100
+        </p>
     </div>
     """, unsafe_allow_html=True)
     
