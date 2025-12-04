@@ -186,20 +186,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-.param-glass {
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 20px 24px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-    font-size: 1.05em;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
@@ -900,121 +886,105 @@ if st.session_state["show_peach_page"]:
     st.success("Données prêtes ✔️")
 
     # ------------ SIDEBAR LOCALE ------------
-col_params, col_output = st.columns([1, 2])
-with col_params:
-    st.markdown('<div class="param-glass">', unsafe_allow_html=True)
-
     st.subheader("⚙️ Paramètres")
 
-    target_return = st.slider(
-        "🎯 Rendement annuel cible (%)",
-        0.0, 30.0, 6.0
-    ) / 100
+    target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
+    horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
+    nintendo_weight = st.slider("🎮 Poids de Nintendo (%)", 
+                                int(cons.min_center_weight*100),
+                                int(cons.max_center_weight*100),
+                                30) / 100
 
-    horizon_years = st.slider(
-        "⏳ Horizon d'investissement (années)",
-        1, 20, 3
-    )
-
-    nintendo_weight = st.slider(
-        "🎮 Poids de Nintendo (%)",
-        int(cons.min_center_weight * 100),
-        int(cons.max_center_weight * 100),
-        30
-    ) / 100
-    
     if st.button("🚀 Lancer l’optimisation"):
-     st.markdown('</div>', unsafe_allow_html=True)
- 
-        
-    try:
-        weights_m4 = optimize_mv_centered(
-            MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
-        )
 
-        ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
+        try:
+            weights_m4 = optimize_mv_centered(
+                MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
+            )
 
-        hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
-        hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
-            hrp_weights_full, RETURNS
-        )
+            ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
 
-        st.success("Optimisation terminée ✔️")
-        st.write("### Résultats à analyser…")
-        
-        # === AFFICHAGE DES RÉSULTATS ===
+            hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
+            hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
+                hrp_weights_full, RETURNS
+            )
 
-        st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
+            st.success("Optimisation terminée ✔️")
+            st.write("### Résultats à analyser…")
+            
+            # === AFFICHAGE DES RÉSULTATS ===
 
-        colA, colB = st.columns(2)
+            st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
 
-        with colA:
-            st.markdown("### Poids optimisés (M4)")
-            st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
+            colA, colB = st.columns(2)
 
-        with colB:
-            st.markdown("### Indicateurs de performance (M4)")
-            st.write(f"**Rendement annuel :** {ann_ret:.2%}")
-            st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
-            st.write(f"**Sharpe ratio :** {sharpe:.2f}")
-            st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
+            with colA:
+                st.markdown("### Poids optimisés (M4)")
+                st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
 
-        # --- HRP ---
-        st.markdown("---")
-        st.markdown("## 🧩 Allocation HRP (benchmark)")
+            with colB:
+                st.markdown("### Indicateurs de performance (M4)")
+                st.write(f"**Rendement annuel :** {ann_ret:.2%}")
+                st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
+                st.write(f"**Sharpe ratio :** {sharpe:.2f}")
+                st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
 
-        colC, colD = st.columns(2)
+            # --- HRP ---
+            st.markdown("---")
+            st.markdown("## 🧩 Allocation HRP (benchmark)")
 
-        with colC:
-            st.markdown("### Poids HRP")
-            st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
+            colC, colD = st.columns(2)
 
-        with colD:
-            st.markdown("### Indicateurs HRP")
-            st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
-            st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
-            st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
-            st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
+            with colC:
+                st.markdown("### Poids HRP")
+                st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
 
-        # --- Graphique comparatif ---
-        st.markdown("---")
-        st.markdown("## 📈 Comparaison : Portefeuille Optimisé vs HRP")
+            with colD:
+                st.markdown("### Indicateurs HRP")
+                st.write(f"**Rendement annuel :** {hrp_ret:.2%}")
+                st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
+                st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
+                st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
 
-        fig, ax = plt.subplots(figsize=(10,5))
-        ax.plot(growth_port, label="Portefeuille Optimisé (M4)")
-        ax.plot(hrp_growth, label="HRP", linestyle="dashed")
-        ax.set_title("Croissance cumulée du portefeuille")
-        ax.set_xlabel("Date")
-        ax.set_ylabel("Croissance")
-        ax.legend()
-        st.pyplot(fig)
+            # --- Graphique comparatif ---
+            st.markdown("---")
+            st.markdown("## 📈 Comparaison : Portefeuille Optimisé vs HRP")
 
-        # --- Analyse textuelle (style intro-box) ---
-        st.markdown("""
-        <div class="intro-box">
-            <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
-                L’optimisation centrée sur <strong>Nintendo</strong> montre une allocation 
-                construite autour d’un compromis rendement/risque supérieur au benchmark HRP. 
-                Le portefeuille optimisé affiche un <strong>Sharpe ratio plus élevé</strong>, 
-                indiquant une meilleure efficacité du risque. Bien que la pondération de 
-                Nintendo soit imposée par votre choix initial, l’optimiseur redistribue le 
-                reste du capital vers les titres ayant le meilleur couple rendement/variance.
-                <br><br>
-                Le benchmark <strong>HRP</strong>, basé sur la hiérarchie des corrélations, 
-                fournit une allocation plus équilibrée mais moins agressive. Cela se traduit par 
-                une volatilité plus faible mais un rendement inférieur. 
-                <br><br>
-                Au final, l’allocation optimisée présente un profil de croissance cumulée 
-                supérieur, ce qui en fait une approche adaptée pour un investisseur recherchant 
-                une <strong>allocation centrée sur Nintendo tout en maximisant la performance ajustée du risque</strong>.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+            fig, ax = plt.subplots(figsize=(10,5))
+            ax.plot(growth_port, label="Portefeuille Optimisé (M4)")
+            ax.plot(hrp_growth, label="HRP", linestyle="dashed")
+            ax.set_title("Croissance cumulée du portefeuille")
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Croissance")
+            ax.legend()
+            st.pyplot(fig)
 
-        
+            # --- Analyse textuelle (style intro-box) ---
+            st.markdown("""
+            <div class="intro-box">
+                <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
+                    L’optimisation centrée sur <strong>Nintendo</strong> montre une allocation 
+                    construite autour d’un compromis rendement/risque supérieur au benchmark HRP. 
+                    Le portefeuille optimisé affiche un <strong>Sharpe ratio plus élevé</strong>, 
+                    indiquant une meilleure efficacité du risque. Bien que la pondération de 
+                    Nintendo soit imposée par votre choix initial, l’optimiseur redistribue le 
+                    reste du capital vers les titres ayant le meilleur couple rendement/variance.
+                    <br><br>
+                    Le benchmark <strong>HRP</strong>, basé sur la hiérarchie des corrélations, 
+                    fournit une allocation plus équilibrée mais moins agressive. Cela se traduit par 
+                    une volatilité plus faible mais un rendement inférieur. 
+                    <br><br>
+                    Au final, l’allocation optimisée présente un profil de croissance cumulée 
+                    supérieur, ce qui en fait une approche adaptée pour un investisseur recherchant 
+                    une <strong>allocation centrée sur Nintendo tout en maximisant la performance ajustée du risque</strong>.
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
 
-    except Exception as e:
-        st.error(f"Erreur : {e}")
+            
+
+        except Exception as e:
+            st.error(f"Erreur : {e}")
 
 # ====================== PAGE LUIGI FULL WIDTH ======================================================================================================
 if st.session_state["show_luigi_page"]:
@@ -2515,42 +2485,42 @@ if st.session_state["show_birdo_page"]:
 # ════════════════════════════════════════════════
 # RECOMMANDATIONS FINALES - VERSION PHRASEE
 # ════════════════════════════════════════════════
-    st.markdown("---")
-    
-    perf_bh = ((data_original.iloc[-1]/data_original.iloc[0])-1)*100
-    perf_sma = optimization_results.iloc[0]['Strategy_Return']
-    sharpe_sma = optimization_results.iloc[0]['Sharpe_Ratio']
-    n_trades = int(data_sma['Position'].diff().ne(0).sum())
-    position_actuelle = "LONG ✅" if data_sma['Position'].iloc[-1] > 0 else "SHORT ❌"
-    
-    st.markdown(f"""
-    ## 🎯 **RECOMMANDATIONS PERSONNALISÉES**
-    
-    **Bonjour investisseur {profil['nom']} !** 
-    
-    Votre analyse Nintendo (NTDOY) révèle des opportunités claires :
-    
-    ### **🏆 Stratégie Recommandée**
-    La **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** surperforme le Buy & Hold de **{perf_sma:.2f}x** contre **{perf_bh:.0f}%**.
-    
-    **Avantages clés :**
-    - **Sharpe Ratio** : {sharpe_sma:.3f} (excellent risque/rendement)
-    - **Fréquence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
-    - **Position actuelle** : **{position_actuelle}**
-    
-    ### **🎯 Plan d'Action Immédiat**
-    1. **Implémentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
-    2. **Diversifiez 70% SMA + 30% K-Means**
-    3. **Stop-loss** : -15% maximum
-    4. **Take-profit** : +25% par trade
-    
-    ### **📈 Prévision 2026**
-    Avec cette stratégie, attendez-vous à **{perf_sma**(1/10)*100:.1f}% annualisé** (hors frais).
-    
-    > **⚠️ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage à déduire.
-    
-    **Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
-    """)
+st.markdown("---")
+
+perf_bh = ((data_original.iloc[-1]/data_original.iloc[0])-1)*100
+perf_sma = optimization_results.iloc[0]['Strategy_Return']
+sharpe_sma = optimization_results.iloc[0]['Sharpe_Ratio']
+n_trades = int(data_sma['Position'].diff().ne(0).sum())
+position_actuelle = "LONG ✅" if data_sma['Position'].iloc[-1] > 0 else "SHORT ❌"
+
+st.markdown(f"""
+## 🎯 **RECOMMANDATIONS PERSONNALISÉES**
+
+**Bonjour investisseur {profil['nom']} !** 
+
+Votre analyse Nintendo (NTDOY) révèle des opportunités claires :
+
+### **🏆 Stratégie Recommandée**
+La **SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}** surperforme le Buy & Hold de **{perf_sma:.2f}x** contre **{perf_bh:.0f}%**.
+
+**Avantages clés :**
+- **Sharpe Ratio** : {sharpe_sma:.3f} (excellent risque/rendement)
+- **Fréquence** : {n_trades} signaux sur 10 ans (**{n_trades//10}/an**)
+- **Position actuelle** : **{position_actuelle}**
+
+### **🎯 Plan d'Action Immédiat**
+1. **Implémentez SMA {int(optimization_results.iloc[0]['SMA_Short'])}/{int(optimization_results.iloc[0]['SMA_Long'])}**
+2. **Diversifiez 70% SMA + 30% K-Means**
+3. **Stop-loss** : -15% maximum
+4. **Take-profit** : +25% par trade
+
+### **📈 Prévision 2026**
+Avec cette stratégie, attendez-vous à **{perf_sma**(1/10)*100:.1f}% annualisé** (hors frais).
+
+> **⚠️ Disclaimer** : Performances historiques. Frais de transaction (0.1-0.3%) et slippage à déduire.
+
+**Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
+""")
 
 
 
