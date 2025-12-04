@@ -900,7 +900,7 @@ if st.session_state["show_peach_page"]:
     st.success("Données prêtes ✔️")
 
     # ------------ SIDEBAR LOCALE ------------
-
+col_params, col_output = st.columns([1, 2])
 with col_params:
     st.markdown('<div class="param-glass">', unsafe_allow_html=True)
 
