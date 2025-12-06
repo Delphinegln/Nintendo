@@ -789,47 +789,76 @@ if st.session_state["show_peach_page"]:
         w = w / w.sum()
         return float((w**2).sum())
 
-    # ---------- OPTIMISATION MV ----------
-    def optimize_mv_centered(mu, cov, tickers, center, cons, target_center_weight):
+    # ---------- OPTIMISATION MV (MODIFIÉE : RENDEMENT CIBLE RÉEL + NINTENDO FIXÉ) ----------
+    def optimize_mv_centered(mu, cov, tickers, center, cons, target_center_weight, target_return=None):
+        """
+        Markowitz "target return": min variance sous contrainte de rendement cible,
+        avec un poids FIXE sur le titre 'center' (Nintendo).
+        """
         if not HAS_CVXPY:
-            weights = pd.Series(0.0, index=tickers)
-            weights[center] = target_center_weight
-            others = [t for t in tickers if t != center]
-            rest = 1 - target_center_weight
-            weights[others] = rest / len(others)
-            return weights
+            raise RuntimeError("cvxpy est requis pour une optimisation réelle (pip install cvxpy).")
 
+        tickers = list(tickers)
         n = len(tickers)
-        w = cp.Variable(n)
+        if center not in tickers:
+            raise ValueError(f"Le ticker centre '{center}' n'est pas dans l'univers.")
         idx_center = tickers.index(center)
+
+        w = cp.Variable(n)
 
         Sigma = cov.loc[tickers, tickers].values
         Sigma = 0.5*(Sigma+Sigma.T)
-        eps = 1e-6*np.mean(np.diag(Sigma))
-        np.fill_diagonal(Sigma, np.diag(Sigma)+eps)
+        eps = 1e-8 * max(float(np.mean(np.diag(Sigma))), 1e-12)
+        Sigma = Sigma + eps * np.eye(n)
 
-        gamma = 10.0 / max(np.trace(Sigma), 1e-8)
+        mu_vec = mu.loc[tickers].values
 
         constraints = [cp.sum(w) == 1, w >= 0]
+
+        # Cap max hors Nintendo
         for i in range(n):
             if i != idx_center:
                 constraints.append(w[i] <= cons.max_weight_per_name)
 
-        constraints.append(w[idx_center] == target_center_weight)
+        # Nintendo fixé
+        constraints.append(w[idx_center] == float(target_center_weight))
 
-        objective = cp.Maximize(mu.loc[tickers].values @ w - 0.5 * gamma * cp.quad_form(w, Sigma))
+        # Rendement cible (si fourni)
+        if target_return is not None:
+            constraints.append(mu_vec @ w >= float(target_return))
+
+        # Objectif : min variance (vrai Markowitz "target return")
+        objective = cp.Minimize(cp.quad_form(w, Sigma))
         prob = cp.Problem(objective, constraints)
 
         try:
             prob.solve(solver=cp.OSQP, verbose=False)
-        except:
+        except Exception:
             prob.solve(solver=cp.SCS, verbose=False)
 
         if w.value is None:
-            raise RuntimeError("Optimisation impossible")
+            raise RuntimeError(
+                "Optimisation impossible : rendement cible irréalisable avec les contraintes "
+                "(long-only, caps, Nintendo fixé). Baisse le rendement cible ou augmente max_weight_per_name."
+            )
 
         wv = np.array(w.value).ravel()
-        return pd.Series(wv / wv.sum(), index=tickers)
+        wv = np.clip(wv, 0, None)
+        wv = wv / wv.sum()
+
+        out = pd.Series(wv, index=tickers)
+
+        # Sécurité numérique : on force Nintendo exactement et on renormalise le reste
+        out[center] = float(target_center_weight)
+        others = [t for t in tickers if t != center]
+        rest = 1.0 - float(target_center_weight)
+        s = float(out[others].sum())
+        if s > 0:
+            out[others] = out[others] * (rest / s)
+        else:
+            out[others] = rest / len(others)
+
+        return out
 
     # ---------- HRP ----------
     def _correl_dist(corr):
@@ -870,7 +899,6 @@ if st.session_state["show_peach_page"]:
         weights = weights.reindex(returns.columns)
         return weights / weights.sum()
 
-
     # ----------------- CHARGEMENT -----------------
     with st.spinner("📡 Téléchargement des données..."):
         UNIVERSE = [NINTENDO] + DEFAULT_PEERS
@@ -887,45 +915,51 @@ if st.session_state["show_peach_page"]:
 
     st.success("Données prêtes ✔️")
 
-    # ------------ SIDEBAR LOCALE ------------
- 
-
+    # ------------ PARAMÈTRES ------------
     st.subheader("⚙️ Paramètres")
 
     target_return = st.slider("🎯 Rendement annuel cible (%)", 0.0, 30.0, 6.0) / 100
     horizon_years = st.slider("⏳ Horizon d'investissement (années)", 1, 20, 3)
-    nintendo_weight = st.slider("🎮 Poids de Nintendo (%)", 
-                                int(cons.min_center_weight*100),
-                                int(cons.max_center_weight*100),
-                                30) / 100
+    nintendo_weight = st.slider(
+        "🎮 Poids de Nintendo (%)",
+        int(cons.min_center_weight*100),
+        int(cons.max_center_weight*100),
+        30
+    ) / 100
 
-    
-    if st.button("🚀 Lancer l’optimisation"):
+    if st.button("🚀 Lancer l’optimisation", key="run_peach_opt"):
 
         try:
+            # ==== M4 : Nintendo fixé + rendement cible réel ====
             weights_m4 = optimize_mv_centered(
-                MU_ANN, COV_ANN, TICKERS, CENTER, cons, target_center_weight=nintendo_weight
+                MU_ANN, COV_ANN, TICKERS, CENTER, cons,
+                target_center_weight=nintendo_weight,
+                target_return=target_return
             )
 
             ann_ret, ann_vol, sharpe, _, growth_port = evaluate_portfolio(weights_m4, RETURNS)
 
+            # ==== HRP ====
             hrp_weights_full = HRP_WEIGHTS.reindex(TICKERS).fillna(0)
-            hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(
-                hrp_weights_full, RETURNS
-            )
+            hrp_ret, hrp_vol, hrp_sharpe, _, hrp_growth = evaluate_portfolio(hrp_weights_full, RETURNS)
 
             st.success("Optimisation terminée ✔️")
             st.write("### Résultats à analyser…")
-            
-            # === AFFICHAGE DES RÉSULTATS ===
 
+            # ==========================
+            #      AFFICHAGE RÉSULTATS
+            # ==========================
             st.markdown("## 📊 Résultats du portefeuille optimisé (Méthode M4)")
 
             colA, colB = st.columns(2)
 
             with colA:
                 st.markdown("### Poids optimisés (M4)")
-                st.dataframe(weights_m4.map(lambda x: round(x*100,2)))
+                df_w_m4 = pd.DataFrame({
+                    "Nom": [TICKER_NAME.get(t, t) for t in weights_m4.index],
+                    "Poids (%)": (weights_m4.values * 100).round(2)
+                }).sort_values("Poids (%)", ascending=False)
+                st.dataframe(df_w_m4, hide_index=True)
 
             with colB:
                 st.markdown("### Indicateurs de performance (M4)")
@@ -933,6 +967,9 @@ if st.session_state["show_peach_page"]:
                 st.write(f"**Volatilité annuelle :** {ann_vol:.2%}")
                 st.write(f"**Sharpe ratio :** {sharpe:.2f}")
                 st.write(f"**Indice Herfindahl :** {herfindahl(weights_m4):.4f}")
+                st.write(f"**Horizon déclaré :** {horizon_years} an(s)")
+                st.write(f"**Rendement cible (contrainte) :** {target_return:.2%}")
+                st.write(f"**Poids Nintendo (fixé) :** {weights_m4.get(CENTER, 0.0):.2%}")
 
             # --- HRP ---
             st.markdown("---")
@@ -942,7 +979,11 @@ if st.session_state["show_peach_page"]:
 
             with colC:
                 st.markdown("### Poids HRP")
-                st.dataframe(hrp_weights_full.map(lambda x: round(x*100,2)))
+                df_w_hrp = pd.DataFrame({
+                    "Nom": [TICKER_NAME.get(t, t) for t in hrp_weights_full.index],
+                    "Poids (%)": (hrp_weights_full.values * 100).round(2)
+                }).sort_values("Poids (%)", ascending=False)
+                st.dataframe(df_w_hrp, hide_index=True)
 
             with colD:
                 st.markdown("### Indicateurs HRP")
@@ -950,6 +991,7 @@ if st.session_state["show_peach_page"]:
                 st.write(f"**Volatilité annuelle :** {hrp_vol:.2%}")
                 st.write(f"**Sharpe ratio :** {hrp_sharpe:.2f}")
                 st.write(f"**Indice Herfindahl :** {herfindahl(hrp_weights_full):.4f}")
+                st.write(f"**Poids Nintendo (HRP) :** {hrp_weights_full.get(CENTER, 0.0):.2%}")
 
             # --- Graphique comparatif ---
             st.markdown("---")
@@ -964,32 +1006,66 @@ if st.session_state["show_peach_page"]:
             ax.legend()
             st.pyplot(fig)
 
-            # --- Analyse textuelle (style intro-box) ---
-            st.markdown("""
+            # --- Commentaire AUTO (accurate) ---
+            hhi_m4 = herfindahl(weights_m4)
+            hhi_hrp = herfindahl(hrp_weights_full)
+
+            def pick_winner(a, b, higher_is_better=True, tol=1e-12):
+                if abs(a-b) <= tol:
+                    return "égalité"
+                if higher_is_better:
+                    return "M4" if a > b else "HRP"
+                return "M4" if a < b else "HRP"
+
+            w_ret = pick_winner(ann_ret, hrp_ret, True)
+            w_vol = pick_winner(ann_vol, hrp_vol, False)
+            w_sh  = pick_winner(sharpe, hrp_sharpe, True)
+            w_hhi = pick_winner(hhi_m4, hhi_hrp, False)
+
+            if hrp_vol < ann_vol - 1e-12:
+                risk_line = "HRP est plus prudent (volatilité plus faible)."
+            elif ann_vol < hrp_vol - 1e-12:
+                risk_line = "M4 est plus prudent (volatilité plus faible)."
+            else:
+                risk_line = "Volatilité très proche entre M4 et HRP."
+
+            if hrp_sharpe > sharpe + 1e-12:
+                eff_line = "HRP est plus efficient en performance ajustée du risque (Sharpe supérieur)."
+            elif sharpe > hrp_sharpe + 1e-12:
+                eff_line = "M4 est plus efficient en performance ajustée du risque (Sharpe supérieur)."
+            else:
+                eff_line = "Efficacité risque/rendement très proche (Sharpe similaire)."
+
+            if hhi_m4 > hhi_hrp + 1e-12:
+                div_line = "M4 est plus concentré (moins diversifié) que HRP."
+            elif hhi_hrp > hhi_m4 + 1e-12:
+                div_line = "HRP est plus concentré (moins diversifié) que M4."
+            else:
+                div_line = "Niveau de concentration similaire (HHI proche)."
+
+            st.markdown(f"""
             <div class="intro-box">
                 <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
-                    L’optimisation centrée sur <strong>Nintendo</strong> montre une allocation 
-                    construite autour d’un compromis rendement/risque supérieur au benchmark HRP. 
-                    Le portefeuille optimisé affiche un <strong>Sharpe ratio plus élevé</strong>, 
-                    indiquant une meilleure efficacité du risque. Bien que la pondération de 
-                    Nintendo soit imposée par votre choix initial, l’optimiseur redistribue le 
-                    reste du capital vers les titres ayant le meilleur couple rendement/variance.
-                    <br><br>
-                    Le benchmark <strong>HRP</strong>, basé sur la hiérarchie des corrélations, 
-                    fournit une allocation plus équilibrée mais moins agressive. Cela se traduit par 
-                    une volatilité plus faible mais un rendement inférieur. 
-                    <br><br>
-                    Au final, l’allocation optimisée présente un profil de croissance cumulée 
-                    supérieur, ce qui en fait une approche adaptée pour un investisseur recherchant 
-                    une <strong>allocation centrée sur Nintendo tout en maximisant la performance ajustée du risque</strong>.
+                    <strong>Comparaison automatique (basée sur tes chiffres) :</strong><br><br>
+                    • Rendement : avantage <strong>{w_ret}</strong><br>
+                    • Volatilité : avantage <strong>{w_vol}</strong> (plus faible = mieux)<br>
+                    • Sharpe : avantage <strong>{w_sh}</strong><br>
+                    • Diversification (HHI) : avantage <strong>{w_hhi}</strong> (plus faible = mieux)<br><br>
+                    👉 {risk_line}<br>
+                    👉 {eff_line}<br>
+                    👉 {div_line}
                 </p>
             </div>
             """, unsafe_allow_html=True)
 
-            
+            st.caption(
+                "Note : ces chiffres sont estimés sur données historiques (période sélectionnée) "
+                "et ne garantissent pas les performances futures."
+            )
 
         except Exception as e:
             st.error(f"Erreur : {e}")
+
 
 # ====================== PAGE LUIGI FULL WIDTH ======================================================================================================
 if st.session_state["show_luigi_page"]:
