@@ -1051,9 +1051,9 @@ if st.session_state["show_peach_page"]:
                     • Volatilité : avantage <strong>{w_vol}</strong> (plus faible = mieux)<br>
                     • Sharpe : avantage <strong>{w_sh}</strong><br>
                     • Diversification (HHI) : avantage <strong>{w_hhi}</strong> (plus faible = mieux)<br><br>
-                    👉 {risk_line}<br>
-                    👉 {eff_line}<br>
-                    👉 {div_line}
+                    --> {risk_line}<br>
+                    --> {eff_line}<br>
+                    --> {div_line}
                 </p>
             </div>
             """, unsafe_allow_html=True)
