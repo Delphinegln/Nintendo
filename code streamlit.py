@@ -2607,22 +2607,3 @@ if st.session_state["show_birdo_page"]:
 
 
 
-
-# ========== SIDEBAR ==========
-with st.sidebar:
-    st.markdown("### Navigation")
-
-    if st.button("Partie 1 - Daisy"):
-        st.image("images/Daisy.png", width=120)
-
-    if st.button("Partie 2 - Peach"):
-        st.image("images/Peach.png", width=120)
-
-    if st.button("Partie 3 - Birdo"):
-        st.image("images/Birdo.png", width=120)
-
-    if st.button("Partie 4 - Bowser"):
-        st.image("images/Bowser.png", width=120)
-
-    if st.button("Partie 5 - Luigi"):
-        st.image("images/Luigi.png", width=120)
