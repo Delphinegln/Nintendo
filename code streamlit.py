@@ -2157,16 +2157,24 @@ if st.session_state["show_bowser_page"]:
             st.subheader("📊 Tableau Complet")
             
             
+            # Options d'affichage
+            col1, col2 = st.columns(2)
+            with col1:
+                show_greeks = st.checkbox("Afficher les Greeks", value=True)
+            with col2:
+                decimals = st.slider("Décimales", 2, 6, 2)
+            
             # Préparation du tableau
             df_display = df_results.copy()
-            st.dataframe(df_display, use_container_width=True)
             
+            if not show_greeks:
+                greek_cols = [col for col in df_display.columns if any(x in col for x in ['Delta', 'Gamma', 'Vega', 'Theta'])]
+                df_display = df_display.drop(columns=greek_cols, errors='ignore')
             
-            # Affichage
-            st.dataframe(df_display, use_container_width=True)
-            
-            # Statistiques descriptives
-            st.subheader("📈 Statistiques Descriptives")
+            # Arrondir
+            numeric_cols = df_display.select_dtypes(include=[np.number]).columns
+            for col in numeric_cols:
+                df_display[col] = df_display[col].round(decimals)
             
             if 'call' in option_types_focus:
                 st.markdown("#### Calls")
