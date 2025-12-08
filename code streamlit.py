@@ -1727,29 +1727,7 @@ if st.session_state["show_bowser_page"]:
         with tab1:
             st.subheader("Résultats des Évaluations")
             
-            # Filtrage optionnel
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                selected_status = st.multiselect("Filtrer par Status", ['ITM', 'ATM', 'OTM'], default=['ITM', 'ATM', 'OTM'])
-            with col2:
-                selected_maturity = st.multiselect("Filtrer par Maturité", sorted(df_results['Maturité (mois)'].unique()), 
-                                                  default=sorted(df_results['Maturité (mois)'].unique()))
-            with col3:
-                precision = st.slider("Décimales", 2, 4, 2)
             
-            # Filtrage
-            df_filtered = df_results[
-                (df_results['Status'].isin(selected_status)) &
-                (df_results['Maturité (mois)'].isin(selected_maturity))
-            ]
-            
-            # Arrondir les colonnes numériques
-            numeric_cols = df_filtered.select_dtypes(include=[np.number]).columns
-            df_display = df_filtered.copy()
-            for col in numeric_cols:
-                df_display[col] = df_display[col].round(precision)
-            
-            st.dataframe(df_display, use_container_width=True)
             
             # Export
             csv = df_display.to_csv(index=False)
