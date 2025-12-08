@@ -1712,6 +1712,7 @@ if st.session_state["show_bowser_page"]:
                     results_all.append(result)
             
             df_results = pd.DataFrame(results_all)
+            st.session_state["results"] = df_results
         
         st.success(f"✅ {len(df_results)} configurations d'options évaluées")
         
