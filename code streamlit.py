@@ -1727,7 +1727,7 @@ if st.session_state["show_bowser_page"]:
         with tab1:
             st.subheader("Résultats des Évaluations")
             df_display = df_results.copy()
-            
+            st.dataframe(df_display, use_container_width=True)
             
             # Export
             csv = df_display.to_csv(index=False)
