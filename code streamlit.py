@@ -2172,14 +2172,6 @@ if st.session_state["show_bowser_page"]:
             # Préparation du tableau
             df_display = df_results.copy()
             
-            if not show_greeks:
-                greek_cols = [col for col in df_display.columns if any(x in col for x in ['Delta', 'Gamma', 'Vega', 'Theta'])]
-                df_display = df_display.drop(columns=greek_cols, errors='ignore')
-            
-            # Arrondir
-            numeric_cols = df_display.select_dtypes(include=[np.number]).columns
-            for col in numeric_cols:
-                df_display[col] = df_display[col].round(decimals)
             
             # Affichage
             st.dataframe(df_display, use_container_width=True)
