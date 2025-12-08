@@ -1726,7 +1726,7 @@ if st.session_state["show_bowser_page"]:
         # TAB 1: RÉSULTATS
         with tab1:
             st.subheader("Résultats des Évaluations")
-            
+            df_display = df_results.copy()
             
             
             # Export
