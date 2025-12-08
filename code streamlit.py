@@ -1,4 +1,3 @@
-
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -2059,6 +2058,11 @@ if st.session_state["show_bowser_page"]:
         # TAB 4: P&L
         with tab4:
             st.subheader("📉 Analyse Profit & Loss")
+            if "results" not in st.session_state:
+                st.warning("Veuillez d'abord lancer l'optimisation.")
+                st.stop()
+
+            df_results = st.session_state["results"]
             
             # Sélection d'une option
             option_selected = st.selectbox(
