@@ -2162,12 +2162,6 @@ if st.session_state["show_bowser_page"]:
         with tab5:
             st.subheader("📊 Tableau Complet")
             
-            # Options d'affichage
-            col1, col2 = st.columns(2)
-            with col1:
-                show_greeks = st.checkbox("Afficher les Greeks", value=True)
-            with col2:
-                decimals = st.slider("Décimales", 2, 6, 2)
             
             # Préparation du tableau
             df_display = df_results.copy()
