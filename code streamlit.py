@@ -2075,7 +2075,7 @@ if st.session_state["show_bowser_page"]:
                 "Sélectionnez une option pour analyser",
                 options=range(len(df_results)),
                 format_func=lambda x: f"{df_results.iloc[x]['Status']} - ${df_results.iloc[x]['Strike']:.2f} ({int(df_results.iloc[x]['Maturité (mois)'])} mois)",
-                key="bowser_pl_option_select"  # ✅ CLÉ STABLE - CRUCIAL!
+                key="bowser_pl_selectbox_option"  # ✅ CLÉ STABLE - CRUCIAL!
             )
             
             selected_option = df_results.iloc[option_selected]
