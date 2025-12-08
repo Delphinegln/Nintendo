@@ -1712,11 +1712,13 @@ if st.session_state["show_bowser_page"]:
                     results_all.append(result)
             
             df_results = pd.DataFrame(results_all)
-            
             st.session_state["df_results"] = df_results
-            st.session_state["action_finale"] = df_results['ValAction+Frais'] if 'ValAction+Frais' in df_results.columns else None
-            
-            st.success(f"{len(df_results)} configurations d'options évaluées ✅")
+            st.session_state["levier"] = levier
+            st.session_state["couts_order"] = couts_total
+            st.session_state["investissement"] = investissement_total
+            st.session_state["action_finale"] = df_results['ValAction+Frais']  # si existant
+        
+        st.success(f"✅ {len(df_results)} configurations d'options évaluées")
         
         # ═══════════════════════════════════════════════════════════════════════════
         # ONGLETS INTERACTIFS
@@ -2066,7 +2068,10 @@ if st.session_state["show_bowser_page"]:
                 st.stop()
 
             df_results = st.session_state["df_results"]
-            
+            levier = st.session_state["levier"]
+            couts_order = st.session_state["couts_order"]
+            investissement = st.session_state["investissement"]
+            action_finale = st.session_state["action_finale"]
 
             df_results = st.session_state["results"]
             
@@ -2074,8 +2079,7 @@ if st.session_state["show_bowser_page"]:
             option_selected = st.selectbox(
                 "Sélectionnez une option pour analyser",
                 options=range(len(df_results)),
-                format_func=lambda x: f"{df_results.iloc[x]['Status']} - ${df_results.iloc[x]['Strike']:.2f} ({int(df_results.iloc[x]['Maturité (mois)'])} mois)",
-                key="bowser_pl_option_select"  # ✅ CLÉ STABLE - CRUCIAL!
+                format_func=lambda x: f"{df_results.iloc[x]['Status']} - ${df_results.iloc[x]['Strike']:.2f} ({int(df_results.iloc[x]['Maturité (mois)'])} mois)"
             )
             
             selected_option = df_results.iloc[option_selected]
