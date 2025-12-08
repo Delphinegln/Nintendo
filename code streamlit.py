@@ -1,3 +1,4 @@
+
 import streamlit as st
 import yfinance as yf
 import pandas as pd
@@ -1476,9 +1477,7 @@ if st.session_state["show_bowser_page"]:
         # ═══════════════════════════════════════════════════════════════════════════
         # TÉLÉCHARGEMENT DES DONNÉES
         # ═══════════════════════════════════════════════════════════════════════════
-        if "df_results_cached" not in st.session_state:
-            st.session_state.df_results_cached = None
-            
+        
         @st.cache_data
         def download_data(ticker, start, end):
             try:
@@ -1656,84 +1655,67 @@ if st.session_state["show_bowser_page"]:
             st.info(f"✅ Taux sans risque: {r*100:.2f}%")
         
         # Calcul des options
-        if lancer_simulation:
-            with st.spinner("⏳ Calcul des options en cours..."):
-                results_all = []
-                
-                for K in K_values:
-                    for T in T_values:
-                        T_months = int(T * 12)
-                        moneyness = S0 / K
-                        
-                        if moneyness > 1.05:
-                            status = 'ITM'
-                        elif moneyness > 0.95:
-                            status = 'ATM'
-                        else:
-                            status = 'OTM'
-                        
-                        result = {
-                            'Strike': K,
-                            'Maturité (mois)': T_months,
-                            'Maturité (années)': T,
-                            'Moneyness': moneyness,
-                            'Status': status
-                        }
-                        
-                        if 'call' in option_types_focus:
-                            call_euro = black_scholes_call(S0, K, T, r, volatility_hist)
-                            result['Call Européen'] = call_euro
-                            
-                            call_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='call')
-                            result['Call Américain'] = call_american
-                            
-                            call_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='call')
-                            result['Call Asiatique'] = call_asian
-                            
-                            greeks_call = bs_greeks(S0, K, T, r, volatility_hist, 'call')
-                            result['Call Delta'] = greeks_call['delta']
-                            result['Call Gamma'] = greeks_call['gamma']
-                            result['Call Vega'] = greeks_call['vega']
-                            result['Call Theta'] = greeks_call['theta']
-                        
-                        if 'put' in option_types_focus:
-                            put_euro = black_scholes_put(S0, K, T, r, volatility_hist)
-                            result['Put Européen'] = put_euro
-                            
-                            put_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='put')
-                            result['Put Américain'] = put_american
-                            
-                            put_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='put')
-                            result['Put Asiatique'] = put_asian
-                            
-                            greeks_put = bs_greeks(S0, K, T, r, volatility_hist, 'put')
-                            result['Put Delta'] = greeks_put['delta']
-                            result['Put Gamma'] = greeks_put['gamma']
-                            result['Put Vega'] = greeks_put['vega']
-                            result['Put Theta'] = greeks_put['theta']
-                        
-                        results_all.append(result)
-                
-                df_results = pd.DataFrame(results_all)
+        with st.spinner("⏳ Calcul des options en cours..."):
+            results_all = []
             
-            st.success(f"✅ {len(df_results)} configurations d'options évaluées")
-    df_results = st.session_state.df_results_cached
-    if df_results is not None:
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Résultats", "Visualisations", "Recommandations", "P&L", "Tableau"])
+            for K in K_values:
+                for T in T_values:
+                    T_months = int(T * 12)
+                    moneyness = S0 / K
+                    
+                    if moneyness > 1.05:
+                        status = 'ITM'
+                    elif moneyness > 0.95:
+                        status = 'ATM'
+                    else:
+                        status = 'OTM'
+                    
+                    result = {
+                        'Strike': K,
+                        'Maturité (mois)': T_months,
+                        'Maturité (années)': T,
+                        'Moneyness': moneyness,
+                        'Status': status
+                    }
+                    
+                    if 'call' in option_types_focus:
+                        call_euro = black_scholes_call(S0, K, T, r, volatility_hist)
+                        result['Call Européen'] = call_euro
+                        
+                        call_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='call')
+                        result['Call Américain'] = call_american
+                        
+                        call_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='call')
+                        result['Call Asiatique'] = call_asian
+                        
+                        greeks_call = bs_greeks(S0, K, T, r, volatility_hist, 'call')
+                        result['Call Delta'] = greeks_call['delta']
+                        result['Call Gamma'] = greeks_call['gamma']
+                        result['Call Vega'] = greeks_call['vega']
+                        result['Call Theta'] = greeks_call['theta']
+                    
+                    if 'put' in option_types_focus:
+                        put_euro = black_scholes_put(S0, K, T, r, volatility_hist)
+                        result['Put Européen'] = put_euro
+                        
+                        put_american = binomial_tree_american(S0, K, T, r, volatility_hist, N=100, option_type='put')
+                        result['Put Américain'] = put_american
+                        
+                        put_asian, _ = asian_option_monte_carlo(S0, K, T, r, volatility_hist, n_simulations=n_simulations, option_type='put')
+                        result['Put Asiatique'] = put_asian
+                        
+                        greeks_put = bs_greeks(S0, K, T, r, volatility_hist, 'put')
+                        result['Put Delta'] = greeks_put['delta']
+                        result['Put Gamma'] = greeks_put['gamma']
+                        result['Put Vega'] = greeks_put['vega']
+                        result['Put Theta'] = greeks_put['theta']
+                    
+                    results_all.append(result)
+            
+            df_results = pd.DataFrame(results_all)
         
-        with tab1:
-            st.subheader("Résultats des évaluations")
-            df_display = df_results.copy()
-            st.dataframe(df_display, use_container_width=True)
-            
-            csv = df_display.to_csv(index=False)
-            st.download_button(
-                label="📥 Télécharger CSV",
-                data=csv,
-                file_name="nintendo_options.csv",
-                mime="text/csv"
-            )
-
+        st.success(f"✅ {len(df_results)} configurations d'options évaluées")
+        
         # ═══════════════════════════════════════════════════════════════════════════
         # ONGLETS INTERACTIFS
         # ═══════════════════════════════════════════════════════════════════════════
@@ -1746,7 +1728,7 @@ if st.session_state["show_bowser_page"]:
         with tab1:
             st.subheader("Résultats des Évaluations")
             df_display = df_results.copy()
-            st.dataframe(df_display, use_container_width=True)
+            
             
             # Export
             csv = df_display.to_csv(index=False)
@@ -2601,6 +2583,3 @@ if st.session_state["show_birdo_page"]:
     
     **Prêt à trader ?** Les signaux SMA sont fiables et automatisables ! 🎮
     """)
-
-
-
