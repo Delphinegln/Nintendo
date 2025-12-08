@@ -1714,10 +1714,8 @@ if st.session_state["show_bowser_page"]:
             df_results = pd.DataFrame(results_all)
             
             st.session_state["df_results"] = df_results
-            st.session_state["levier"] = levier
-            st.session_state["couts_order"] = couts_total
-            st.session_state["investissement"] = investissement_total
             st.session_state["action_finale"] = df_results['ValAction+Frais'] if 'ValAction+Frais' in df_results.columns else None
+            
             st.success(f"{len(df_results)} configurations d'options évaluées ✅")
         
         # ═══════════════════════════════════════════════════════════════════════════
@@ -2068,10 +2066,7 @@ if st.session_state["show_bowser_page"]:
                 st.stop()
 
             df_results = st.session_state["df_results"]
-            levier = st.session_state.get("levier", 0)              
-            couts_order = st.session_state.get("couts_order", 0)   
-            investissement = st.session_state.get("investissement", 0)  
-            action_finale = st.session_state.get("action_finale", None)  
+            
 
             df_results = st.session_state["results"]
             
