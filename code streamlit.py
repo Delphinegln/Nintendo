@@ -1712,11 +1712,7 @@ if st.session_state["show_bowser_page"]:
                     results_all.append(result)
             
             df_results = pd.DataFrame(results_all)
-            st.session_state["df_results"] = df_results
-            st.session_state["levier"] = levier
-            st.session_state["couts_order"] = couts_total
-            st.session_state["investissement"] = investissement_total
-            st.session_state["action_finale"] = df_results['ValAction+Frais']  # si existant
+            st.session_state["results"] = df_results
         
         st.success(f"✅ {len(df_results)} configurations d'options évaluées")
         
@@ -2066,12 +2062,6 @@ if st.session_state["show_bowser_page"]:
             if "results" not in st.session_state:
                 st.warning("Veuillez d'abord lancer l'optimisation.")
                 st.stop()
-
-            df_results = st.session_state["df_results"]
-            levier = st.session_state["levier"]
-            couts_order = st.session_state["couts_order"]
-            investissement = st.session_state["investissement"]
-            action_finale = st.session_state["action_finale"]
 
             df_results = st.session_state["results"]
             
