@@ -203,6 +203,20 @@ st.markdown("""
 
 
 
+st.markdown("""
+    <div style="
+        width:100%;
+        text-align:center;
+        padding:20px 0;
+        background-color: rgba(255, 255, 255, 0.85);
+        border-radius: 12px;
+        margin-bottom: 10px;
+    ">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/320px-Nintendo.svg.png"
+             width="200">
+    </div>
+""", unsafe_allow_html=True)
+
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
