@@ -203,17 +203,20 @@ st.markdown("""
 
 
 
+# ===== CONTAINER OPAQUE AVEC LOGO ET TITRE =====
 st.markdown("""
     <div style="
         width:100%;
         text-align:center;
-        padding:20px 0;
-        background-color: rgba(255, 255, 255, 0.85);
+        padding:30px 0;
+        background-color: rgba(255, 255, 255, 0.95);
         border-radius: 12px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
     ">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/320px-Nintendo.svg.png"
-             width="200">
+             width="150" style="display:block; margin:auto;">
+        <h1 style="margin-top:15px;">Dashboard for Nintendo's Investors</h1>
+        <p style="opacity:0.8; margin-top:5px;">Sélectionne une section pour explorer les modules.</p>
     </div>
 """, unsafe_allow_html=True)
 
