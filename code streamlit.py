@@ -45,20 +45,6 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
-# ===== LOGO NINTENDO depuis GitHub =====
-
-# ===== LOGO NINTENDO (affiché au dessus du titre principal) =====
-
-st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-
-st.image(
-    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/320px-Nintendo.svg.png",
-    width=200
-)
-
-st.markdown("</div>", unsafe_allow_html=True)
-
-
 
 # ========== SESSION STATE GLOBAL ==========
 if "show_daisy_page" not in st.session_state:
@@ -201,24 +187,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-
-
-# ===== CONTAINER OPAQUE AVEC LOGO ET TITRE =====
-st.markdown("""
-    <div style="
-        width:100%;
-        text-align:center;
-        padding:30px 0;
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 12px;
-        margin-bottom: 20px;
-    ">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/320px-Nintendo.svg.png"
-             width="150" style="display:block; margin:auto;">
-        <h1 style="margin-top:15px;">Dashboard for Nintendo's Investors</h1>
-        <p style="opacity:0.8; margin-top:5px;">Sélectionne une section pour explorer les modules.</p>
-    </div>
-""", unsafe_allow_html=True)
 
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
