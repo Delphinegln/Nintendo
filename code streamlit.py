@@ -187,6 +187,24 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ========== LOGO NINTENDO EN HAUT ==========
+
+logo_path = IMG / "nintendologo.png"
+
+with open(logo_path, "rb") as f:
+    logo_data = base64.b64encode(f.read()).decode()
+
+st.markdown(
+    f"""
+    <div style="text-align:center; margin-top:10px; margin-bottom:0px;">
+        <img src="data:image/png;base64,{logo_data}" 
+             alt="Nintendo Logo" 
+             width="180">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard pour les investisseurs Nintendo</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
