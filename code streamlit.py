@@ -1093,7 +1093,7 @@ if st.session_state["show_luigi_page"]:
         unsafe_allow_html=True
     )
     st.markdown(
-        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
+        "<p style='text-align:center; opacity:0.85;'>Informations du portefeuille, VaR en approche Paramétrique et Historique, Backtesting et ES, Crédit Risk Modeling.</p>",
         unsafe_allow_html=True
     )
 
@@ -1350,7 +1350,7 @@ if st.session_state["show_bowser_page"]:
         unsafe_allow_html=True
     )
     st.markdown(
-        "<p style='text-align:center; opacity:0.85;'>Vue analyste complète : états financiers, performance boursière, simulations Monte Carlo et scénarios.</p>",
+        "<p style='text-align:center; opacity:0.85;'>Simulation d'options en fonction du profil de risque, visualisation, recommandations, P&L et récapitulatif.</p>",
         unsafe_allow_html=True
     )
 
