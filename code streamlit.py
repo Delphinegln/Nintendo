@@ -187,6 +187,18 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- LOGO EN HAUT DE PAGE ---
+st.markdown(
+    """
+    <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+        <img src="https://raw.githubusercontent.com/Delphinegln/Nintendo/main/images/nintendologo.png"
+             alt="Nintendo Logo"
+             style="width: 200px;">
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 
 # ========== HEADER ==========
 st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
