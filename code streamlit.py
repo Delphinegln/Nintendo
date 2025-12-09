@@ -45,23 +45,20 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
-# ========== LOGO NINTENDO EN HAUT ==========
+# ===== LOGO NINTENDO depuis GitHub =====
 
-logo_path = IMG / "nintendologo.png"
-
-with open(logo_path, "rb") as f:
-    logo_data = base64.b64encode(f.read()).decode()
+logo_url = "https://raw.githubusercontent.com/TON_USER/TON_REPO/main/images/nintendologo.png"
 
 st.markdown(
-    f"""
+    """
     <div style="text-align:center; margin-top:10px; margin-bottom:0px;">
-        <img src="data:image/png;base64,{logo_data}" 
-             alt="Nintendo Logo" 
-             width="180">
-    </div>
     """,
     unsafe_allow_html=True
 )
+
+st.image(logo_url, width=200)
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ========== SESSION STATE GLOBAL ==========
