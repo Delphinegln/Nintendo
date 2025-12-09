@@ -2504,10 +2504,10 @@ if st.session_state["show_birdo_page"]:
         lags = profil['n_lags_regression']  
         cols = [f'lag_{lag}' for lag in range(1, lags + 1)]
 
-    for lag in range(1, lags + 1):
-        data_regression[f'lag_{lag}'] = data_regression['returns'].shift(lag)
-    data_regression.dropna(inplace=True)
-    data_regression['direction'] = np.sign(data_regression['returns']).astype(int)
+        for lag in range(1, lags + 1):
+            data_regression[f'lag_{lag}'] = data_regression['returns'].shift(lag)
+        data_regression.dropna(inplace=True)
+        data_regression['direction'] = np.sign(data_regression['returns']).astype(int)
     
   
     # 2️⃣ ENSUITE data_ml avec direction
