@@ -47,7 +47,7 @@ sns.set_theme(style="whitegrid")
 
 # ===== LOGO NINTENDO depuis GitHub =====
 
-logo_url = "https://raw.githubusercontent.com/TON_USER/TON_REPO/main/images/nintendologo.png"
+logo_url = "https://github.com/Delphinegln/Nintendo/blob/ba5f22c8202a7a346d7c0835b3a53d2d8ea7e427/images/nintendologo.png"
 
 st.markdown(
     """
