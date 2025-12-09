@@ -45,6 +45,11 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
+st.image(
+    "https://raw.githubusercontent.com/Delphinegln/Nintendo/ba5f22c8202a7a346d7c0835b3a53d2d8ea7e427/images/nintendologo.png",
+    width=200
+)
+
 # ===== LOGO NINTENDO depuis GitHub =====
 
 logo_url = "https://raw.githubusercontent.com/Delphinegln/Nintendo/ba5f22c8202a7a346d7c0835b3a53d2d8ea7e427/images/nintendologo.png
