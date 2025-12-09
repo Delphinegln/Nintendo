@@ -45,26 +45,19 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
+# ===== LOGO NINTENDO depuis GitHub =====
+
+# ===== LOGO NINTENDO (affiché au dessus du titre principal) =====
+
+st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+
 st.image(
-    "https://raw.githubusercontent.com/Delphinegln/Nintendo/ba5f22c8202a7a346d7c0835b3a53d2d8ea7e427/images/nintendologo.png",
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/320px-Nintendo.svg.png",
     width=200
 )
 
-# ===== LOGO NINTENDO depuis GitHub =====
-
-logo_url = "https://raw.githubusercontent.com/Delphinegln/Nintendo/ba5f22c8202a7a346d7c0835b3a53d2d8ea7e427/images/nintendologo.png
-"
-
-st.markdown(
-    """
-    <div style="text-align:center; margin-top:10px; margin-bottom:0px;">
-    """,
-    unsafe_allow_html=True
-)
-
-st.image(logo_url, width=200)
-
 st.markdown("</div>", unsafe_allow_html=True)
+
 
 
 # ========== SESSION STATE GLOBAL ==========
