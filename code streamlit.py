@@ -36,7 +36,7 @@ except Exception:
 
 warnings.filterwarnings("ignore")
 
-# ========== CONFIG PAGE (UNE SEULE FOIS, EN PREMIER) ==========
+# ========== CONFIG PAGE  ==========
 st.set_page_config(
     page_title="Nintendo Dashboard",
     layout="wide",
@@ -45,7 +45,7 @@ st.set_page_config(
 
 sns.set_theme(style="whitegrid")
 
-# ========== SESSION STATE GLOBAL (UNE SEULE FOIS) ==========
+# ========== SESSION STATE GLOBAL ==========
 if "show_daisy_page" not in st.session_state:
     st.session_state["show_daisy_page"] = False
 
@@ -219,7 +219,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
 
 
 
-    # ===== LIGNE 1 : DAISY + PEACH (CENTRÉES EN HAUT) =====
+    # ===== LIGNE 1 : DAISY + PEACH =====
     col1, col2, col3, col4, col5 = st.columns([1, 2, 0.5, 2, 1])
 
     with col2:
@@ -281,7 +281,7 @@ if not (st.session_state["show_daisy_page"] or st.session_state["show_peach_page
     
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ===== LIGNE 3 : LUIGI SEUL PARFAITEMENT CENTRÉ =====
+    # ===== LIGNE 3 : LUIGI =====
     col1, col2, col3 = st.columns([1.5, 2, 1.5])
 
     with col2:
@@ -326,7 +326,7 @@ if st.session_state["show_daisy_page"]:
         "TCEHY": "Tencent Holdings Corporation"
     }
 
-    # ---------- TEXTE DESCRIPTIF AU LIEU DU CODE ----------
+    # ---------- TEXTE DESCRIPTIF ---------
     st.markdown("""
     <div class="intro-box">
         <p style='text-align: justify; font-size: 1.1em; line-height: 1.8;'>
@@ -341,7 +341,7 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS (PLEINE LARGEUR) ----------
+    # ---------- GRAPHIQUE 1 : ÉTATS FINANCIERS  ----------
     st.markdown("### 📊 États financiers – Nintendo")
     
     ntd = yf.Ticker("NTDOY")
@@ -364,7 +364,7 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÈRE (PLEINE LARGEUR) ----------
+    # ---------- GRAPHIQUE 2 : PERFORMANCE BOURSIÈRE----------
     st.markdown("### 📈 Performance boursière comparée")
 
     tickers = list(companies.keys())
@@ -438,7 +438,7 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 3 : MONTE CARLO (PLEINE LARGEUR) ----------
+    # ---------- GRAPHIQUE 3 : MONTE CARLO  ----------
     st.markdown("### 🎲 Simulation Monte Carlo – NTDOY")
     st.markdown("*Projection à 5 ans basée sur 500 trajectoires simulées*")
 
@@ -550,7 +550,7 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 4 : PROJECTION REVENUS (PLEINE LARGEUR) ----------
+    # ---------- GRAPHIQUE 4 : PROJECTION REVENUS ----------
     st.markdown("### 🔮 Projection de revenus")
     st.markdown("*Scénario de croissance simulée 2025-2030*")
 
@@ -629,7 +629,7 @@ if st.session_state["show_daisy_page"]:
 
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # ---------- GRAPHIQUE 5 : SCÉNARIOS (PLEINE LARGEUR) ----------
+    # ---------- GRAPHIQUE 5 : SCÉNARIOS  ----------
     st.markdown("### 🧪 Scénarios de résultat opérationnel")
     st.markdown("*Évaluation sous trois hypothèses de performance*")
 
@@ -1006,7 +1006,7 @@ if st.session_state["show_peach_page"]:
             ax.legend()
             st.pyplot(fig)
 
-            # --- Commentaire AUTO (accurate) ---
+            # --- Commentaire AUTO ---
             hhi_m4 = herfindahl(weights_m4)
             hhi_hrp = herfindahl(hrp_weights_full)
 
@@ -2247,7 +2247,7 @@ if st.session_state["show_birdo_page"]:
         index=1
     )
     
-    # Profils prédéfinis (inchangés)
+    # Profils prédéfinis 
     profils = {
         1: {
             'nom': 'CONSERVATEUR',
@@ -2316,14 +2316,14 @@ if st.session_state["show_birdo_page"]:
     # CHARGEMENT DES DONNÉES
     # =========================
         
-    # CHARGEMENT SÉCURISÉ
+    # CHARGEMENT 
     st.markdown("### 📥 Chargement des données...")
     
     try:
         ticker = "NTDOY"
         data = yf.download(ticker, start="2015-09-01", end="2025-09-30", progress=False)
         
-        # CORRECTION : prend la première colonne Close (multi-index)
+        
         if isinstance(data['Close'], pd.DataFrame):
             data_original = data['Close'].iloc[:, 0].dropna()
         else:
@@ -2510,7 +2510,7 @@ if st.session_state["show_birdo_page"]:
         data_regression['direction'] = np.sign(data_regression['returns']).astype(int)
     
   
-        # 2️⃣ ENSUITE data_ml avec direction
+        # 2️⃣ 
         data_ml = data_regression[cols[:2] + ['returns', 'direction']].copy()  # ← MAINTENANT OK
         features = cols[:2] 
     
@@ -2548,7 +2548,7 @@ if st.session_state["show_birdo_page"]:
         st.plotly_chart(fig_clusters, use_container_width=True)
     
 # ════════════════════════════════════════════════
-# RECOMMANDATIONS FINALES - VERSION PHRASEE
+# RECOMMANDATIONS FINALES -
 # ════════════════════════════════════════════════
     st.markdown("---")
     
