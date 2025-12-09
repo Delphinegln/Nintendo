@@ -188,7 +188,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========== HEADER ==========
-st.markdown("<h1 style='text-align: center;'>Dashboard for Nintendo's Investors</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Dashboard pour les investisseurs Nintendo</h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; opacity: 0.8; margin-bottom: 40px;'>Sélectionne une section pour explorer les modules.</p>", unsafe_allow_html=True)
 
 def card_with_button(img_path, title, subtitle, desc, btn_label, key):
